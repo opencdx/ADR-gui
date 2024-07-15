@@ -4,7 +4,6 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { CriteriaTypes } from './criteria-types'
 import type { DragItem } from './interfaces'
 import { useCriteriaStore } from "@/lib/store";
-import { Button } from "@/components/ui/Button";
 
 const dropBox: CSSProperties = {
     display: 'flex',
@@ -43,7 +42,6 @@ const QueryBox: FC<QueryBoxProps> = memo(function QueryBox({
     criteria,
 })  {
     const { criteriaList, removeCriteria } = useCriteriaStore();
-    const { addCriteria } = useCriteriaStore();
 
     const handleRemove = (index: number) => {
         removeCriteria(index);
@@ -51,10 +49,9 @@ const QueryBox: FC<QueryBoxProps> = memo(function QueryBox({
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [CriteriaTypes.AGE, CriteriaTypes.BMI, CriteriaTypes.GENDER, CriteriaTypes.HEIGHT, CriteriaTypes.ID, CriteriaTypes.WEIGHT],
+            accept: [CriteriaTypes.CRITERIA],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItemType())
-                addCriteria(monitor.getItemType() as string)
                 return undefined
             },
             collect: (monitor: DropTargetMonitor) => ({

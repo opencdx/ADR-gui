@@ -1,7 +1,8 @@
 import type { CSSProperties, FC } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { CriteriaTypes } from './criteria-types'
+import { useCriteriaStore } from "@/lib/store";
+import { CriteriaTypes } from './criteria-types';
 
 const style: CSSProperties = {
     display: 'flex',
@@ -13,14 +14,27 @@ const style: CSSProperties = {
 export interface CriteriaBoxProps {
   showCopyIcon?: boolean
   criteria: string
+  isChild?: boolean
 }
 
-export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
+interface DropResult {
+  criteria: string
+}
+
+export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isChild }) => {
+  const { addCriteria } = useCriteriaStore();
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: criteria,
+      type: CriteriaTypes.CRITERIA,
+      item: { criteria },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
+      },
+      end: (item, monitor) => {
+        const dropResult = monitor.getDropResult<DropResult>()
+        if (item && dropResult) {
+          addCriteria(item.criteria as string)
+        }
       },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.4 : 1,
@@ -30,8 +44,17 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
   )
 
   return (
-    <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
-      <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px"}}>add</span> {criteria}
-    </div>
+    <>
+      {!isChild &&
+        <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
+          <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px"}}>add</span> {criteria}
+        </div>
+      }
+      {isChild &&
+        <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
+          <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px", paddingLeft: "20px"}}>add</span> {criteria}
+        </div>
+      }
+    </>
   )
 }
