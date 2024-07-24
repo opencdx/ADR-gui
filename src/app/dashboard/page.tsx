@@ -1,51 +1,23 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
-
-import { useTranslations} from 'next-intl';
-
-import { CriteriaBox } from './criteria-box';
-import { StatefulQueryBox as QueryBox } from './query-box';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Endpoints } from '@/axios/apiEndpoints';
+import Dashboard from "@/components/dashboard";
+import { Navbar } from '@/components/navbar';
+import TreeView from '@/components/tree-view';
+import { Divider } from '@nextui-org/react';
 
 export default function DashboardPage() {
-  
-  const t = useTranslations('common');
-  const [criteriaList, setCriteria] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchQueries = async () => {
-      Endpoints.query.then((response) => {
-        setCriteria(response.data);
-      });
-    };
-
-    fetchQueries();
-  });
-
   return (
-    <>      
-      <div className="flex py-4">
-        <DndProvider backend={HTML5Backend}>
-          <div style={{ overflow: 'hidden', clear: 'both', margin: '-.5rem' }}>
-            <div style={{ float: 'left' }}>
-              {criteriaList?.map((criteria) => (
-                <>
-                <CriteriaBox showCopyIcon={true} criteria={criteria.description}/>
-                {criteria.children.map((child) => (
-                  <CriteriaBox showCopyIcon={true} criteria={child.description} isChild={true}/>
-                ))}
-                </>
-              ))}
+    <>
+    <Navbar />
+      <Divider />
+      <div className="flex">
+        <div className="w-full overflow-x-auto">
+          <div className="sm:h-[calc(99vh-60px)] overflow-auto ">
+            <div className="w-full flex justify-center mx-auto   overflow-auto h-[calc(100vh - 120px)] overflow-y-auto relative">
+              <div className="w-full md:max-w-6xl">{<Dashboard />}</div>
             </div>
           </div>
-          <div style={{ float: 'left', marginLeft: '1rem' }}>
-            <QueryBox/>
-          </div>
-        </DndProvider>
+        </div>
       </div>
-    </>
+      </>
   );
+  
 }

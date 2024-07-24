@@ -15,11 +15,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Endpoints } from '@/axios/apiEndpoints';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { Button, Input } from 'ui-library';
 import {useTranslations} from 'next-intl';
-import {useLocale} from 'next-intl';
+
 
 export default function Login() {
   const t = useTranslations('common');
@@ -82,19 +80,27 @@ export default function Login() {
       >
         <Card
           aria-label="login form"
-          className="w-[450px] max-w-full p-4"
+          className="w-[500px] max-w-full p-4"
           tabIndex={0}
           shadow='none'
         >
           <CardHeader className="flex justify-center">
             <div aria-label="open">
-              ADR
+              <Image
+                alt="opencdx logo s"
+                aria-label="Hello World Logo"
+                height={40}
+                radius="none"
+                tabIndex={0}
+                width={100}
+              />
             </div>
           </CardHeader>
           <CardBody className="grid gap-4">
             <Input
               required
               defaultValue=""
+              variant="bordered"
               id="email"
               label={t('email_usename_placeholder')}
               type="userName"
@@ -107,6 +113,7 @@ export default function Login() {
               label={t('password_placeholder')}
               defaultValue=""
               isRequired
+              variant="bordered"
               isInvalid={!isPasswordStrong && password.length > 0}
               type={isVisible ? "text" : "password"}
               onValueChange={handlePasswordChange}
@@ -143,7 +150,7 @@ export default function Login() {
               type="submit"
               isDisabled={isDisabled()}
             >
-              {t('sign_in_label')}
+              {t('login_label')}
             </Button>
           </CardFooter>
 
@@ -154,6 +161,7 @@ export default function Login() {
               className="text-center"
               color="primary"
               onClick={() => router.push("/register")}
+              onPress={() => router.push("/register")}
             >
               {t('sign_up_label')}
             </Link>

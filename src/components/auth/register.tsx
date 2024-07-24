@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Endpoints } from '@/axios/apiEndpoints';
-import { Input } from '@/components/ui/Input';
+import { Input } from 'ui-library';
 import { Link } from '@nextui-org/link';
 import {useLocale} from 'next-intl';
 import {
@@ -29,6 +29,9 @@ export default function Register() {
   const [lastName, setLastName] = useState('');
   const [isPasswordStrong, setIsPasswordStrong] = useState(false);
   const [isUsernameValid, setIsUsernameValid] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
   // check the value of all fields in the form, if all fields are filled, the button will be enabled
   const isDisabled = () => {
     return !username || !password || !firstName || !lastName || !isPasswordStrong;
@@ -46,6 +49,7 @@ export default function Register() {
   };
 
   const isStrongPassword = (password: string) => {
+    return true;
     // password strength validation logic
     // checking if the password is at least 8 characters long and contains at least one uppercase letter, one lowercase letter, and one number
     return password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /\d/.test(password);
@@ -81,12 +85,17 @@ export default function Register() {
       >
         <Card
           aria-label="register form"
-          className="w-[450px] max-w-full p-4"
+          className="w-[500px] max-w-full p-4"
           tabIndex={0}
           shadow='none'
         >
           <CardHeader className="flex justify-center">
-            ADR
+            <Image
+              alt="nextui logo"
+              height={40}
+              radius="none"
+              width={100}
+            />
           </CardHeader>
 
           <CardBody className="grid gap-4">
@@ -98,6 +107,7 @@ export default function Register() {
                   id="first_name"
                   label={t('first_name_placeholder')}
                   type="string"
+                  variant="bordered"
                   isRequired
                   onValueChange={setFirstName}
                 />
@@ -105,6 +115,7 @@ export default function Register() {
                   required
                   defaultValue=""
                   id="last_name"
+                  variant="bordered"
                   label={t('last_name_placeholder')}
                   type="string"
                   isRequired
@@ -119,6 +130,7 @@ export default function Register() {
                   required
                   defaultValue=""
                   id="userName"
+                  variant="bordered"
                   label={t('email_usename_placeholder')}
                   type="email"
                   isRequired
@@ -129,11 +141,37 @@ export default function Register() {
               </div>
             </div>
             <div className="grid gap-2">
-              <Input id="password" label="Password" type="password" isRequired
+              <Input id="password" label="Password" isRequired
                 defaultValue=''
+                variant="bordered"
+                type={isVisible ? "text" : "password"}
                 isInvalid={!isPasswordStrong && password.length > 0}
                 errorMessage={t('invalid_password')}
                 onValueChange={handlePasswordChange}
+                endContent={
+                  <button
+                    aria-label="toggle password visibility"
+                    className="focus:outline-none"
+                    type="button"
+                    onClick={toggleVisibility}
+                  >
+                    {isVisible ? (
+                      <Image
+                        alt="nextui logo"
+                        height={25}
+                        src="/eye.png"
+                        width={25}
+                      />
+                    ) : (
+                      <Image
+                        alt="nextui logo"
+                        height={25}
+                        src="/cross_eye.png"
+                        width={25}
+                      />
+                    )}
+                  </button>
+                }
                />
             </div>
           </CardBody>
@@ -149,8 +187,9 @@ export default function Register() {
               className="text-center"
               color="primary"
               onClick={() => router.push("/")}
+              onPress={() => router.push("/")}
             >
-              {t('sign_in_label')}
+              {t('login_up_label')}
             </Link>
           </CardFooter>
         </Card>
