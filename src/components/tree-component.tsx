@@ -10,21 +10,14 @@ export default function TreeComponent() {
       key: '0',
       title: 'Dashboard',
       data: 'Documents Folder',
+      label: 'Dashboard',
       //   icon: 'pi pi-fw pi-inbox',
       children: [
         {
           key: '1-0',
           title: 'UI Components',
           data: 'Sub Item 1',
-          //   icon: 'pi pi-fw pi-inbox',
-          // children: [
-          //   {
-          //     key: '1-0-0',
-          //     title: 'Child Item 1',
-          //     //   icon: 'pi pi-fw pi-inbox',
-          //     data: 'Expenses Document',
-          //   },
-          // ],
+          label: 'UI Components',
         },
       ],
     },

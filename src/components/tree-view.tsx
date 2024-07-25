@@ -3,7 +3,7 @@
 import { Fragment } from 'react';
 
 import { NavItems } from '@/configs';
-import { Accordion, AccordionItem } from '@/components/ui/Accordion';
+import { Accordion, AccordionItem } from 'ui-library';
 import { Maximize, Minimize } from 'lucide-react';
 
 import TreeComponent from './tree-component';
@@ -22,7 +22,40 @@ export default function TreeView() {
           {/* Top */}
           <div className="mt-4 relative pb-2 ">
             <div className="flex flex-col space-y-1">
-              
+              {navItems.map((item, idx) => {
+                if (item.position === 'top') {
+                  return (
+                    <Fragment key={idx}>
+                      <div>
+                        <Accordion
+                          key={idx}
+                          className="min-h-[100px]"
+                          defaultExpandedKeys={['1']}
+                          isCompact={true}
+                          selectionBehavior="toggle"
+                          variant="splitted"
+                        >
+                          <AccordionItem
+                            key="1"
+                            aria-label="Accordion 1"
+                            id="section1"
+                            indicator={({ isOpen }) =>
+                              isOpen ? (
+                                <Maximize aria-label="maximize" />
+                              ) : (
+                                <Minimize aria-label="minimize" />
+                              )
+                            }
+                            title="Section 1"
+                          >
+                            <TreeComponent />
+                          </AccordionItem>
+                        </Accordion>
+                      </div>
+                    </Fragment>
+                  );
+                }
+              })}
             </div>
           </div>
         </aside>

@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 
-import NextLink from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { User, Link } from "@nextui-org/react";
+import { User } from "@nextui-org/react";
 import { useLocale } from 'next-intl';
 import {useTransition} from 'react';
 
@@ -71,9 +70,14 @@ export const Navbar = () => {
     <NextUINavbar maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
-          {/* <NextLink className="flex justify-start items-center gap-1" > */}
-            ADR
-          {/* </NextLink> */}
+            <Image
+              alt="nextui logo"
+              height={40}
+              radius='none'
+              src="/HelloWorld.png"
+              width={100}
+              
+            />
         </NavbarBrand>
       </NavbarContent>
 
@@ -101,7 +105,10 @@ export const Navbar = () => {
                   />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu variant="faded" aria-label="Dropdown menu with icons"
+              <DropdownMenu 
+              variant="faded" 
+              aria-label="Dropdown menu with icons"
+              selectionMode="single"
                 onAction={(key) => {
                   if (key === 'logout') {
                     window.location.href = "/";
@@ -120,6 +127,7 @@ export const Navbar = () => {
               >
                 <DropdownItem
                   key="locale"
+                  tabIndex={0}
                   startContent={<Image
                     alt="nextui logo"
                     height={20}
@@ -130,15 +138,14 @@ export const Navbar = () => {
                   {
                     localeOptions.map((language) => {
                       if (language.key !== locale) {
-                        return (
-                          <div>{language.label}</div>
-                        );
+                        return language.label
                       }
                     })
                   }
                 </DropdownItem>
                 <DropdownItem
                   key="settings"
+                  tabIndex={0}
                   startContent={<Image
                     alt="nextui logo"
                     height={20}
@@ -151,6 +158,7 @@ export const Navbar = () => {
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
+                  tabIndex={0}
                   startContent={<Image
                     alt="nextui logo"
                     height={20}

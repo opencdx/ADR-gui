@@ -86,6 +86,7 @@
     "tailwindcss": "3.4.4",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.5.2",
+    "ui-library": "file:../ui-library/src",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
