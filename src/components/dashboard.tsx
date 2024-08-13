@@ -18,7 +18,7 @@ export default function Dashboard() {
 
   const body: CSSProperties = {
     background: '#E6F1FE',
-    padding: '20px'
+    padding: '20px',
   }
 
   const criteria: CSSProperties = {
@@ -28,10 +28,10 @@ export default function Dashboard() {
     clear: 'both',
     margin: '-.5rem',
     padding: '10px',
+    width: '100%',
   }
 
   const criteriaContainer: CSSProperties = {
-    display: 'flex',
     borderRadius: '8px',
     padding: '8px',
     alignItems: 'center',
@@ -39,6 +39,10 @@ export default function Dashboard() {
     alignSelf: 'stretch',
     background: '#FAFAFA',
     border: '1px solid #E4E4E7',
+    width: '100%',
+    overflow: 'scroll',
+    display: 'table',
+    float: 'left',
   }
 
   useEffect(() => {
@@ -66,27 +70,23 @@ export default function Dashboard() {
           <div style={{ ...criteria }}>
             <h1>Available Criteria</h1>
             <Input variant='bordered' id='search' label='Search' />
-            <Tabs aria-label='Available Criteria' style={{marginTop: '10px'}}>
+            <Tabs aria-label='Available Criteria' style={{marginTop: '10px'}} fullWidth>
               <Tab key='criteria' title='Available Criteria'>
                 <div style={{ ...criteriaContainer }}>
-                  <div style={{ float: 'left' }}>
                     {criteriaList?.map((criteria) => (
                       <>
                         <CriteriaBox key={criteria.id} showCopyIcon={true} criteria={criteria.conceptName} />
                       </>
                     ))}
-                  </div>
                 </div>
               </Tab>
               <Tab key='units' title='Units of Measure'>
                 <div style={{ ...criteriaContainer }}>
-                  <div style={{ float: 'left' }}>
                     {unitsOfMeasure?.map((unit) => (
                       <>
                         <CriteriaBox key={unit.id} showCopyIcon={true} criteria={unit.conceptName} />
                       </>
                     ))}
-                  </div>
                 </div>
               </Tab>
             </Tabs>

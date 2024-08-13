@@ -11,7 +11,7 @@ const style: CSSProperties = {
     background: '#FFF',
     padding: '12px 16px',
     minHeight: '54px',
-    minWidth: '237px',
+    width: '98%',
     height: 'auto',
     alignItems: 'flex-start',
     alignSelf: 'stretch',
