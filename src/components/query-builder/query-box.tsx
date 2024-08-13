@@ -78,8 +78,8 @@ const QueryBox: FC<QueryBoxProps> = memo(function QueryBox({
         <div>
             {criteriaList?.map((criteria, index) => (
                 <div style={{ ...criteriaBox }}>
-                    <div style={{display: "flex"}}><span class="material-symbols-outlined" style={{color: "#757575"}}>drag_indicator</span><p style={{color: "#001124"}}>{criteria}</p></div>
-                    <div><span onClick={() => handleRemove(index)} class="material-symbols-outlined" style={{color: "#757575", cursor: "pointer"}}>delete</span></div>
+                    <div style={{display: "flex"}}><span className="material-symbols-outlined" style={{color: "#757575"}}>drag_indicator</span><p style={{color: "#001124"}}>{criteria}</p></div>
+                    <div><span onClick={() => handleRemove(index)} className="material-symbols-outlined" style={{color: "#757575", cursor: "pointer"}}>delete</span></div>
                 </div>
             ),
             )}

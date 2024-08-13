@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from 'react'
+import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
 import { useCriteriaStore } from "@/lib/store";
@@ -6,23 +6,36 @@ import { CriteriaTypes } from './criteria-types';
 
 const style: CSSProperties = {
     display: 'flex',
-    border: '1px dashed gray',
-    padding: '0.5rem',
-    margin: '0.5rem',
+    borderRadius: '8px',
+    border: '1px solid #E4E4E7',
+    background: '#FFF',
+    padding: '12px 16px',
+    minHeight: '54px',
+    minWidth: '237px',
+    height: 'auto',
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
+    gap: '12px',
+    margin: '3px',
+    cursor: 'pointer',
+}
+
+const hoverStyle: CSSProperties = {
+  border: '1px solid #006FEE',
 }
 
 export interface CriteriaBoxProps {
   showCopyIcon?: boolean
   criteria: string
-  isChild?: boolean
 }
 
 interface DropResult {
   criteria: string
 }
 
-export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isChild }) => {
+export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
   const { addCriteria } = useCriteriaStore();
+  const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
       type: CriteriaTypes.CRITERIA,
@@ -37,7 +50,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isCh
         }
       },
       collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0.4 : 1,
+        opacity: monitor.isDragging() ? 0.2 : 1,
       }),
     }),
     [showCopyIcon],
@@ -45,16 +58,9 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isCh
 
   return (
     <>
-      {!isChild &&
-        <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
-          <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px"}}>add</span> {criteria}
-        </div>
-      }
-      {isChild &&
-        <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
-          <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px", paddingLeft: "20px"}}>add</span> {criteria}
-        </div>
-      }
+      <div ref={drag} style={{ ...style, opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        {criteria}
+      </div>
     </>
   )
 }
