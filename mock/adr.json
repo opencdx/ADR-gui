@@ -1,0 +1,125 @@
+{
+  "uuid": "0a717b2d-34ac-42db-abf1-880f156b53f6",
+  "lastMigration": 32,
+  "name": "ADR Mock",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 8085,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "ee5e78c5-87d6-4f72-9941-0feb3922b6c6",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "query",
+      "responses": [
+        {
+          "uuid": "2326aee4-5885-475e-bce4-ba1c2a0f0ff1",
+          "body": "[\n    {\n        \"id\": 25,\n        \"conceptId\": \"dc12873c-8989-42f8-ac29-c2eecc3e3b69\",\n        \"conceptName\": \"Acute eruption of skin\",\n        \"conceptDescription\": \"723010005 | Acute eruption of skin (disorder)\"\n    },\n    {\n        \"id\": 26,\n        \"conceptId\": \"3a01b6d1-9613-42d6-a6b8-828882e69c2a\",\n        \"conceptName\": \"Age\",\n        \"conceptDescription\": \"397669002 | Age (qualifier value)\"\n    },\n    {\n        \"id\": 2,\n        \"conceptId\": \"9061a0d4-254a-42b2-b786-82e5e9f79661\",\n        \"conceptName\": \"Age at diagnosis (observable entity)\",\n        \"conceptDescription\": \"Age at diagnosis (observable entity)\"\n    },\n    {\n        \"id\": 11,\n        \"conceptId\": \"f99f17a3-5248-472d-b88f-f4c894630084\",\n        \"conceptName\": \"Body height (observable entity)\",\n        \"conceptDescription\": \"Body height (observable entity)\"\n    },\n    {\n        \"id\": 8,\n        \"conceptId\": \"0f0a0956-9019-4006-b74d-71c04d9a9b59\",\n        \"conceptName\": \"Body mass index (observable entity)\",\n        \"conceptDescription\": \"Body mass index (observable entity)\"\n    },\n    {\n        \"id\": 27,\n        \"conceptId\": \"64f4704d-d1f3-46d8-8330-780c1768e541\",\n        \"conceptName\": \"Body mass index 25-29 - overweight\",\n        \"conceptDescription\": \"162863004 | Body mass index 25-29 - overweight (finding)\"\n    },\n    {\n        \"id\": 28,\n        \"conceptId\": \"49d74011-a43a-4258-b8d7-206679349384\",\n        \"conceptName\": \"Body mass index 30+ - obesity\",\n        \"conceptDescription\": \"162864005 | Body mass index 30+ - obesity (finding)\"\n    },\n    {\n        \"id\": 29,\n        \"conceptId\": \"d9188b17-d87e-4f70-92f1-8a9848f2c30f\",\n        \"conceptName\": \"Body mass index less than 20\",\n        \"conceptDescription\": \"310252000 | Body mass index less than 20 (finding)\"\n    },\n    {\n        \"id\": 9,\n        \"conceptId\": \"1339a965-5c4d-40a7-b04f-60a17b43455b\",\n        \"conceptName\": \"Body weight (observable entity)\",\n        \"conceptDescription\": \"Body weight (observable entity)\"\n    },\n    {\n        \"id\": 30,\n        \"conceptId\": \"f99f79f5-1075-4331-b0a8-52d7c647715c\",\n        \"conceptName\": \"Chronic lung disease\",\n        \"conceptDescription\": \"413839001 | Chronic lung disease (disorder)\"\n    },\n    {\n        \"id\": 31,\n        \"conceptId\": \"547b6170-4c31-416e-81c7-12625542c72e\",\n        \"conceptName\": \"Chronic lung disease due to surfactant disorder\",\n        \"conceptDescription\": \"707534000 | Chronic lung disease due to surfactant disorder (disorder)\"\n    },\n    {\n        \"id\": 32,\n        \"conceptId\": \"03918653-4a61-4282-b146-9b68185e467f\",\n        \"conceptName\": \"Date of birth\",\n        \"conceptDescription\": \"184099003 | Date of birth (observable entity)\"\n    },\n    {\n        \"id\": 33,\n        \"conceptId\": \"c6f9e586-4173-43d4-9008-e50c1b7a7a2f\",\n        \"conceptName\": \"Date of onset\",\n        \"conceptDescription\": \"298059007 | Date of onset (observable entity)\"\n    },\n    {\n        \"id\": 34,\n        \"conceptId\": \"90f740b3-f9a2-4532-8388-b31714a6a6f6\",\n        \"conceptName\": \"Detected\",\n        \"conceptDescription\": \"260373001 | Detected (qualifier value)\"\n    },\n    {\n        \"id\": 4,\n        \"conceptId\": \"9d11d012-7e48-4738-960f-420d78262a58\",\n        \"conceptName\": \"Evaluation finding (finding)\",\n        \"conceptDescription\": \"Evaluation finding (finding)\"\n    },\n    {\n        \"id\": 5,\n        \"conceptId\": \"12e11755-845a-4e0c-9f39-24f7386a11ae\",\n        \"conceptName\": \"Evaluation procedure (procedure)\",\n        \"conceptDescription\": \"Evaluation procedure (procedure)\"\n    },\n    {\n        \"id\": 3,\n        \"conceptId\": \"4c3137e7-9215-415e-b840-5a580c275080\",\n        \"conceptName\": \"Family medicine specialist (occupation)\",\n        \"conceptDescription\": \"Family medicine specialist (occupation)\"\n    },\n    {\n        \"id\": 35,\n        \"conceptId\": \"b78510a4-f56a-4e61-b7a4-c8438c673d1b\",\n        \"conceptName\": \"History of chronic lung disease\",\n        \"conceptDescription\": \"414415007 | History of chronic lung disease (situation)\"\n    },\n    {\n        \"id\": 36,\n        \"conceptId\": \"b3a45188-79f6-457c-b2b6-957780e84736\",\n        \"conceptName\": \"Invalid result\",\n        \"conceptDescription\": \"455371000124106 | Invalid result (qualifier value)\"\n    },\n    {\n        \"id\": 15,\n        \"conceptId\": \"628a2165-0999-40f5-87d4-a40501f1f5f9\",\n        \"conceptName\": \"Man\",\n        \"conceptDescription\": \"339947000 | Man (person)\"\n    },\n    {\n        \"id\": 17,\n        \"conceptId\": \"c59c3129-3f64-45e6-9901-6d7f053f6263\",\n        \"conceptName\": \"Negative\",\n        \"conceptDescription\": \"260385009 | Negative (qualifier value)\"\n    },\n    {\n        \"id\": 23,\n        \"conceptId\": \"99782a3a-2e09-4482-9c4c-2213f69792e5\",\n        \"conceptName\": \"Normal body mass index\",\n        \"conceptDescription\": \"35425004 | Normal body mass index (finding)\"\n    },\n    {\n        \"id\": 18,\n        \"conceptId\": \"7d540808-89e1-447a-a34b-7876369754b1\",\n        \"conceptName\": \"Not Detected\",\n        \"conceptDescription\": \"260415000 | Not Detected (qualifier value)\"\n    },\n    {\n        \"id\": 1,\n        \"conceptId\": \"9f19e2d2-3992-4474-b717-e1050e3a5341\",\n        \"conceptName\": \"Patient (person)\",\n        \"conceptDescription\": \"Patient (person)\"\n    },\n    {\n        \"id\": 19,\n        \"conceptId\": \"5b6a7283-d643-47e6-a2b6-03e49902a45e\",\n        \"conceptName\": \"Positive\",\n        \"conceptDescription\": \"10828004 | Positive (qualifier value)\"\n    },\n    {\n        \"id\": 16,\n        \"conceptId\": \"359f77d5-6397-4b55-a2b6-c0695f165371\",\n        \"conceptName\": \"Pregnant woman\",\n        \"conceptDescription\": \"255409004 | Pregnant woman (person)\"\n    },\n    {\n        \"id\": 20,\n        \"conceptId\": \"4c197306-450d-4a5e-a468-011a36388383\",\n        \"conceptName\": \"Presumptive Positive\",\n        \"conceptDescription\": \"720735008 | Presumptive Positive (qualifier value)\"\n    },\n    {\n        \"id\": 6,\n        \"conceptId\": \"c4e07b26-88f9-4250-803c-86463391c001\",\n        \"conceptName\": \"Seconds (qualifier value)\",\n        \"conceptDescription\": \"Seconds (qualifier value)\"\n    }\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    },
+    {
+      "uuid": "55758bd9-ed71-4a2f-b1da-15d57b4ed34e",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "query/units",
+      "responses": [
+        {
+          "uuid": "85d034c7-a0c2-4da8-8c7f-583c302bf12f",
+          "body": "[\n    {\n        \"id\": 24,\n        \"conceptId\": \"b66571ca-bba7-4a5a-a90f-2ef9f0c33a56\",\n        \"conceptName\": \"Seconds\",\n        \"conceptDescription\": \"257997001 | Seconds (qualifier value)\"\n    },\n    {\n        \"id\": 21,\n        \"conceptId\": \"9a6877c0-04b7-4d5d-9766-8695192790d4\",\n        \"conceptName\": \"day\",\n        \"conceptDescription\": \"258703001 | day (qualifier value)\"\n    },\n    {\n        \"id\": 12,\n        \"conceptId\": \"01759586-062f-455f-a0c4-23904464b5f4\",\n        \"conceptName\": \"inch (qualifier value)\",\n        \"conceptDescription\": \"inch (qualifier value)\"\n    },\n    {\n        \"id\": 14,\n        \"conceptId\": \"20e0e0e0-70a1-4161-b7a4-e7725f5f583e\",\n        \"conceptName\": \"kilogram (qualifier value)\",\n        \"conceptDescription\": \"kilogram (qualifier value)\"\n    },\n    {\n        \"id\": 13,\n        \"conceptId\": \"757702f5-2516-4d25-ab74-4a226806857f\",\n        \"conceptName\": \"meter (qualifier value)\",\n        \"conceptDescription\": \"meter (qualifier value)\"\n    },\n    {\n        \"id\": 22,\n        \"conceptId\": \"3a44167a-e94a-4962-8d2e-d94e57475732\",\n        \"conceptName\": \"month\",\n        \"conceptDescription\": \"258706009 | month (qualifier value)\"\n    },\n    {\n        \"id\": 10,\n        \"conceptId\": \"98999a1c-11b1-4777-a9b6-3b25482676c4\",\n        \"conceptName\": \"pounds (qualifier value)\",\n        \"conceptDescription\": \"pounds (qualifier value)\"\n    },\n    {\n        \"id\": 7,\n        \"conceptId\": \"d9036e1e-3397-4f00-a40a-021626644970\",\n        \"conceptName\": \"year (qualifier value)\",\n        \"conceptDescription\": \"year (qualifier value)\"\n    }\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "ee5e78c5-87d6-4f72-9941-0feb3922b6c6"
+    },
+    {
+      "type": "route",
+      "uuid": "55758bd9-ed71-4a2f-b1da-15d57b4ed34e"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}
