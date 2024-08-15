@@ -19,30 +19,31 @@ export default function Dashboard() {
   const body: CSSProperties = {
     background: '#E6F1FE',
     padding: '20px',
+    height: 'calc(100vh - 71px)',
+    display: 'flex',
+    flexDirection: 'row',
+    overflow: 'hidden',
   }
 
   const criteria: CSSProperties = {
     borderRadius: '8px',
     background: '#FFF',
-    overflow: 'hidden',
     clear: 'both',
     margin: '-.5rem',
     padding: '10px',
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
   }
 
   const criteriaContainer: CSSProperties = {
     borderRadius: '8px',
     padding: '8px',
-    alignItems: 'center',
-    gap: '8px',
-    alignSelf: 'stretch',
     background: '#FAFAFA',
     border: '1px solid #E4E4E7',
-    width: '100%',
     overflow: 'scroll',
-    display: 'table',
-    float: 'left',
+    height: '100%',
   }
 
   useEffect(() => {
