@@ -12,7 +12,7 @@ const style: CSSProperties = {
     padding: '12px 16px',
     minHeight: '54px',
     width: '98%',
-    height: 'auto',
+    height: 'fit-content',
     alignItems: 'flex-start',
     alignSelf: 'stretch',
     gap: '12px',

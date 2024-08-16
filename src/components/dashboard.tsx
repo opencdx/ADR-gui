@@ -47,7 +47,7 @@ export default function Dashboard() {
     flexWrap: 'wrap',
   }
   const windowHeight = window.innerHeight;
-  const containerHeight = windowHeight * 0.7; // Adjust percentage as needed
+  const containerHeight = windowHeight * 0.75; // Adjust percentage as needed
   criteriaContainer.height = `${containerHeight}px`;
   useEffect(() => {
     const getCriteria = async () => {
