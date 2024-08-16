@@ -69,7 +69,7 @@ export default function Dashboard() {
   const t = useTranslations('common');
   return (
     <>
-      <div className="flex h-screen" >
+      <div className="flex py-4" style={{ ...body }}>
         <DndProvider backend={HTML5Backend}>
           <div style={{ ...criteria }}>
             <h1>Available Criteria</h1>
