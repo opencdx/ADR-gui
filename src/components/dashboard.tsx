@@ -31,7 +31,7 @@ export default function Dashboard() {
     background: '#FFF',
     clear: 'both',
     padding: '10px',
-    width: 'fit-content',
+    width: '415px',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
