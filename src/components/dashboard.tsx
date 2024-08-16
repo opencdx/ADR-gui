@@ -19,7 +19,6 @@ export default function Dashboard() {
   const body: CSSProperties = {
     background: '#E6F1FE',
     padding: '20px',
-    height: 'calc(100vh - 71px)',
     display: 'flex',
     flexDirection: 'row',
     overflow: 'hidden',
@@ -42,10 +41,14 @@ export default function Dashboard() {
     padding: '8px',
     background: '#FAFAFA',
     border: '1px solid #E4E4E7',
-    overflow: 'scroll',
-    height: '100%',
+    overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   }
-
+  const windowHeight = window.innerHeight;
+  const containerHeight = windowHeight * 0.7; // Adjust percentage as needed
+  criteriaContainer.height = `${containerHeight}px`;
   useEffect(() => {
     const getCriteria = async () => {
       Endpoints.getCriteria.then((response) => {
@@ -66,14 +69,14 @@ export default function Dashboard() {
   const t = useTranslations('common');
   return (
     <>
-      <div className="flex py-4" style={{ ...body }}>
+      <div className="flex h-screen" >
         <DndProvider backend={HTML5Backend}>
           <div style={{ ...criteria }}>
             <h1>Available Criteria</h1>
             <Input variant='bordered' id='search' label='Search' />
             <Tabs aria-label='Available Criteria' style={{marginTop: '10px'}} fullWidth>
               <Tab key='criteria' title='Available Criteria'>
-                <div style={{ ...criteriaContainer }}>
+              <div style={{ ...criteriaContainer}}>
                     {criteriaList?.map((criteria) => (
                       <>
                         <CriteriaBox key={criteria.id} showCopyIcon={true} criteria={criteria.conceptName} />
