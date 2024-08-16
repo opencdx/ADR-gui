@@ -23,6 +23,7 @@ export default function Dashboard() {
     display: 'flex',
     flexDirection: 'row',
     overflow: 'hidden',
+    width: 'fit-content',
   }
 
   const criteria: CSSProperties = {

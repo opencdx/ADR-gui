@@ -13,7 +13,7 @@ const criteriaContainer: CSSProperties = {
 }
 
 const windowHeight = window.innerHeight;
-const containerHeight = windowHeight * 0.75; // Adjust percentage as needed
+const containerHeight = windowHeight * 0.70; // Adjust percentage as needed
 criteriaContainer.height = `${containerHeight}px`;
 
 export interface CriteriaListProps {
