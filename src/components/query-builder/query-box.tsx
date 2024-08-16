@@ -88,7 +88,7 @@ const QueryBox: FC<QueryBoxProps> = memo(function QueryBox({
                 style={{ ...dropBox, backgroundColor, color, border, opacity }}
                 role="QueryBox"
             >
-                {isActive ? 'Release to add' : 'Drag a criteria here and begin defining'}
+                {isActive ? 'Release to add' : 'Drag criteria and or operators here in the Query Field and begin defining'}
             </div>
         </div>
     )

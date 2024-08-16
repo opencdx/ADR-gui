@@ -29,7 +29,6 @@ export default function Dashboard() {
     borderRadius: '8px',
     background: '#FFF',
     clear: 'both',
-    margin: '-.5rem',
     padding: '10px',
     width: '100%',
     display: 'flex',
@@ -73,7 +72,7 @@ export default function Dashboard() {
         <DndProvider backend={HTML5Backend}>
           <div style={{ ...criteria }}>
             <h1 style={{ ...title }}>Available Criteria</h1>
-            <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm}/>
+            <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
             <Tabs aria-label='Available Criteria' style={{ ...tab }} fullWidth>
               <Tab key='criteria' title='Available Criteria'>
                 <CriteriaList criteriaList={criteriaList} filter={searchTerm} />
@@ -84,7 +83,10 @@ export default function Dashboard() {
             </Tabs>
           </div>
           <div style={{ float: 'left', marginLeft: '1rem' }}>
-            <QueryBox />
+            <div style={{ ...criteria }}>
+              <h1 style={{ ...title }}>Query Builder</h1>
+              <QueryBox />
+            </div>
           </div>
         </DndProvider>
       </div>
