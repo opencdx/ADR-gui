@@ -1,20 +1,21 @@
 'use client';
 
-import React, { CSSProperties, useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useTranslations } from 'next-intl';
 import { Endpoints } from '@/axios/apiEndpoints';
-import { CriteriaBox } from './query-builder/criteria-box';
 import { StatefulQueryBox as QueryBox } from './query-builder/query-box';
 import { Input } from 'ui-library';
 import { Tabs, Tab } from '@nextui-org/react';
+import { CriteriaList } from './query-builder/criteria-list';
 
 export default function Dashboard() {
 
   const [criteriaList, setCriteria] = useState<any[]>([]);
   const [unitsOfMeasure, setUnitsOfMeasure] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const body: CSSProperties = {
     background: '#E6F1FE',
@@ -36,19 +37,18 @@ export default function Dashboard() {
     overflow: 'hidden',
   }
 
-  const criteriaContainer: CSSProperties = {
-    borderRadius: '8px',
-    padding: '8px',
-    background: '#FAFAFA',
-    border: '1px solid #E4E4E7',
-    overflow: 'auto',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  const title: CSSProperties = {
+    color: '#001124',
+    fontSize: '20px',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    marginBottom: '24px',
   }
-  const windowHeight = window.innerHeight;
-  const containerHeight = windowHeight * 0.75; // Adjust percentage as needed
-  criteriaContainer.height = `${containerHeight}px`;
+
+  const tab: CSSProperties = {
+    marginTop: '16px',
+  }
+
   useEffect(() => {
     const getCriteria = async () => {
       Endpoints.getCriteria.then((response) => {
@@ -64,7 +64,7 @@ export default function Dashboard() {
 
     getCriteria();
     getUnits();
-  });
+  }), [];
 
   const t = useTranslations('common');
   return (
@@ -72,26 +72,14 @@ export default function Dashboard() {
       <div className="flex py-4" style={{ ...body }}>
         <DndProvider backend={HTML5Backend}>
           <div style={{ ...criteria }}>
-            <h1>Available Criteria</h1>
-            <Input variant='bordered' id='search' label='Search' />
-            <Tabs aria-label='Available Criteria' style={{marginTop: '10px'}} fullWidth>
+            <h1 style={{ ...title }}>Available Criteria</h1>
+            <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm}/>
+            <Tabs aria-label='Available Criteria' style={{ ...tab }} fullWidth>
               <Tab key='criteria' title='Available Criteria'>
-              <div style={{ ...criteriaContainer}}>
-                    {criteriaList?.map((criteria) => (
-                      <>
-                        <CriteriaBox key={criteria.id} showCopyIcon={true} criteria={criteria.conceptName} />
-                      </>
-                    ))}
-                </div>
+                <CriteriaList criteriaList={criteriaList} filter={searchTerm} />
               </Tab>
               <Tab key='units' title='Units of Measure'>
-                <div style={{ ...criteriaContainer }}>
-                    {unitsOfMeasure?.map((unit) => (
-                      <>
-                        <CriteriaBox key={unit.id} showCopyIcon={true} criteria={unit.conceptName} />
-                      </>
-                    ))}
-                </div>
+                <CriteriaList criteriaList={unitsOfMeasure} filter={searchTerm} />
               </Tab>
             </Tabs>
           </div>

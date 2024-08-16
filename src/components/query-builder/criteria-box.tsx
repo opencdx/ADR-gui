@@ -10,7 +10,6 @@ const style: CSSProperties = {
     border: '1px solid #E4E4E7',
     background: '#FFF',
     padding: '12px 16px',
-    minHeight: '54px',
     width: '98%',
     height: 'fit-content',
     alignItems: 'flex-start',
