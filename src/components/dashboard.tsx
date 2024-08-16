@@ -23,7 +23,7 @@ export default function Dashboard() {
     display: 'flex',
     flexDirection: 'row',
     overflow: 'hidden',
-    width: 'fit-content',
+    width: '100%',
   }
 
   const criteria: CSSProperties = {
@@ -32,9 +32,23 @@ export default function Dashboard() {
     clear: 'both',
     padding: '10px',
     width: '100%',
+    maxWidth: '300px',
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    float: 'left',
+  }
+
+  const query: CSSProperties = {
+    borderRadius: '8px',
+    background: '#FFF',
+    clear: 'both',
+    padding: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    width: '100%',
+    marginLeft: '20px',
   }
 
   const title: CSSProperties = {
@@ -83,11 +97,9 @@ export default function Dashboard() {
               </Tab>
             </Tabs>
           </div>
-          <div style={{ float: 'left', marginLeft: '1rem' }}>
-            <div style={{ ...criteria }}>
-              <h1 style={{ ...title }}>Query Builder</h1>
-              <QueryBox />
-            </div>
+          <div style={{ ...query }}>
+            <h1 style={{ ...title }}>Query Builder</h1>
+            <QueryBox />
           </div>
         </DndProvider>
       </div>
