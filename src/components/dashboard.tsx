@@ -17,25 +17,8 @@ export default function Dashboard() {
   const [unitsOfMeasure, setUnitsOfMeasure] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const body: CSSProperties = {
-    background: '#E6F1FE',
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'row',
-    overflow: 'hidden',
-    width: '100%',
-  }
-
   const criteria: CSSProperties = {
-    borderRadius: '8px',
-    background: '#FFF',
-    clear: 'both',
-    padding: '10px',
     width: '415px',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    float: 'left',
   }
 
   const query: CSSProperties = {
@@ -48,18 +31,6 @@ export default function Dashboard() {
     overflow: 'hidden',
     width: '100%',
     marginLeft: '20px',
-  }
-
-  const title: CSSProperties = {
-    color: '#001124',
-    fontSize: '20px',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    marginBottom: '24px',
-  }
-
-  const tab: CSSProperties = {
-    marginTop: '16px',
   }
 
   useEffect(() => {
@@ -82,12 +53,12 @@ export default function Dashboard() {
   const t = useTranslations('common');
   return (
     <>
-      <div className="flex py-4" style={{ ...body }}>
+      <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full'>
         <DndProvider backend={HTML5Backend}>
-          <div style={{ ...criteria }}>
-            <h1 style={{ ...title }}>Available Criteria</h1>
+          <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden float-left' style={{...criteria}}>
+            <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
             <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
-            <Tabs aria-label='Available Criteria' style={{ ...tab }} fullWidth>
+            <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
               <Tab key='criteria' title='Available Criteria'>
                 <CriteriaList criteriaList={criteriaList} filter={searchTerm} />
               </Tab>
@@ -96,8 +67,8 @@ export default function Dashboard() {
               </Tab>
             </Tabs>
           </div>
-          <div style={{ ...query }}>
-            <h1 style={{ ...title }}>Query Builder</h1>
+          <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden w-full ml-5'>
+            <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
             <QueryBox />
           </div>
         </DndProvider>

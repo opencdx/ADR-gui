@@ -1,16 +1,7 @@
 import { useEffect, useMemo, type CSSProperties, type FC } from 'react'
 import { CriteriaBox } from './criteria-box'
 
-const criteriaContainer: CSSProperties = {
-    borderRadius: '8px',
-    padding: '8px',
-    background: '#FAFAFA',
-    border: '1px solid #E4E4E7',
-    overflow: 'auto',
-    display: 'flex',
-    flexDirection: 'row',
-    flexFlow: 'column',
-}
+const criteriaContainer: CSSProperties = {}
 
 const windowHeight = window.innerHeight;
 const containerHeight = windowHeight * 0.70; // Adjust percentage as needed
@@ -40,7 +31,7 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, filter }) =>
     });
 
     return (
-        <div style={{ ...criteriaContainer }}>
+        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col' style={{ ...criteriaContainer }}>
             {criteriaList?.map((criteria) => (
                 <>
                     <CriteriaBox key={criteria.id} showCopyIcon={true} criteria={criteria.conceptName} />

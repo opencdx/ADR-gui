@@ -5,18 +5,8 @@ import { useCriteriaStore } from "@/lib/store";
 import { CriteriaTypes } from './criteria-types';
 
 const style: CSSProperties = {
-    display: 'flex',
-    borderRadius: '8px',
     border: '1px solid #E4E4E7',
-    background: '#FFF',
-    padding: '12px 16px',
     width: '98%',
-    height: 'fit-content',
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-    gap: '12px',
-    margin: '3px',
-    cursor: 'pointer',
 }
 
 const hoverStyle: CSSProperties = {
@@ -57,7 +47,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
 
   return (
     <>
-      <div ref={drag} style={{ ...style, opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+      <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer' style={{ ...style, opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         {criteria}
       </div>
     </>
