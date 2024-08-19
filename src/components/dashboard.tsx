@@ -10,29 +10,14 @@ import { StatefulQueryBox as QueryBox } from './query-builder/query-box';
 import { Input } from 'ui-library';
 import { Tabs, Tab } from '@nextui-org/react';
 import { CriteriaList } from './query-builder/criteria-list';
+import { useGetQueryableData, useGetUnits } from '@/hooks/hooks';
 
 export default function Dashboard() {
 
-  const [criteriaList, setCriteria] = useState<any[]>([]);
-  const [unitsOfMeasure, setUnitsOfMeasure] = useState<any[]>([]);
+  const { data: criteriaList } = useGetQueryableData();
+  const { data: unitsOfMeasure } = useGetUnits();
+
   const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    const getCriteria = async () => {
-      Endpoints.getCriteria.then((response) => {
-        setCriteria(response.data);
-      });
-    };
-
-    const getUnits = async () => {
-      Endpoints.getUnits.then((response) => {
-        setUnitsOfMeasure(response.data);
-      });
-    };
-
-    getCriteria();
-    getUnits();
-  }), [];
 
   const t = useTranslations('common');
   return (
@@ -44,10 +29,10 @@ export default function Dashboard() {
             <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
             <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
               <Tab key='criteria' title='Available Criteria'>
-                <CriteriaList criteriaList={criteriaList} filter={searchTerm} />
+                <CriteriaList criteriaList={criteriaList?.data} filter={searchTerm} />
               </Tab>
               <Tab key='units' title='Units of Measure'>
-                <CriteriaList criteriaList={unitsOfMeasure} filter={searchTerm} />
+                <CriteriaList criteriaList={unitsOfMeasure?.data} filter={searchTerm} />
               </Tab>
             </Tabs>
           </div>

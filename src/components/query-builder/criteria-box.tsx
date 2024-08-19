@@ -10,7 +10,7 @@ const hoverStyle: CSSProperties = {
 
 export interface CriteriaBoxProps {
   showCopyIcon?: boolean
-  criteria: string
+  criteria: string | undefined
 }
 
 interface DropResult {

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, type CSSProperties, type FC } from 'react'
 import { CriteriaBox } from './criteria-box'
+import { TinkarConceptModel } from '@/api/adr';
 
 const criteriaContainer: CSSProperties = {}
 
@@ -8,7 +9,7 @@ const containerHeight = windowHeight * 0.70; // Adjust percentage as needed
 criteriaContainer.height = `${containerHeight}px`;
 
 export interface CriteriaListProps {
-    criteriaList: any[],
+    criteriaList: TinkarConceptModel[] | undefined,
     filter: string
 }
 
@@ -16,16 +17,16 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, filter }) =>
 
     const criteria = useMemo(() => {
         if (filter) {
-            criteriaList = criteriaList.filter(item => {
-                return item.conceptName.toLowerCase().includes(filter.toLowerCase());
+            criteriaList = criteriaList?.filter(item => {
+                return item.conceptName?.toLowerCase().includes(filter.toLowerCase());
             });
         }
     }, [criteriaList, filter]);
 
     useEffect(() => {
         if (filter) {
-            criteriaList = criteriaList.filter(item => {
-                return item.conceptName.toLowerCase().includes(filter.toLowerCase());
+            criteriaList = criteriaList?.filter(item => {
+                return item.conceptName?.toLowerCase().includes(filter.toLowerCase());
             });
         }
     });
