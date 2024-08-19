@@ -17,22 +17,6 @@ export default function Dashboard() {
   const [unitsOfMeasure, setUnitsOfMeasure] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const criteria: CSSProperties = {
-    width: '415px',
-  }
-
-  const query: CSSProperties = {
-    borderRadius: '8px',
-    background: '#FFF',
-    clear: 'both',
-    padding: '10px',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    width: '100%',
-    marginLeft: '20px',
-  }
-
   useEffect(() => {
     const getCriteria = async () => {
       Endpoints.getCriteria.then((response) => {
@@ -55,7 +39,7 @@ export default function Dashboard() {
     <>
       <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full'>
         <DndProvider backend={HTML5Backend}>
-          <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden float-left' style={{...criteria}}>
+          <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden float-left w-[420px]'>
             <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
             <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
             <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
