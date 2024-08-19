@@ -4,11 +4,6 @@ import { useDrag } from 'react-dnd'
 import { useCriteriaStore } from "@/lib/store";
 import { CriteriaTypes } from './criteria-types';
 
-const style: CSSProperties = {
-    border: '1px solid #E4E4E7',
-    width: '98%',
-}
-
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
 }
@@ -47,7 +42,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
 
   return (
     <>
-      <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer' style={{ ...style, opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+      <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer w-[98%]' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         {criteria}
       </div>
     </>
