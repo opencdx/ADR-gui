@@ -14,7 +14,6 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Endpoints } from '@/axios/apiEndpoints';
 import { Button, Input } from 'ui-library';
 import {useTranslations} from 'next-intl';
 
@@ -50,26 +49,7 @@ export default function Login() {
     const userName = e.currentTarget.email.value;
     const password = e.currentTarget.password.value;
 
-    try {
-      const response = await Endpoints.login({ userName, password });
-
-      const data = response.data;
-
-      if (data.token) {
-        localStorage.setItem('serviceToken', data.token);
-        router.push("/dashboard");
-      } else {
-        toast.error(data.message || t('login_failed'), {
-          position: 'top-right',
-          autoClose: 2000,
-        });
-      }
-    } catch (err: any) {
-      toast.error(err.message || t('error_occurred'), {
-        position: 'top-center',
-        autoClose: 2000,
-      });
-    }
+    
   };
 
   return (
