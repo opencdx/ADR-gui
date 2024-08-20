@@ -1,50 +1,44 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Endpoints } from '@/axios/apiEndpoints';
-import { CriteriaBox } from './query-builder/criteria-box';
-import { StatefulQueryBox as QueryBox  } from './query-builder/query-box';
-
-export const cities = [
-  { key: 'sydney', label: 'Sydney' },
-  { key: 'sanfrancisco', label: 'San Francisco' },
-  { key: 'london', label: 'London' },
-];
+import { StatefulQueryBox as QueryBox } from './query-builder/query-box';
+import { Input } from 'ui-library';
+import { Tabs, Tab } from '@nextui-org/react';
+import { CriteriaList } from './query-builder/criteria-list';
+import { useGetQueryableData, useGetUnits } from '@/hooks/hooks';
 
 export default function Dashboard() {
 
-  const [criteriaList, setCriteria] = useState<any[]>([]);
+  const { data: criteriaList } = useGetQueryableData();
+  const { data: unitsOfMeasure } = useGetUnits();
 
-  useEffect(() => {
-    const fetchQueries = async () => {
-      Endpoints.query.then((response) => {
-        setCriteria(response.data);
-      });
-    };
+  const [searchTerm, setSearchTerm] = useState('');
 
-    fetchQueries();
-  });
-  
   const t = useTranslations('common');
   return (
     <>
-      <div className="flex py-4">
+      <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full'>
         <DndProvider backend={HTML5Backend}>
-          <div style={{ overflow: 'hidden', clear: 'both', margin: '-.5rem' }}>
-            <div style={{ float: 'left' }}>
-              {criteriaList?.map((criteria) => (
-                <>
-                <CriteriaBox showCopyIcon={true} criteria={criteria.conceptName}/>
-                </>
-              ))}
-            </div>
+          <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden float-left w-[420px]'>
+            <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
+            <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
+            <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
+              <Tab key='criteria' title='Available Criteria'>
+                <CriteriaList criteriaList={criteriaList?.data} filter={searchTerm} />
+              </Tab>
+              <Tab key='units' title='Units of Measure'>
+                <CriteriaList criteriaList={unitsOfMeasure?.data} filter={searchTerm} />
+              </Tab>
+            </Tabs>
           </div>
-          <div style={{ float: 'left', marginLeft: '1rem' }}>
-            <QueryBox/>
+          <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden w-full ml-5'>
+            <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
+            <QueryBox />
           </div>
         </DndProvider>
       </div>

@@ -1,28 +1,25 @@
-import type { CSSProperties, FC } from 'react'
+import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
 import { useCriteriaStore } from "@/lib/store";
 import { CriteriaTypes } from './criteria-types';
 
-const style: CSSProperties = {
-    display: 'flex',
-    border: '1px dashed gray',
-    padding: '0.5rem',
-    margin: '0.5rem',
+const hoverStyle: CSSProperties = {
+  border: '1px solid #006FEE',
 }
 
 export interface CriteriaBoxProps {
   showCopyIcon?: boolean
-  criteria: string
-  isChild?: boolean
+  criteria: string | undefined
 }
 
 interface DropResult {
   criteria: string
 }
 
-export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isChild }) => {
+export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
   const { addCriteria } = useCriteriaStore();
+  const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
       type: CriteriaTypes.CRITERIA,
@@ -37,7 +34,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isCh
         }
       },
       collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0.4 : 1,
+        opacity: monitor.isDragging() ? 0.2 : 1,
       }),
     }),
     [showCopyIcon],
@@ -45,16 +42,9 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria, isCh
 
   return (
     <>
-      {!isChild &&
-        <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
-          <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px"}}>add</span> {criteria}
-        </div>
-      }
-      {isChild &&
-        <div ref={drag} style={{ ...style, opacity, cursor: "pointer" }}>
-          <span class="material-symbols-outlined" style={{color: "#0066FF", paddingRight: "12px", paddingLeft: "20px"}}>add</span> {criteria}
-        </div>
-      }
+      <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer w-[98%]' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        {criteria}
+      </div>
     </>
   )
 }

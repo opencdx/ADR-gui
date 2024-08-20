@@ -70,14 +70,7 @@ export const Navbar = () => {
     <NextUINavbar maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
-            <Image
-              alt="nextui logo"
-              height={40}
-              radius='none'
-              src="/HelloWorld.png"
-              width={100}
-              
-            />
+            ADR
         </NavbarBrand>
       </NavbarContent>
 

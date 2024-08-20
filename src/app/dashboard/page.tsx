@@ -10,9 +10,9 @@ export default function DashboardPage() {
       <Divider />
       <div className="flex">
         <div className="w-full overflow-x-auto">
-          <div className="sm:h-[calc(99vh-60px)] overflow-auto ">
-            <div className="w-full flex justify-center mx-auto   overflow-auto h-[calc(100vh - 120px)] overflow-y-auto relative">
-              <div className="w-full md:max-w-6xl">{<Dashboard />}</div>
+          <div className="h-full overflow-auto ">
+            <div className="w-full flex justify-center overflow-auto h-full ">
+              <div className="w-full md:max-w-7xl">{<Dashboard />}</div>
             </div>
           </div>
         </div>

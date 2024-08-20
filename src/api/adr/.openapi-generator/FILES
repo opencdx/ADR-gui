@@ -1,0 +1,17 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+model/adrquery.ts
+model/formula.ts
+model/index.ts
+model/query.ts
+model/saved-query.ts
+model/tinkar-concept-model.ts
+server/anf-controller-api.ts
+server/query-controller-api.ts
