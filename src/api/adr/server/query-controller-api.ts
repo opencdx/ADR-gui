@@ -190,6 +190,41 @@ export const QueryControllerApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {ADRQuery} aDRQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        queryCSV: async (aDRQuery: ADRQuery, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'aDRQuery' is not null or undefined
+            assertParamExists('queryCSV', 'aDRQuery', aDRQuery)
+            const localVarPath = `/query/csv`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(aDRQuery, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SavedQuery} savedQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -292,6 +327,18 @@ export const QueryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {ADRQuery} aDRQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async queryCSV(aDRQuery: ADRQuery, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.queryCSV(aDRQuery, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['QueryControllerApi.queryCSV']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {SavedQuery} savedQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -356,6 +403,15 @@ export const QueryControllerApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {QueryControllerApiQueryCSVRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        queryCSV(requestParameters: QueryControllerApiQueryCSVRequest, options?: RawAxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.queryCSV(requestParameters.aDRQuery, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {QueryControllerApiSaveQueryRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -390,6 +446,20 @@ export interface QueryControllerApiPostQueryRequest {
      * 
      * @type {ADRQuery}
      * @memberof QueryControllerApiPostQuery
+     */
+    readonly aDRQuery: ADRQuery
+}
+
+/**
+ * Request parameters for queryCSV operation in QueryControllerApi.
+ * @export
+ * @interface QueryControllerApiQueryCSVRequest
+ */
+export interface QueryControllerApiQueryCSVRequest {
+    /**
+     * 
+     * @type {ADRQuery}
+     * @memberof QueryControllerApiQueryCSV
      */
     readonly aDRQuery: ADRQuery
 }
@@ -465,6 +535,17 @@ export class QueryControllerApi extends BaseAPI {
      */
     public postQuery(requestParameters: QueryControllerApiPostQueryRequest, options?: RawAxiosRequestConfig) {
         return QueryControllerApiFp(this.configuration).postQuery(requestParameters.aDRQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {QueryControllerApiQueryCSVRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof QueryControllerApi
+     */
+    public queryCSV(requestParameters: QueryControllerApiQueryCSVRequest, options?: RawAxiosRequestConfig) {
+        return QueryControllerApiFp(this.configuration).queryCSV(requestParameters.aDRQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

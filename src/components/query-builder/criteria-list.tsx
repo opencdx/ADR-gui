@@ -36,10 +36,7 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, filter }) =>
             {criteriaList?.map((criteria) => (
                 <>
                     <CriteriaBox key={criteria.id} showCopyIcon={true}
-                        id={criteria.id}
-                        conceptId={criteria.conceptId}
-                        conceptName={criteria.conceptName}
-                        conceptDescription={criteria.conceptDescription}
+                        criteria={criteria}
                     />
                 </>
             ))}

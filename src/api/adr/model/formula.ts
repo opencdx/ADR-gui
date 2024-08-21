@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TinkarConceptModel } from './tinkar-concept-model';
 
 /**
  * This class represents a mathematical formula for performing calculations. Only one of leftOperand, leftOperandValue, or leftOperandFormula should be set. Only one of rightOperand, rightOperandValue, or rightOperandFormula should be set. Operation is required.
@@ -27,17 +30,17 @@ export interface Formula {
      */
     'name'?: string;
     /**
-     * The left operand of the formula. Only one of leftOperand, leftOperandValue, or leftOperandFormula should be set.
-     * @type {string}
+     * 
+     * @type {TinkarConceptModel}
      * @memberof Formula
      */
-    'leftOperand'?: string;
+    'leftOperand'?: TinkarConceptModel;
     /**
-     * The right operand of the formula. Only one of rightOperand, rightOperandValue, or rightOperandFormula should be set.
-     * @type {string}
+     * 
+     * @type {TinkarConceptModel}
      * @memberof Formula
      */
-    'rightOperand'?: string;
+    'rightOperand'?: TinkarConceptModel;
     /**
      * The value of the left operand in the formula. Only one of leftOperand, leftOperandValue, or leftOperandFormula should be set.
      * @type {number}
@@ -63,19 +66,19 @@ export interface Formula {
      */
     'rightOperandFormula'?: Formula;
     /**
-     * The unit of measurement for the left operand in the formula.
-     * @type {string}
+     * 
+     * @type {TinkarConceptModel}
      * @memberof Formula
      */
-    'leftOperandUnit'?: string;
+    'leftOperandUnit'?: TinkarConceptModel;
     /**
-     * The unit of measurement for the right operand in the formula.
-     * @type {string}
+     * 
+     * @type {TinkarConceptModel}
      * @memberof Formula
      */
-    'rightOperandUnit'?: string;
+    'rightOperandUnit'?: TinkarConceptModel;
     /**
-     * The operation to be performed in the formula. Required.
+     * Numerical operations that can be performed on numerical values.
      * @type {string}
      * @memberof Formula
      */

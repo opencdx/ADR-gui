@@ -16,6 +16,9 @@
 // May contain unused imports in some cases
 // @ts-ignore
 import type { Formula } from './formula';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { TinkarConceptModel } from './tinkar-concept-model';
 
 /**
  * A query object used for searching concepts.  Only one of these fields should be used at a time: formula, conceptId, group. Operation fields are used to compare the value of those fields against another value.  JoinOperation is used to bring together the multiple queries in an ADRQuery.
@@ -24,13 +27,13 @@ import type { Formula } from './formula';
  */
 export interface Query {
     /**
-     * Tinkar Concept ID that will be queried.  Optional
-     * @type {string}
+     * 
+     * @type {TinkarConceptModel}
      * @memberof Query
      */
-    'conceptId'?: string;
+    'concept'?: TinkarConceptModel;
     /**
-     * The comparison operation to be performance on the value coming from the query.  Optional
+     * Comparison operations for querying.
      * @type {string}
      * @memberof Query
      */
@@ -42,11 +45,11 @@ export interface Query {
      */
     'operationDouble'?: number;
     /**
-     * The unit of the value to be compared against the conceptId, if the value is to be compared against a number.  Optional
-     * @type {string}
+     * 
+     * @type {TinkarConceptModel}
      * @memberof Query
      */
-    'operationUnit'?: string;
+    'operationUnit'?: TinkarConceptModel;
     /**
      * The value to be compared against the conceptId, if the value is to be compared against a string.  Optional
      * @type {string}
@@ -60,7 +63,7 @@ export interface Query {
      */
     'formula'?: Formula;
     /**
-     * Indicates how queries should be applied AND / OR  order of operation is the given order of queries  Optional
+     * Logical join operations for querying.
      * @type {string}
      * @memberof Query
      */
