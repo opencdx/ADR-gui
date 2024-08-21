@@ -284,7 +284,7 @@ export const QueryControllerApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postQuery(aDRQuery: ADRQuery, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async postQuery(aDRQuery: ADRQuery, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postQuery(aDRQuery, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['QueryControllerApi.postQuery']?.[localVarOperationServerIndex]?.url;
@@ -351,7 +351,7 @@ export const QueryControllerApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postQuery(requestParameters: QueryControllerApiPostQueryRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        postQuery(requestParameters: QueryControllerApiPostQueryRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<string>> {
             return localVarFp.postQuery(requestParameters.aDRQuery, options).then((request) => request(axios, basePath));
         },
         /**

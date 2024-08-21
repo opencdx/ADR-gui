@@ -1,9 +1,10 @@
 import { CSSProperties, FC, memo, useCallback, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { CriteriaTypes } from './criteria-types'
+import { DroppableTypes } from './droppable-types'
 import type { DragItem } from './interfaces'
-import { useCriteriaStore } from "@/lib/store";
+import { useCriteriaStore, useQueryStore } from "@/lib/store";
+import { Input } from "ui-library";
 
 const dropBox: CSSProperties = {
     display: 'flex',
@@ -27,29 +28,25 @@ const criteriaBox: CSSProperties = {
     marginBottom: '4px',
 }
 
-const criteriaRemove: CSSProperties = {
-    float: 'right',
-    width: 'auto',
-}
-
-export interface QueryBoxProps {
+export interface QueryBuilderProps {
     onDrop: (item: any) => void
     criteria?: string
 }
 
-const QueryBox: FC<QueryBoxProps> = memo(function QueryBox({
+const QueryBuilder: FC<QueryBuilderProps> = memo(function QueryBox({
     onDrop,
-    criteria,
 })  {
     const { criteriaList, removeCriteria } = useCriteriaStore();
+    const { query } = useQueryStore();
 
-    const handleRemove = (index: number) => {
+    const handleRemove = (index: number, criteria: string) => {
+        //query.query?.queries.
         removeCriteria(index);
     };
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [CriteriaTypes.CRITERIA],
+            accept: [DroppableTypes.CRITERIA, DroppableTypes.OPERATOR],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItemType())
                 return undefined
@@ -75,22 +72,24 @@ const QueryBox: FC<QueryBoxProps> = memo(function QueryBox({
     }
 
     return (
-        <div>
-            {criteriaList?.map((criteria, index) => (
-                <div style={{ ...criteriaBox }}>
-                    <div style={{display: "flex"}}><span className="material-symbols-outlined" style={{color: "#757575"}}>drag_indicator</span><p style={{color: "#001124"}}>{criteria}</p></div>
-                    <div><span onClick={() => handleRemove(index)} className="material-symbols-outlined" style={{color: "#757575", cursor: "pointer"}}>delete</span></div>
+        <>
+            <div>
+                {criteriaList?.map((criteria, index) => (
+                    <div style={{ ...criteriaBox }}>
+                        <div style={{display: "flex"}}><span className="material-symbols-outlined" style={{color: "#757575"}}>drag_indicator</span><p style={{color: "#001124"}}>{criteria}</p></div>
+                        <div><span onClick={() => handleRemove(index, criteria)} className="material-symbols-outlined" style={{color: "#757575", cursor: "pointer"}}>delete</span></div>
+                    </div>
+                ),
+                )}
+                <div 
+                    ref={drop}
+                    style={{ ...dropBox, backgroundColor, color, border, opacity }}
+                    role="QueryBox"
+                >
+                    {isActive ? 'Release to add' : 'Drag criteria and or operators here in the Query Field and begin defining'}
                 </div>
-            ),
-            )}
-            <div 
-                ref={drop}
-                style={{ ...dropBox, backgroundColor, color, border, opacity }}
-                role="QueryBox"
-            >
-                {isActive ? 'Release to add' : 'Drag criteria and or operators here in the Query Field and begin defining'}
             </div>
-        </div>
+        </>
     )
 })
 
@@ -106,7 +105,7 @@ export const StatefulQueryBox: FC = (props) => {
     )
 
     return (
-        <QueryBox
+        <QueryBuilder
             {...props}
             criteria={criteria as string}
             onDrop={handleDrop}
