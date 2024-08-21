@@ -16,7 +16,7 @@ const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     const { query, updateQuery } = useQueryStore();
 
     const handleRemove = (index: number) => {
-        query.query?.queries?.splice(index);
+        query.query?.queries?.splice(index, 1);
         updateQuery(query);
     };
 
