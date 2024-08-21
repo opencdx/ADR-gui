@@ -5,28 +5,6 @@ import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
 
-const dropBox: CSSProperties = {
-    display: 'flex',
-    borderRadius: '4px',
-    height: '56px',
-    width: '800px',
-    padding: '1.1rem',
-    alignItems: 'center',
-    marginBottom: '4px',
-}
-
-const criteriaBox: CSSProperties = {
-    display: 'flex',
-    borderRadius: '4px',
-    height: '56px',
-    width: '800px',
-    padding: '1.1rem',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    border: '1px solid #757575',
-    marginBottom: '4px',
-}
-
 export interface QueryDropAreaProps {
     onDrop: (item: any) => void
     criteria?: string
@@ -76,15 +54,15 @@ const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                     let queryBox;
                     if (query.joinOperation) {
                         queryBox = (
-                            <div style={{ ...criteriaBox }}>
-                                <div style={{ display: "flex" }}><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}>{query.joinOperation}</p></div>
+                            <div className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'>
+                                <div className='flex'><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}>{query.joinOperation}</p></div>
                                 <div><span onClick={() => handleRemove(index)} className="material-symbols-outlined" style={{ color: "#757575", cursor: "pointer" }}>delete</span></div>
                             </div>
                         );
                     } else if (query.concept) {
                         queryBox = (
-                            <div style={{ ...criteriaBox }}>
-                                <div style={{ display: "flex" }}><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}>{query.concept.conceptName}</p></div>
+                            <div className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'>
+                                <div className='flex' ><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}>{query.concept.conceptName}</p></div>
                                 <div><span onClick={() => handleRemove(index)} className="material-symbols-outlined" style={{ color: "#757575", cursor: "pointer" }}>delete</span></div>
                             </div>
                         )
@@ -93,7 +71,8 @@ const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                 })}
                 <div
                     ref={drop}
-                    style={{ ...dropBox, backgroundColor, color, border, opacity }}
+                    className='flex rounded-md h-14 w-auto px-4 py-2 items-center mb-2'
+                    style={{ backgroundColor, color, border, opacity }}
                     role="QueryBox"
                 >
                     {isActive ? 'Release to add' : 'Drag criteria and or operators here in the Query Field and begin defining'}
