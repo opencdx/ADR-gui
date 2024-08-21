@@ -12,10 +12,10 @@ export const NavItems = () => {
 
   return [
     {
-      name: 'Dashboard',
-      href: '/dashboard',
+      name: 'Query Builder',
+      href: '/query-builder',
       icon: <User size={20} />,
-      active: isNavItemActive(pathname, '/dashboard'),
+      active: isNavItemActive(pathname, '/query-builder'),
       position: 'top',
     },
   ];

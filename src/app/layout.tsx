@@ -7,9 +7,12 @@ import { siteConfig } from '@/config/site';
 import clsx from 'clsx';
 
 import { Providers } from './providers';
-import {NextIntlClientProvider} from 'next-intl';
-import {getLocale, getMessages} from 'next-intl/server';
-import {unstable_setRequestLocale} from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import { unstable_setRequestLocale } from 'next-intl/server';
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -46,19 +49,21 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        
+
         <Providers
           themeProps={{ attribute: 'class', defaultTheme: 'light', children }}
         >
-          <div className="relative flex flex-col h-screen">
-            <main>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-              </NextIntlClientProvider>
+          <PrimeReactProvider>
+            <div className="relative flex flex-col h-screen">
+              <main>
+                <NextIntlClientProvider messages={messages}>
+                  {children}
+                </NextIntlClientProvider>
               </main>
-          </div>
+            </div>
+          </PrimeReactProvider>
         </Providers>
-        
+
       </body>
     </html>
   );
@@ -66,8 +71,8 @@ export default async function RootLayout({
 
 // Can be imported from a shared config
 const locales = ['en', 'es'];
- 
+
 export function generateStaticParams() {
-  return locales.map((locale) => ({locale}));
+  return locales.map((locale) => ({ locale }));
 }
 

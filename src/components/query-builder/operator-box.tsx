@@ -8,23 +8,6 @@ const hoverStyle: CSSProperties = {
   
 }
 
-const operatorStyle: CSSProperties = {
-  borderRadius: '8px',
-  border: '2px solid #006FEE',
-  display: 'inline-flex',
-  height: '32px',
-  padding: '0px 12px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  gap: '12px',
-  flexShrink: '0',
-  color: '#006FEE',
-  fontSize: '14px',
-  fontStyle: 'normal',
-  fontWeight: 500,
-  lineHeight: '20px',
-}
-
 export interface OperatorBoxProps {
   showCopyIcon?: boolean
   operator: string | undefined

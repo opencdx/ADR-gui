@@ -3,7 +3,6 @@ import { useDrag } from 'react-dnd'
 
 import { useCriteriaStore, useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
-import { Query } from '@/api/adr';
 
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',

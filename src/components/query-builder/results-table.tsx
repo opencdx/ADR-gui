@@ -1,5 +1,7 @@
-import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react'
 import { CSSProperties, FC, useMemo, useState } from 'react'
+import { usePapaParse } from 'react-papaparse';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 
 const tableStyle: CSSProperties = {}
 
@@ -14,71 +16,32 @@ export interface ResultsTableProps {
 export const ResultsTable: FC<ResultsTableProps> = ({ queryResults }) => {
 
     const [columns, setColumns] = useState<string[]>([]);
-    const [rows, setRows] = useState<string[][]>([]);
+    const [rows, setRows] = useState<any>([]);
 
-    const [page, setPage] = useState(1);
-    const rowsPerPage = 10;
+    const { readString } = usePapaParse();
 
-    const pages = Math.ceil(rows.length / rowsPerPage);
-
-    const items = useMemo(() => {
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-
-        return rows.slice(start, end);
-    }, [page, rows]);
 
     const setData = useMemo(() => {
-        setColumns(queryResults[0].split(','));
-        queryResults.splice(0, 1);
-
-        const rows: string[][] = [];
-
-        queryResults.forEach((query) => {
-            rows.push(query.split(','));
+        readString(queryResults.join("\n"), {
+            worker: true,
+            header: true,
+            complete: (results) => {
+                setRows(results.data);
+            },
         });
-
-        setRows(rows);
+        setColumns(queryResults[0].split(','));
 
     }, [queryResults]);
 
     return (
         <>
-            <h1>Results: </h1>
-            <Table aria-label='Example static collection table'
-                className='overflow-scroll'
-                style={{...tableStyle}}
-                bottomContent={
-                    <div className="flex w-full justify-center">
-                        <Pagination
-                            isCompact
-                            showControls
-                            showShadow
-                            color="secondary"
-                            page={page}
-                            total={pages}
-                            onChange={(page) => setPage(page)}
-                        />
-                    </div>
-                }
-            >
-                <TableHeader>
-                    {columns?.map((column) => (
-                        <TableColumn>{column}</TableColumn>
-                    ),
-                    )}
-                </TableHeader>
-                <TableBody>
-                    {rows?.map((row, index) => (
-                        <TableRow key={index}>
-                            {row?.map((entry) => (
-                                <TableCell>{entry}</TableCell>
-                            ))}
-                        </TableRow>
-                    ),
-                    )}
-                </TableBody>
-            </Table >
+            <DataTable value={rows}
+                paginator rows={5}>
+                {columns?.map((column) => (
+                    <Column field={column} header={column} sortable />
+                ),
+                )}
+            </DataTable>
         </>
     )
 }
