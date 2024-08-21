@@ -1,10 +1,9 @@
 import { CSSProperties, FC, memo, useCallback, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { DroppableTypes } from './droppable-types'
+import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
-import { useCriteriaStore, useQueryStore } from "@/lib/store";
-import { Input } from "ui-library";
+import { useQueryStore } from "@/lib/store";
 
 const dropBox: CSSProperties = {
     display: 'flex',
@@ -28,25 +27,24 @@ const criteriaBox: CSSProperties = {
     marginBottom: '4px',
 }
 
-export interface QueryBuilderProps {
+export interface QueryDropAreaProps {
     onDrop: (item: any) => void
     criteria?: string
 }
 
-const QueryBuilder: FC<QueryBuilderProps> = memo(function QueryBox({
+const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop,
-})  {
-    const { criteriaList, removeCriteria } = useCriteriaStore();
-    const { query } = useQueryStore();
+}) {
+    const { query, updateQuery } = useQueryStore();
 
-    const handleRemove = (index: number, criteria: string) => {
-        //query.query?.queries.
-        removeCriteria(index);
+    const handleRemove = (index: number) => {
+        query.query?.queries?.splice(index);
+        updateQuery(query);
     };
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.CRITERIA, DroppableTypes.OPERATOR],
+            accept: [DroppableTypes.CRITERIA, DroppableTypes.JOIN_OPERATION],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItemType())
                 return undefined
@@ -74,14 +72,26 @@ const QueryBuilder: FC<QueryBuilderProps> = memo(function QueryBox({
     return (
         <>
             <div>
-                {criteriaList?.map((criteria, index) => (
-                    <div style={{ ...criteriaBox }}>
-                        <div style={{display: "flex"}}><span className="material-symbols-outlined" style={{color: "#757575"}}>drag_indicator</span><p style={{color: "#001124"}}>{criteria}</p></div>
-                        <div><span onClick={() => handleRemove(index, criteria)} className="material-symbols-outlined" style={{color: "#757575", cursor: "pointer"}}>delete</span></div>
-                    </div>
-                ),
-                )}
-                <div 
+                {query?.query?.queries?.map((query, index) => {
+                    let queryBox;
+                    if (query.joinOperation) {
+                        queryBox = (
+                            <div style={{ ...criteriaBox }}>
+                                <div style={{ display: "flex" }}><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}>{query.joinOperation}</p></div>
+                                <div><span onClick={() => handleRemove(index)} className="material-symbols-outlined" style={{ color: "#757575", cursor: "pointer" }}>delete</span></div>
+                            </div>
+                        );
+                    } else if (query.concept) {
+                        queryBox = (
+                            <div style={{ ...criteriaBox }}>
+                                <div style={{ display: "flex" }}><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}>{query.concept.conceptName}</p></div>
+                                <div><span onClick={() => handleRemove(index)} className="material-symbols-outlined" style={{ color: "#757575", cursor: "pointer" }}>delete</span></div>
+                            </div>
+                        )
+                    }
+                    return (queryBox);
+                })}
+                <div
                     ref={drop}
                     style={{ ...dropBox, backgroundColor, color, border, opacity }}
                     role="QueryBox"
@@ -105,7 +115,7 @@ export const StatefulQueryBox: FC = (props) => {
     )
 
     return (
-        <QueryBuilder
+        <QueryDropArea
             {...props}
             criteria={criteria as string}
             onDrop={handleDrop}

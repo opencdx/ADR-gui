@@ -1,9 +1,9 @@
 import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { useCriteriaStore, useQueryStore } from "@/lib/store";
+import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
-import { Query, TinkarConceptModel } from '@/api/adr';
+import { TinkarConceptModel } from '@/api/adr';
 
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
@@ -19,7 +19,6 @@ interface DropResult {
 }
 
 export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
-  const { addCriteria } = useCriteriaStore();
   const { query, updateQuery } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
@@ -32,8 +31,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
       end: (item, monitor) => {
         const dropResult = monitor.getDropResult<DropResult>()
         if (item && dropResult) {
-          addCriteria(criteria.conceptName as string)
-          query.query?.queries?.push( {concept: criteria});
+          query.query?.queries?.push({ concept: criteria });
           updateQuery(query);
         }
       },

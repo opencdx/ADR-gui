@@ -1,5 +1,5 @@
 import { useEffect, useMemo, type CSSProperties, type FC } from 'react'
-import { CriteriaBox } from './criteria-box'
+import { CriteriaBox } from '../droppable/criteria-box'
 import { TinkarConceptModel } from '@/api/adr';
 
 const criteriaContainer: CSSProperties = {}
