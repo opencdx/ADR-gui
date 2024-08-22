@@ -10,7 +10,7 @@ interface QueryStore {
 
 export const useQueryStore = create<QueryStore>()(
     (set) => ({
-        query: { query: { queries: []}},
+        query: { query: { queries: [], unitOutput: UnitOutput.Imperial}},
         queryList: [],
         updateQueryStore: (query: SavedQuery) => set({ query }),
         updateQueryListStore: (queryList: Array<SavedQuery>) => set({queryList}),
