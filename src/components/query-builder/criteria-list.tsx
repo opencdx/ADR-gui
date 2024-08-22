@@ -18,7 +18,7 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, filter }) =>
     }, [criteriaList, filter]);
 
     return (
-        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col  h-[calc(100%-100px)]' >
+        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col h-screen' >
             {filteredCriteria?.map((criteria) => (
                 <>
                     <CriteriaBox key={criteria.id} showCopyIcon={true}
