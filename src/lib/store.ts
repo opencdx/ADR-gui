@@ -1,14 +1,18 @@
-import { SavedQuery } from '@/api/adr';
+import { SavedQuery, UnitOutput } from '@/api/adr';
 import { createWithEqualityFn as create } from 'zustand/traditional';
 
 interface QueryStore {
     query: SavedQuery;
-    updateQuery: (query: SavedQuery) => void;
+    queryList: Array<SavedQuery>;
+    updateQueryStore: (query: SavedQuery) => void;
+    updateQueryListStore: (queryList: Array<SavedQuery>) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
     (set) => ({
-        query: {query: {queries: []}},
-        updateQuery: (query: SavedQuery) => set({ query })
+        query: { query: { queries: []}},
+        queryList: [],
+        updateQueryStore: (query: SavedQuery) => set({ query }),
+        updateQueryListStore: (queryList: Array<SavedQuery>) => set({queryList}),
     })
 );

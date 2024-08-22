@@ -13,11 +13,11 @@ export interface QueryDropAreaProps {
 const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop,
 }) {
-    const { query, updateQuery } = useQueryStore();
+    const { query, updateQueryStore } = useQueryStore();
 
     const handleRemove = (index: number) => {
         query.query?.queries?.splice(index, 1);
-        updateQuery(query);
+        updateQueryStore(query);
     };
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(

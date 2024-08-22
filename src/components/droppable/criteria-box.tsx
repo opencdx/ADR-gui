@@ -19,7 +19,7 @@ interface DropResult {
 }
 
 export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
-  const { query, updateQuery } = useQueryStore();
+  const { query, updateQueryStore } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
@@ -32,7 +32,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
         const dropResult = monitor.getDropResult<DropResult>()
         if (item && dropResult) {
           query.query?.queries?.push({ concept: criteria });
-          updateQuery(query);
+          updateQueryStore(query);
         }
       },
       collect: (monitor) => ({
