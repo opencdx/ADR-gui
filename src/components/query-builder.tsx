@@ -50,7 +50,7 @@ export default function QueryBuilder() {
 
   return (
     <>
-      <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full'>
+      <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full h-screen'>
         <DndProvider backend={HTML5Backend}>
           <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden float-left w-[420px]'>
             <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
