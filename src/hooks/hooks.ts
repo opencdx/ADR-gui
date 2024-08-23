@@ -31,19 +31,14 @@ export const usePostQuery = () => {
 };
 
 export const useSaveQuery = () => {
-    const [saveError, setSaveError] = useState<Error | null>(null);
     const [query, setQuery] = useState<SavedQuery | null>(null);
     const mutation = useMutation({
         mutationFn: async (params: SavedQuery) => {
-            setSaveError(null);
             const response = await adrApi.saveQuery({savedQuery: params });
             setQuery(response.data);
-        },
-        onError: (error: Error) => {
-            setSaveError(error);
-        },
+        }
     });
-    return { ...mutation, error: saveError, data: query};
+    return { ...mutation, data: query};
 };
 
 export const useUpdateQuery = () => {

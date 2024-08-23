@@ -26,7 +26,7 @@ export default function QueryBuilder() {
   const { data: criteriaList } = useGetQueryableData();
   const { data: unitsOfMeasure } = useGetUnits();
   const { mutate: postQuery, data: queryResults } = usePostQuery();
-  const { mutate: saveQuery, data: savedQueryResult, error: saveError } = useSaveQuery();
+  const { mutateAsync: saveQuery, data: savedQueryResult, error: saveError } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
   const { query, updateQueryStore, updateQueryListStore } = useQueryStore();
   const { data: queries } = useListQueries();
@@ -48,23 +48,27 @@ export default function QueryBuilder() {
 
   const runSaveQuery = async () => {
     query.name = queryName;
-    await saveQuery(query);
-    if (saveError) {
-      toast.error(saveError.message, {
-        position: 'top-right',
-        autoClose: 2000,
-      });
-    } else if (savedQueryResult) {
-      toast.success("Query saved", {
-        position: 'top-right',
-        autoClose: 2000,
-      });
-      updateQueryStore(savedQueryResult);
-
-      if (queries?.data) {
-        updateQueryListStore(queries?.data);
+    saveQuery(query, {
+      onSuccess: () => {
+        toast.success("Query saved", {
+          position: 'top-right',
+          autoClose: 2000,
+        });
+        if (savedQueryResult) {
+          updateQueryStore(savedQueryResult);
+        }
+  
+        if (queries?.data) {
+          updateQueryListStore(queries?.data);
+        }
+      },
+      onError: () => {
+        toast.error(saveError?.message, {
+          position: 'top-right',
+          autoClose: 2000,
+        });
       }
-    }
+    });
   };
 
   const runUpdateQuery = async () => {
@@ -137,10 +141,10 @@ export default function QueryBuilder() {
               <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' />
               <div className='my-auto'>
                 <Button className='m-1' endContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
-                {!query.id &&
+                {!query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery}>Save Query</Button>
                 }
-                {query.id &&
+                {query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runUpdateQuery}>Update Query</Button>
                 }
                 <Button className='m-2' endContent={<ArrowForwardIcon />} onClick={runQuery} onPress={onOpen}>Run Query</Button>
