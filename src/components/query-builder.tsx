@@ -55,15 +55,11 @@ export default function QueryBuilder() {
           autoClose: 2000,
         });
         if (savedQueryResult) {
-          updateQueryStore(savedQueryResult);
-        }
-  
-        if (queries?.data) {
-          updateQueryListStore(queries?.data);
+          updateQueryStore(savedQueryResult.data);
         }
       },
-      onError: () => {
-        toast.error(saveError?.message, {
+      onError: (error) => {
+        toast.error(error?.message, {
           position: 'top-right',
           autoClose: 2000,
         });
@@ -81,7 +77,9 @@ export default function QueryBuilder() {
   }
 
   useEffect(() => {
-    setQueryName(query.name!);
+    if (query) {
+      setQueryName(query.name!);
+    }
   }, [query]);
 
   return (
