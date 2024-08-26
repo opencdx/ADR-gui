@@ -1,8 +1,9 @@
 import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { useCriteriaStore } from "@/lib/store";
-import { CriteriaTypes } from './criteria-types';
+import { useQueryStore } from "@/lib/store";
+import { DroppableTypes } from './droppable-types';
+import { TinkarConceptModel } from '@/api/adr';
 
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
@@ -10,7 +11,7 @@ const hoverStyle: CSSProperties = {
 
 export interface CriteriaBoxProps {
   showCopyIcon?: boolean
-  criteria: string | undefined
+  criteria: TinkarConceptModel
 }
 
 interface DropResult {
@@ -18,11 +19,11 @@ interface DropResult {
 }
 
 export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
-  const { addCriteria } = useCriteriaStore();
+  const { query, updateQuery } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: CriteriaTypes.CRITERIA,
+      type: DroppableTypes.CRITERIA,
       item: { criteria },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
@@ -30,7 +31,8 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
       end: (item, monitor) => {
         const dropResult = monitor.getDropResult<DropResult>()
         if (item && dropResult) {
-          addCriteria(item.criteria as string)
+          query.query?.queries?.push({ concept: criteria });
+          updateQuery(query);
         }
       },
       collect: (monitor) => ({
@@ -43,7 +45,7 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
   return (
     <>
       <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer w-[98%]' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        {criteria}
+        {criteria.conceptName}
       </div>
     </>
   )

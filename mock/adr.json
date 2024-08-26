@@ -65,6 +65,35 @@
         }
       ],
       "responseMode": null
+    },
+    {
+      "uuid": "42038cea-790f-4176-bd94-cc283f1a7851",
+      "type": "http",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "query",
+      "responses": [
+        {
+          "uuid": "2ec17765-96a8-4f7a-92c6-0e8e00fd4304",
+          "body": "[\n    \"Participant ID,Reported,Body mass index 25-29 - overweight Reported,Body mass index 25-29 - overweight,Body weight Reported,Body weight,Body height Reported,Body height,Woman Reported,Woman,Age at diagnosis Reported,Age at diagnosis,Age Reported,Age,Body mass index 30+ - obesity Reported,Body mass index 30+ - obesity,Man Reported,Man,Acute eruption of skin Reported,Acute eruption of skin,Acute exudative skin eruption (disorder) Reported,Acute exudative skin eruption (disorder),Acute maculopapular eruption of skin (disorder) Reported,Acute maculopapular eruption of skin (disorder),\",\n    \"cae80f3a-9fd9-49a4-ab10-beb2c8c9ba45,Tue Aug 20 07:00:20 UTC 2024,Tue Aug 20 03:58:24 UTC 2024,25.305225 Body mass index,Tue Aug 20 06:18:48 UTC 2024,219.0 pounds,Tue Aug 20 01:28:51 UTC 2024,78.0 inch,Tue Aug 20 03:19:30 UTC 2024,1.0,,,,,,,,,,,,,,,\",\n    \"cadb3594-788a-4b71-b6e6-953a4e92d69e,Sun Aug 18 09:05:28 UTC 2024,Sun Aug 18 01:36:19 UTC 2024,26.398367 Body mass index,Sun Aug 18 00:40:57 UTC 2024,184.0 pounds,,,Sat Aug 17 21:06:36 UTC 2024,1.0,,,,,,,,,,,,,,,\",\n    \"5478d331-ced2-4283-9abc-571c445b49c9,Mon Aug 19 05:52:51 UTC 2024,Sun Aug 18 18:48:44 UTC 2024,28.561403 Body mass index,Mon Aug 19 00:27:14 UTC 2024,132.0 pounds,,,Mon Aug 19 05:31:14 UTC 2024,1.0,Sun Aug 18 21:47:43 UTC 2024,5.0,,,,,,,,,,,,,\",\n    \"343d2f70-a9c8-4ec4-8656-5b89fbbaf9e1,Tue Aug 20 00:56:53 UTC 2024,Mon Aug 19 18:42:58 UTC 2024,27.124681 Body mass index,,,Tue Aug 20 00:40:34 UTC 2024,56.0 inch,,,Mon Aug 19 20:57:43 UTC 2024,5.0,,,,,,,,,,,,,\",\n    \"be99619a-2444-4c88-8d5a-c25b0ff852aa,Sat Aug 17 17:13:16 UTC 2024,Sat Aug 17 10:18:13 UTC 2024,27.099773 Body mass index,Sat Aug 17 11:19:21 UTC 2024,153.0 pounds,,,,,Sat Aug 17 10:40:28 UTC 2024,5.0,,,,,,,,,,,,,\",\n    \"228a108c-795c-41b5-8f39-523693e00f88,Mon Aug 19 13:56:01 UTC 2024,,,,,Mon Aug 19 04:04:40 UTC 2024,68.0 inch,Mon Aug 19 06:44:59 UTC 2024,1.0,,,Mon Aug 19 04:55:15 UTC 2024,5.0,Mon Aug 19 03:39:21 UTC 2024,38.464317 - INF Body mass index,,,,,,,,,\",\n    \"ba107ccc-68d8-4f6c-aeef-4ea9acbdf6ce,Sun Aug 18 19:08:47 UTC 2024,,,,,Sun Aug 18 08:57:12 UTC 2024,54.0 inch,,,,,Sun Aug 18 08:09:54 UTC 2024,5.0,Sun Aug 18 12:06:43 UTC 2024,83.17387 - INF Body mass index,Sun Aug 18 13:13:47 UTC 2024,1.0,,,,,,,\",\n    \"e4e744d7-1cfa-4888-87ad-bc3b4b634dbc,Sun Aug 18 07:07:18 UTC 2024,,,,,,,Sat Aug 17 21:31:19 UTC 2024,1.0,Sat Aug 17 22:24:03 UTC 2024,5.0,,,Sun Aug 18 01:17:29 UTC 2024,32.953125 - INF Body mass index,,,,,,,,,\",\n    \"df0177a5-65b6-400e-80b8-3af7549a6d2b,Sun Aug 18 20:21:13 UTC 2024,,,Sun Aug 18 08:55:25 UTC 2024,327.0 pounds,,,,,Sun Aug 18 11:29:08 UTC 2024,5.0,,,Sun Aug 18 19:10:03 UTC 2024,32.57951 - INF Body mass index,Sun Aug 18 15:01:51 UTC 2024,1.0,Sun Aug 18 09:50:43 UTC 2024,1.0,,,,,\",\n    \"e7109bf3-0554-4fe8-9365-b419a1129b73,Sat Aug 17 04:29:46 UTC 2024,,,,,Fri Aug 16 17:10:00 UTC 2024,64.0 inch,,,,,,,Fri Aug 16 18:20:26 UTC 2024,30.0 - INF Body mass index,,,,,,,,,\",\n    \"09d0a196-b7d1-48ee-bf2d-5c6db06be799,Mon Aug 19 00:08:16 UTC 2024,,,,,Sun Aug 18 19:56:45 UTC 2024,61.0 inch,,,,,Sun Aug 18 14:20:51 UTC 2024,5.0,Sun Aug 18 13:14:27 UTC 2024,38.919106 - INF Body mass index,Sun Aug 18 21:59:19 UTC 2024,1.0,,,,,,,\",\n    \"de1653c4-e4be-4c25-9ca9-17c7359b67c5,Sun Aug 18 21:43:20 UTC 2024,,,Sun Aug 18 13:12:51 UTC 2024,327.0 pounds,Sun Aug 18 18:04:53 UTC 2024,74.0 inch,,,,,Sun Aug 18 10:11:32 UTC 2024,5.0,Sun Aug 18 18:46:44 UTC 2024,41.979733 - INF Body mass index,Sun Aug 18 17:50:46 UTC 2024,1.0,,,,,,,\",\n    \"1a4f8295-a3b7-4c97-8a30-aaa0e5f74cc6,Tue Aug 20 13:56:50 UTC 2024,,,Tue Aug 20 08:30:38 UTC 2024,221.0 pounds,,,Tue Aug 20 08:27:08 UTC 2024,1.0,,,Tue Aug 20 01:59:33 UTC 2024,5.0,Tue Aug 20 05:25:05 UTC 2024,30.0 - INF Body mass index,,,,,,,,,\",\n    \"cb28df86-f21c-4adc-b025-ca2ce2233725,Sat Aug 17 15:37:54 UTC 2024,,,Sat Aug 17 09:59:00 UTC 2024,343.0 pounds,,,Sat Aug 17 09:56:47 UTC 2024,1.0,Sat Aug 17 10:11:25 UTC 2024,5.0,,,Sat Aug 17 13:03:32 UTC 2024,49.21 - INF Body mass index,,,,,,,,,\",\n    \"0a39f7a2-4e5a-4779-ae92-960dd01c8f23,Sun Aug 18 07:33:43 UTC 2024,,,Sat Aug 17 20:47:09 UTC 2024,327.0 pounds,Sat Aug 17 23:44:09 UTC 2024,67.0 inch,Sun Aug 18 03:23:53 UTC 2024,1.0,Sat Aug 17 21:15:50 UTC 2024,5.0,,,Sat Aug 17 21:25:09 UTC 2024,30.0 - INF Body mass index,,,,,,,,,\",\n    \"b2c6c5ec-f28c-47e9-a7c0-4c4726085af3,Tue Aug 20 20:13:06 UTC 2024,,,Tue Aug 20 10:56:47 UTC 2024,247.0 pounds,Tue Aug 20 15:49:03 UTC 2024,59.0 inch,,,Tue Aug 20 19:36:43 UTC 2024,5.0,,,Tue Aug 20 18:54:41 UTC 2024,49.882507 - INF Body mass index,,,,,,,,,\",\n    \"165e177b-caf0-4715-9701-417f25c93920,Mon Aug 19 15:42:25 UTC 2024,,,,,Mon Aug 19 10:47:48 UTC 2024,56.0 inch,,,,,Mon Aug 19 14:39:51 UTC 2024,5.0,Mon Aug 19 08:30:00 UTC 2024,30.0 - INF Body mass index,Mon Aug 19 12:52:26 UTC 2024,1.0,,,,,,,\",\n    \"d9f08cc9-a874-4d81-a79d-bae38077e81f,Mon Aug 19 19:23:13 UTC 2024,,,Mon Aug 19 17:27:45 UTC 2024,228.0 pounds,,,,,,,Mon Aug 19 12:48:20 UTC 2024,5.0,Mon Aug 19 18:18:00 UTC 2024,52.986446 - INF Body mass index,,,,,Mon Aug 19 08:26:46 UTC 2024,1.0,,,\",\n    \"1bdefa87-3728-4d90-b8c9-a468a367e728,Wed Aug 21 00:08:28 UTC 2024,,,Tue Aug 20 19:59:37 UTC 2024,336.0 pounds,,,,,,,,,Tue Aug 20 15:15:05 UTC 2024,30.0 - INF Body mass index,,,,,,,,,\",\n    \"8d7dac2c-7a56-4373-949c-55a91e284da7,Sat Aug 17 01:13:00 UTC 2024,,,Fri Aug 16 17:26:04 UTC 2024,322.0 pounds,,,Fri Aug 16 21:49:57 UTC 2024,1.0,,,Fri Aug 16 23:45:19 UTC 2024,5.0,Fri Aug 16 17:53:31 UTC 2024,50.42682 - INF Body mass index,,,,,,,,,\",\n    \"84d62ae2-8a35-4d11-bdf3-ba352329edd8,Sun Aug 18 05:39:10 UTC 2024,,,,,Sat Aug 17 19:24:02 UTC 2024,62.0 inch,,,Sun Aug 18 05:05:16 UTC 2024,5.0,,,Sun Aug 18 02:33:29 UTC 2024,30.0 - INF Body mass index,Sat Aug 17 21:39:29 UTC 2024,1.0,,,,,Sun Aug 18 01:35:47 UTC 2024,1.0,\",\n    \"6b9ffb09-a7e9-478d-ab4a-72bd0ef9ea82,Wed Aug 21 08:48:46 UTC 2024,,,,,,,Tue Aug 20 23:24:32 UTC 2024,1.0,,,Wed Aug 21 05:15:13 UTC 2024,5.0,Wed Aug 21 03:24:45 UTC 2024,35.119595 - INF Body mass index,,,,,,,,,\",\n    \"07b269b3-aec4-4158-ada3-325d69601e9b,Mon Aug 19 17:57:08 UTC 2024,,,Mon Aug 19 08:34:27 UTC 2024,237.0 pounds,,,,,Mon Aug 19 08:07:38 UTC 2024,5.0,,,Mon Aug 19 10:39:56 UTC 2024,30.0 - INF Body mass index,,,,,,,,,\",\n    \"384ed981-fc2c-43f8-a846-c37db3d2b11c,Wed Aug 21 17:17:25 UTC 2024,,,Wed Aug 21 12:50:56 UTC 2024,252.0 pounds,Wed Aug 21 11:04:15 UTC 2024,61.0 inch,Wed Aug 21 14:08:11 UTC 2024,1.0,Wed Aug 21 11:09:57 UTC 2024,5.0,,,Wed Aug 21 09:56:04 UTC 2024,30.0 - INF Body mass index,,,,,,,,,\",\n    \"d1901978-3cee-440f-9df7-659e23ceacbf,Mon Aug 19 08:56:21 UTC 2024,,,Mon Aug 19 04:34:11 UTC 2024,333.0 pounds,Mon Aug 19 02:43:58 UTC 2024,72.0 inch,,,,,Sun Aug 18 23:08:56 UTC 2024,5.0,Mon Aug 19 03:54:10 UTC 2024,30.0 - INF Body mass index,Mon Aug 19 00:29:54 UTC 2024,1.0,,,,,,,\",\n    \"c6e3f20d-3885-4a53-ad5c-1dff26881a6a,Sun Aug 18 13:21:52 UTC 2024,,,Sun Aug 18 02:23:13 UTC 2024,270.0 pounds,Sun Aug 18 08:01:43 UTC 2024,55.0 inch,,,,,,,Sun Aug 18 08:53:16 UTC 2024,62.74711 - INF Body mass index,Sun Aug 18 10:12:06 UTC 2024,1.0,Sun Aug 18 06:31:09 UTC 2024,1.0,,,,,\",\n    \"f12ae231-0d5e-4c36-ad03-1fcd325d4f0f,Mon Aug 19 17:16:17 UTC 2024,,,,,Mon Aug 19 06:08:31 UTC 2024,73.0 inch,,,Mon Aug 19 15:30:48 UTC 2024,5.0,,,Mon Aug 19 12:08:41 UTC 2024,32.716084 - INF Body mass index,,,,,,,,,\",\n    \"4f5df380-45bf-4fec-ad5c-aee10a3e357b,Sun Aug 18 21:41:54 UTC 2024,,,,,,,,,Sun Aug 18 14:39:53 UTC 2024,5.0,,,Sun Aug 18 18:30:19 UTC 2024,53.683636 - INF Body mass index,,,,,,,,,\",\n    \"839a51ea-0de3-43cd-b135-96f8a6e14f20,Sat Aug 17 13:07:08 UTC 2024,,,,,,,,,,,,,Sat Aug 17 06:56:25 UTC 2024,58.583336 - INF Body mass index,,,,,,,,,\"\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null
     }
   ],
   "rootChildren": [
@@ -75,6 +104,10 @@
     {
       "type": "route",
       "uuid": "55758bd9-ed71-4a2f-b1da-15d57b4ed34e"
+    },
+    {
+      "type": "route",
+      "uuid": "42038cea-790f-4176-bd94-cc283f1a7851"
     }
   ],
   "proxyMode": false,

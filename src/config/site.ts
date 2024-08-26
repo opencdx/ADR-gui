@@ -1,18 +1,18 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'Dashboard',
-  description: 'A dashboard for OpenCDX',
+  name: 'ADR Query Builder',
+  description: 'OpenCDx Query Builder for ADR',
   navItems: [
     {
-      label: 'Dashboard',
-      href: '/dashboard',
+      label: 'Query Builder',
+      href: '/query-builder',
     },
   ],
   navMenuItems: [
     {
-      label: 'Dashboard',
-      href: '/dashboard',
+      label: 'Query Builder',
+      href: '/query-builder',
     },
   ],
 };

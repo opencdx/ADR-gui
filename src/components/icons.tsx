@@ -45,3 +45,11 @@ export const SunFilledIcon = ({
     </g>
   </svg>
 );
+
+export const PreviewIcon = ({}) => (
+  <span className="material-symbols-outlined">preview</span>
+);
+
+export const ArrowForwardIcon = ({}) => (
+  <span className="material-symbols-outlined">arrow_forward</span>
+);

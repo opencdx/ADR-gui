@@ -18,13 +18,13 @@
 import type { Query } from './query';
 
 /**
- * 
+ * A query object used for searching concepts.
  * @export
  * @interface ADRQuery
  */
 export interface ADRQuery {
     /**
-     * Unit output for the system. This maybe IMPERIAL or METRIC or DEFAULT. All units that can be converted will be converted
+     * Unit output options for a system.
      * @type {string}
      * @memberof ADRQuery
      */
