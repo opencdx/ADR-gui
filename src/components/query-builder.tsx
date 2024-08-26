@@ -28,7 +28,7 @@ export default function QueryBuilder() {
   const { mutate: postQuery, data: queryResults } = usePostQuery();
   const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
-  const { query, updateQueryStore, updateQueryListStore } = useQueryStore();
+  const { query, updateQueryStore, updateQueryListStore, resetQueryStore } = useQueryStore();
   const { data: queries } = useListQueries();
   const [searchTerm, setSearchTerm] = useState('');
   const [queryName, setQueryName] = useState('');
@@ -72,12 +72,25 @@ export default function QueryBuilder() {
   };
 
   const runUpdateQuery = async () => {
-    query.name = queryName;
-    updateQuery(query);
-    updateQueryStore(savedUpdateQueryResult?.data!);
-    if (queries?.data) {
-      updateQueryListStore(queries?.data);
-    }
+    const updatedQuery: SavedQuery = { ...query };
+    updatedQuery.name = queryName;
+
+    updateQuery(updatedQuery, {
+      onSuccess: (response) => {
+        toast.success("Query saved", {
+          position: 'top-right',
+          autoClose: 2000,
+        });
+
+        updateQueryStore(response.data);
+      },
+      onError: (error) => {
+        toast.error(error?.message, {
+          position: 'top-right',
+          autoClose: 2000,
+        });
+      }
+    });
   }
 
   useEffect(() => {
@@ -142,6 +155,7 @@ export default function QueryBuilder() {
             <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
               <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' />
               <div className='my-auto'>
+                <Button className='m-1' onClick={resetQueryStore} >New Query</Button>
                 <Button className='m-1' endContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
                 {!query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery}>Save Query</Button>

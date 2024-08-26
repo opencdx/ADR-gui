@@ -10,6 +10,7 @@ interface QueryStore {
     addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
     addOperationToQuery: (operation: JoinOperation) => void;
     removeFromQuery: (index: number) => void;
+    resetQueryStore: () => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -48,6 +49,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries.splice(index, 1);
+                })
+            ),
+        resetQueryStore: () =>
+            set(
+                produce((draft) => {
+                    draft.query = { query: { queries: [], unitOutput: UnitOutput.Imperial }, name: '' };
                 })
             ),
     })
