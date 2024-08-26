@@ -11,7 +11,7 @@ import { Tabs, Tab } from '@nextui-org/react';
 import { CriteriaList } from './query-builder/criteria-list';
 import { useGetQueryableData, useGetUnits, useListQueries, usePostQuery, useSaveQuery, useUpdateQuery } from '@/hooks/hooks';
 import { ArrowForwardIcon, PreviewIcon, SaveIcon } from './icons';
-import { JoinOperation } from '@/api/adr';
+import { JoinOperation, SavedQuery } from '@/api/adr';
 import { ResultsTable } from './query-builder/results-table';
 import { useQueryStore } from '@/lib/store';
 import { JoinOperationBox } from './droppable/join-operation-box';
@@ -26,7 +26,7 @@ export default function QueryBuilder() {
   const { data: criteriaList } = useGetQueryableData();
   const { data: unitsOfMeasure } = useGetUnits();
   const { mutate: postQuery, data: queryResults } = usePostQuery();
-  const { mutateAsync: saveQuery, data: savedQueryResult, error: saveError } = useSaveQuery();
+  const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
   const { query, updateQueryStore, updateQueryListStore } = useQueryStore();
   const { data: queries } = useListQueries();
@@ -47,8 +47,10 @@ export default function QueryBuilder() {
   };
 
   const runSaveQuery = async () => {
-    query.name = queryName;
-    saveQuery(query, {
+    const newQuery: SavedQuery = { ...query };
+    newQuery.name = queryName;
+
+    saveQuery(newQuery, {
       onSuccess: () => {
         toast.success("Query saved", {
           position: 'top-right',
@@ -56,6 +58,9 @@ export default function QueryBuilder() {
         });
         if (savedQueryResult) {
           updateQueryStore(savedQueryResult.data);
+          const newQueries = { ...queries };
+          newQueries.data?.push(savedQueryResult.data);
+          updateQueryListStore(newQueries.data!);
         }
       },
       onError: (error) => {

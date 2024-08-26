@@ -22,13 +22,14 @@ export default function QueryLibrary() {
     };
 
     const loadQuery = async (id: number) => {
-        updateQueryStore(queryList.find(element => element.id === id)!);
+        const loadedQueries = queryList.find(element => element.id === id)!;
+        updateQueryStore(loadedQueries);
     };
 
     return (
         <>
             <h1>Query Library</h1>
-            {queryList.map((query) => {
+            {queryList?.map((query) => {
                 return (
                     <div className="mt-auto w-full justify-between flex">
                         <p className='max-w-xs p-3'>{query.name}</p>

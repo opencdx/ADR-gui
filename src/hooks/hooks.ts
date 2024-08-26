@@ -1,7 +1,6 @@
 import { adrApi } from '@/api';
 import { ADRQuery, SavedQuery } from '@/api/adr';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 
 export const useGetQueryableData = () => {
     return useQuery({
@@ -20,7 +19,7 @@ export const useGetUnits = () => {
 export const useListQueries = () => {
     return useQuery({
         queryKey: ['listQueries'],
-        queryFn: async () => adrApi.listQueries(),
+        queryFn: () => adrApi.listQueries(),
     });
 };
 

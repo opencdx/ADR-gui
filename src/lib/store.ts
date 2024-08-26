@@ -1,18 +1,54 @@
-import { SavedQuery, UnitOutput } from '@/api/adr';
+import { JoinOperation, SavedQuery, TinkarConceptModel, UnitOutput } from '@/api/adr';
 import { createWithEqualityFn as create } from 'zustand/traditional';
+import { produce } from 'immer';
 
 interface QueryStore {
     query: SavedQuery;
     queryList: Array<SavedQuery>;
     updateQueryStore: (query: SavedQuery) => void;
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
+    addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
+    addOperationToQuery: (operation: JoinOperation) => void;
+    removeFromQuery: (index: number) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
     (set) => ({
-        query: { query: { queries: [], unitOutput: UnitOutput.Imperial}},
+        query: { query: { queries: [], unitOutput: UnitOutput.Imperial } },
         queryList: [],
-        updateQueryStore: (query: SavedQuery) => set({ query }),
-        updateQueryListStore: (queryList: Array<SavedQuery>) => set({queryList}),
+        updateQueryStore: (query) =>
+            set(
+                produce((draft) => {
+                    draft.query = { ...query };
+                })
+            ),
+        updateQueryListStore: (queryList) =>
+            set(
+                produce((draft) => {
+                    draft.queryList = [ ...queryList ]
+                })
+            ),
+        addCriteriaToQuery: (criteria) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries.push({
+                        concept: criteria
+                    });
+                })
+            ),
+        addOperationToQuery: (operation) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries.push({
+                        joinOperation: operation
+                    });
+                })
+            ),
+        removeFromQuery: (index) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries.splice(index, 1);
+                })
+            ),
     })
 );
