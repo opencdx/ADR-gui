@@ -51,17 +51,16 @@ export default function QueryBuilder() {
     newQuery.name = queryName;
 
     saveQuery(newQuery, {
-      onSuccess: () => {
+      onSuccess: (response) => {
         toast.success("Query saved", {
           position: 'top-right',
           autoClose: 2000,
         });
-        if (savedQueryResult) {
-          updateQueryStore(savedQueryResult.data);
-          const newQueries = { ...queries };
-          newQueries.data?.push(savedQueryResult.data);
-          updateQueryListStore(newQueries.data!);
-        }
+
+        updateQueryStore(response.data);
+        const newQueries = { ...queries };
+        newQueries.data?.push(response.data);
+        updateQueryListStore(newQueries.data!);
       },
       onError: (error) => {
         toast.error(error?.message, {
