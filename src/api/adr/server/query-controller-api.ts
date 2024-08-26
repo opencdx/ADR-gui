@@ -258,6 +258,41 @@ export const QueryControllerApiAxiosParamCreator = function (configuration?: Con
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {SavedQuery} savedQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateQuery: async (savedQuery: SavedQuery, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'savedQuery' is not null or undefined
+            assertParamExists('updateQuery', 'savedQuery', savedQuery)
+            const localVarPath = `/query/update`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(savedQuery, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -349,6 +384,18 @@ export const QueryControllerApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['QueryControllerApi.saveQuery']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @param {SavedQuery} savedQuery 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateQuery(savedQuery: SavedQuery, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SavedQuery>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateQuery(savedQuery, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['QueryControllerApi.updateQuery']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -419,6 +466,15 @@ export const QueryControllerApiFactory = function (configuration?: Configuration
         saveQuery(requestParameters: QueryControllerApiSaveQueryRequest, options?: RawAxiosRequestConfig): AxiosPromise<SavedQuery> {
             return localVarFp.saveQuery(requestParameters.savedQuery, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {QueryControllerApiUpdateQueryRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateQuery(requestParameters: QueryControllerApiUpdateQueryRequest, options?: RawAxiosRequestConfig): AxiosPromise<SavedQuery> {
+            return localVarFp.updateQuery(requestParameters.savedQuery, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -474,6 +530,20 @@ export interface QueryControllerApiSaveQueryRequest {
      * 
      * @type {SavedQuery}
      * @memberof QueryControllerApiSaveQuery
+     */
+    readonly savedQuery: SavedQuery
+}
+
+/**
+ * Request parameters for updateQuery operation in QueryControllerApi.
+ * @export
+ * @interface QueryControllerApiUpdateQueryRequest
+ */
+export interface QueryControllerApiUpdateQueryRequest {
+    /**
+     * 
+     * @type {SavedQuery}
+     * @memberof QueryControllerApiUpdateQuery
      */
     readonly savedQuery: SavedQuery
 }
@@ -557,6 +627,17 @@ export class QueryControllerApi extends BaseAPI {
      */
     public saveQuery(requestParameters: QueryControllerApiSaveQueryRequest, options?: RawAxiosRequestConfig) {
         return QueryControllerApiFp(this.configuration).saveQuery(requestParameters.savedQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {QueryControllerApiUpdateQueryRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof QueryControllerApi
+     */
+    public updateQuery(requestParameters: QueryControllerApiUpdateQueryRequest, options?: RawAxiosRequestConfig) {
+        return QueryControllerApiFp(this.configuration).updateQuery(requestParameters.savedQuery, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

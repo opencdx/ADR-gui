@@ -53,3 +53,15 @@ export const PreviewIcon = ({}) => (
 export const ArrowForwardIcon = ({}) => (
   <span className="material-symbols-outlined">arrow_forward</span>
 );
+
+export const SaveIcon = ({}) => (
+  <span className="material-symbols-outlined">save</span>
+);
+
+export const EditIcon = ({}) => (
+  <span className="material-symbols-outlined">edit</span>
+);
+
+export const DeleteIcon = ({}) => (
+  <span className="material-symbols-outlined">delete_forever</span>
+);
