@@ -18,7 +18,7 @@ export default function QueryLibrary() {
         if (queries) {
             updateQueryListStore(queries.data);
         }
-    }, []);
+    }, [queries]);
 
     const deleteWarning = (index: number, name: string) => {
         setQueryId(index);

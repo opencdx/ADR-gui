@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -20,6 +20,8 @@ import 'react-json-view-lite/dist/index.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import QueryLibrary from './query-builder/query-library';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/hooks/query-keys';
 
 export default function QueryBuilder() {
 
@@ -34,6 +36,8 @@ export default function QueryBuilder() {
   const [queryName, setQueryName] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure({ defaultOpen: false });
   const [queryPreview, setQueryPreview] = useState('');
+
+  const queryClient = useQueryClient();
 
   const t = useTranslations('common');
 
@@ -58,9 +62,7 @@ export default function QueryBuilder() {
         });
 
         updateQueryStore(response.data);
-        const newQueries = { ...queries };
-        newQueries.data?.push(response.data);
-        updateQueryListStore(newQueries.data!);
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LIST_QUERIES });
       },
       onError: (error) => {
         toast.error(error?.message, {
@@ -83,6 +85,7 @@ export default function QueryBuilder() {
         });
 
         updateQueryStore(response.data);
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LIST_QUERIES });
       },
       onError: (error) => {
         toast.error(error?.message, {

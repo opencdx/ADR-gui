@@ -1,24 +1,25 @@
 import { adrApi } from '@/api';
 import { ADRQuery, SavedQuery } from '@/api/adr';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { QUERY_KEYS } from './query-keys';
 
 export const useGetQueryableData = () => {
     return useQuery({
-        queryKey: ['queryableData'],
+        queryKey: QUERY_KEYS.QUERYABLE_DATA,
         queryFn: async () => adrApi.getQueryableData(),
     });
 };
 
 export const useGetUnits = () => {
     return useQuery({
-        queryKey: ['units'],
+        queryKey: QUERY_KEYS.UNITS,
         queryFn: async () => adrApi.getUnits(),
     });
 };
 
 export const useListQueries = () => {
     return useQuery({
-        queryKey: ['listQueries'],
+        queryKey: QUERY_KEYS.LIST_QUERIES,
         queryFn: () => adrApi.listQueries(),
     });
 };
