@@ -63,5 +63,13 @@ export const EditIcon = ({}) => (
 );
 
 export const DeleteIcon = ({}) => (
-  <span className="material-symbols-outlined">delete_forever</span>
+  <span className="material-symbols-outlined">delete</span>
+);
+
+export const UpArrow = ({}) => (
+  <span className="material-symbols-outlined">keyboard_arrow_up</span>
+);
+
+export const DownArrow = ({}) => (
+  <span className="material-symbols-outlined">keyboard_arrow_down</span>
 );

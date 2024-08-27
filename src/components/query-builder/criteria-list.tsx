@@ -1,5 +1,5 @@
 import { useEffect, useMemo, type CSSProperties, type FC } from 'react'
-import { CriteriaBox } from '../droppable/criteria-box'
+import { CriteriaDroppable } from '../droppable/criteria-droppable'
 import { TinkarConceptModel } from '@/api/adr';
 
 
@@ -21,7 +21,7 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, filter }) =>
         <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col h-screen' >
             {filteredCriteria?.map((criteria) => (
                 <>
-                    <CriteriaBox key={criteria.id} showCopyIcon={true}
+                    <CriteriaDroppable key={criteria.id} showCopyIcon={true}
                         criteria={criteria}
                     />
                 </>

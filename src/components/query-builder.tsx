@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useTranslations } from 'next-intl';
-import { StatefulQueryBox as QueryBox } from './query-builder/query-drop-area';
 import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from 'ui-library';
 import { Tabs, Tab } from '@nextui-org/react';
 import { CriteriaList } from './query-builder/criteria-list';
@@ -14,7 +13,7 @@ import { ArrowForwardIcon, PreviewIcon, SaveIcon } from './icons';
 import { JoinOperation, SavedQuery } from '@/api/adr';
 import { ResultsTable } from './query-builder/results-table';
 import { useQueryStore } from '@/lib/store';
-import { JoinOperationBox } from './droppable/join-operation-box';
+import { JoinOperationDroppable } from './droppable/join-operation-droppable';
 import { allExpanded, defaultStyles, JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { toast, ToastContainer } from 'react-toastify';
@@ -22,6 +21,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import QueryLibrary from './query-builder/query-library';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/hooks/query-keys';
+import OperatorsDropdown from './droppable/operators-dropdown';
+import QueryRender from './query-builder/query-render';
 
 export default function QueryBuilder() {
 
@@ -128,12 +129,13 @@ export default function QueryBuilder() {
           <div className='rounded-md bg-white clear-both flex flex-col overflow-hidden w-full ml-5'>
             <div className='p-3'>
               <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
-              <div className='pb-3'>
-                <JoinOperationBox joinOperation={JoinOperation.And} display='Add Grouping' showCopyIcon={true} />
-                <JoinOperationBox joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
-                <JoinOperationBox joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
+              <div className='pb-3 flex items-center'>
+                <JoinOperationDroppable joinOperation={JoinOperation.And} display='Add Grouping' showCopyIcon={true} />
+                <JoinOperationDroppable joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
+                <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
+                <OperatorsDropdown />
               </div>
-              <QueryBox />
+              <QueryRender />
               <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' scrollBehavior='inside'>
                 <ModalContent>
                   <ModalHeader>

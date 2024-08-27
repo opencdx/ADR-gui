@@ -3,36 +3,37 @@ import { useDrag } from 'react-dnd'
 
 import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
-import { TinkarConceptModel } from '@/api/adr';
+import { Operation } from '@/api/adr/model/query';
 
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
 }
 
-export interface CriteriaBoxProps {
+export interface OperationBoxProps {
   showCopyIcon?: boolean
-  criteria: TinkarConceptModel
+  operation: Operation
+  display: string
 }
 
 interface DropResult {
   criteria: string
 }
 
-export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
+export const OperationBox: FC<OperationBoxProps> = ({ showCopyIcon, operation: operator, display }) => {
   const { addCriteriaToQuery } = useQueryStore();
   const query = useQueryStore((state) => state.query);
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: DroppableTypes.CRITERIA,
-      item: { criteria },
+      type: DroppableTypes.OPERATOR,
+      item: { operator },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
       },
       end: (item, monitor) => {
         const dropResult = monitor.getDropResult<DropResult>();
         if (item && dropResult) {
-          addCriteriaToQuery(criteria);
+          //addCriteriaToQuery(criteria);
         }
       },
       collect: (monitor) => ({
@@ -44,8 +45,8 @@ export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) =>
 
   return (
     <>
-      <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer w-[98%]' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        {criteria.conceptName}
+      <div ref={drag} className='flex rounded-none border-none bg-white w-auto h-[32px] items-center self-stretch gap-3 m-0 cursor-pointer font-medium' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <span className="material-symbols-outlined text-blue-500 ml-3">add</span> { display }
       </div>
     </>
   )
