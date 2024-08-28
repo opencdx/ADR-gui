@@ -103,6 +103,10 @@ export default function QueryBuilder() {
     }
   }, [query]);
 
+  const isDisabled = () => {
+    return !queryName;
+  };
+
   return (
     <>
       <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full h-screen'>
@@ -158,12 +162,12 @@ export default function QueryBuilder() {
               </Modal>
             </div>
             <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
-              <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' />
+              <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
               <div className='my-auto'>
                 <Button className='m-1' onClick={resetQueryStore} >New Query</Button>
                 <Button className='m-1' endContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
                 {!query?.id &&
-                  <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery}>Save Query</Button>
+                  <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery} isDisabled={isDisabled()}>Save Query</Button>
                 }
                 {query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runUpdateQuery}>Update Query</Button>
