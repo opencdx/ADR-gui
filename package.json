@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "next dev",
+    "startDev": "cross-env NODE_ENV=test next dev",
     "build": "ANALYZE=true && next build",
     "generate-api:adr": "openapi-generator-cli generate -i ./src/api/json/adr.json -g typescript-axios -o ./src/api/adr/ --skip-validate-spec --additional-properties=useSingleRequestParameter=true,withoutPrefixEnums=true,enumNameSuffix=,withSeparateModelsAndApi=true,apiPackage=server,modelPackage=model --openapi-normalizer REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true",
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",

@@ -24,27 +24,20 @@
 
 ## About
 
-This project serves as a foundational example for building user-friendly web applications using the React ecosystem.  The "Hello World" theme demonstrates core concepts while incorporating essential features like user authentication and adherence to accessibility standards.
+UI for crafting and running ADR queries.
 
 ## Technologies Used
 
 - [Next.js 14](https://nextjs.org/docs/getting-started)
 - [NextUI v2](https://nextui.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [React DnD](https://react-dnd.github.io/react-dnd/about)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [Immer](https://immerjs.github.io/immer/)
 - [Tailwind Variants](https://tailwind-variants.org)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Framer Motion](https://www.framer.com/motion/)
 - [next-themes](https://github.com/pacocoursey/next-themes)
-
-
-# Homepage: 
-- The application starts with a welcoming "Hello World" message, a clear call-to-action (e.g., "Sign In" or "Register"), and potentially a brief overview of the application's purpose.
-# Authentication:
-- Sign-In: A form for users to enter their credentials (username/email and password). Uses secure practices like hashing and salting passwords.
-- Registration: A form to create new accounts. It may include validation for password strength and email format.
-- Protected Routes: Some parts of the app (e.g., dashboard) are only accessible to authenticated users.
-# Authorization:
-- JWT (JSON Web Tokens): A common mechanism for securely transmitting authentication information between the client and server.
 
 # 508 Compliance (Accessibility):
 # Semantic HTML: 
@@ -62,8 +55,7 @@ Keyboard Navigation: All interactive elements can be accessed and used with a ke
 - Unit/Integration Testing: Tests that validate the functionality of individual components and their interactions.
 
 
-
-## Getting Started
+# Getting Started
 
 To get started, follow these steps:
 
@@ -76,12 +68,13 @@ Before cloning/forking this project, make sure you have the following tools inst
 - [NodeJS](https://nodejs.org/en/download/)
 
 ## Installation
-1. Clone the repository to your local machine:
+1. Clone this repository and the ui library to your local machine:
 
    ```bash
    git clone https://github.com/opencdx/ADR-gui.git
+   git clone https://github.com/opencdx/ui-library.git
 
-2. Install the project dependencies using npm:
+2. Install the project dependencies using npm in both ui-library and ADR-gui:
    
    ```bash
    npm install
@@ -92,10 +85,12 @@ Before cloning/forking this project, make sure you have the following tools inst
    ```bash
     npm start
 
-4.  Open your web browser and visit http://localhost:3000 to access the application
+4.  Open your web browser and visit http://localhost:3000 (or the URL in the cosole) to access the application
 
+5. To use development host use
 
-
+   ```bash
+    npm run startDev
 
 
 ## Cypress
