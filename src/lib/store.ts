@@ -1,6 +1,7 @@
 import { JoinOperation, SavedQuery, TinkarConceptModel, UnitOutput } from '@/api/adr';
 import { createWithEqualityFn as create } from 'zustand/traditional';
 import { produce } from 'immer';
+import { Operation } from '@/api/adr/model/query';
 
 interface QueryStore {
     query: SavedQuery;
@@ -8,7 +9,10 @@ interface QueryStore {
     updateQueryStore: (query: SavedQuery) => void;
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
     addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
-    addOperationToQuery: (operation: JoinOperation) => void;
+    addJoinOperationToQuery: (operation: JoinOperation) => void;
+    addOperationToQuery: (index: number, operation: Operation) => void;
+    addOperationDoubleToQuery: (index: number, value: number) => void;
+    addOperationStringToQuery: (index: number, value: string) => void;
     removeFromQuery: (index: number) => void;
     resetQueryStore: () => void;
 }
@@ -26,7 +30,7 @@ export const useQueryStore = create<QueryStore>()(
         updateQueryListStore: (queryList) =>
             set(
                 produce((draft) => {
-                    draft.queryList = [ ...queryList ]
+                    draft.queryList = [...queryList]
                 })
             ),
         addCriteriaToQuery: (criteria) =>
@@ -37,12 +41,30 @@ export const useQueryStore = create<QueryStore>()(
                     });
                 })
             ),
-        addOperationToQuery: (operation) =>
+        addJoinOperationToQuery: (operation) =>
             set(
                 produce((draft) => {
                     draft.query.query.queries.push({
                         joinOperation: operation
                     });
+                })
+            ),
+        addOperationToQuery: (index, operation) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].operation = operation;
+                })
+            ),
+        addOperationDoubleToQuery: (index, value) =>
+                set(
+                    produce((draft) => {
+                        draft.query.query.queries[index].operationDouble = value;
+                    })
+                ),
+        addOperationStringToQuery: (index, value) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].operationString = value;
                 })
             ),
         removeFromQuery: (index) =>

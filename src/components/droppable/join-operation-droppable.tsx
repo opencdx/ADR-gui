@@ -20,7 +20,7 @@ interface DropResult {
 }
 
 export const JoinOperationDroppable: FC<JoinOperatorDroppableProps> = ({ showCopyIcon, joinOperation, display }) => {
-  const { addOperationToQuery } = useQueryStore();
+  const { addJoinOperationToQuery } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
@@ -32,7 +32,7 @@ export const JoinOperationDroppable: FC<JoinOperatorDroppableProps> = ({ showCop
       end: (item, monitor) => {
         const dropResult = monitor.getDropResult<DropResult>()
         if (item && dropResult) {
-          addOperationToQuery(joinOperation);
+          addJoinOperationToQuery(joinOperation);
         }
       },
       collect: (monitor) => ({

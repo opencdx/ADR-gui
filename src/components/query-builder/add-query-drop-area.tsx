@@ -42,9 +42,9 @@ const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQueryBox({
     let color = '#6E6E6E'
     let border = '1px dashed gray'
     if (draggingColor && canDrop) {
-        backgroundColor = '#76B8DF'
+        backgroundColor = '#CCE3FD'
         color = '#0066FF'
-        border = '1px solid #0066FF'
+        border = '1px solid #66AAF9'
     }
 
     return (

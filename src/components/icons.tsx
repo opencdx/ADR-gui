@@ -73,3 +73,7 @@ export const UpArrow = ({}) => (
 export const DownArrow = ({}) => (
   <span className="material-symbols-outlined">keyboard_arrow_down</span>
 );
+
+export const DragIcon = ({}) => (
+  <span className="material-symbols-outlined">drag_indicator</span>
+);

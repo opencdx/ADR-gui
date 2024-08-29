@@ -19,22 +19,14 @@ interface DropResult {
   criteria: string
 }
 
-export const OperationBox: FC<OperationBoxProps> = ({ showCopyIcon, operation: operator, display }) => {
-  const { addCriteriaToQuery } = useQueryStore();
-  const query = useQueryStore((state) => state.query);
+export const OperationBox: FC<OperationBoxProps> = ({ showCopyIcon, operation, display }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
       type: DroppableTypes.OPERATOR,
-      item: { operator },
+      item: { operation },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
-      },
-      end: (item, monitor) => {
-        const dropResult = monitor.getDropResult<DropResult>();
-        if (item && dropResult) {
-          //addCriteriaToQuery(criteria);
-        }
       },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.2 : 1,
