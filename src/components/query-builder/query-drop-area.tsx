@@ -1,4 +1,4 @@
-import { FC, memo, SetStateAction, useMemo, useState } from "react";
+import { FC, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
 import { DroppableTypes } from '../droppable/droppable-types'
@@ -18,8 +18,17 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop, query, index
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
-    const [ operationValue, setOperationValue ] = useState('');
-    let operationValuewidth = '3ch';
+    const [operationValue, setOperationValue] = useState('');
+    const [hovered, setHovered] = useState(false);
+    const [operationValuewidth, setOperationValuewidth] =  useState('3ch');
+
+    const handleHoverEnter = () => {
+        setHovered(true);
+    };
+
+    const handleHoverLeave = () => {
+        setHovered(false);
+    };
 
     const handleRemove = (index: number) => {
         removeFromQuery(index);
@@ -30,14 +39,12 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     };
 
     const valueUpdated = useMemo(() => {
-        operationValuewidth = (operationValue.length + 1) + 'ch';
-
-        if (!isNaN(Number(operationValue))) {
+        setOperationValuewidth((operationValue.length + 1) + 'ch');
+        if (operationValue && !isNaN(Number(operationValue))) {
             addOperationDoubleToQuery(index, Number(operationValue));
-        } else {
+        } else if (operationValue) {
             addOperationStringToQuery(index, operationValue);
         }
-        
     }, [operationValue]);
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
@@ -83,7 +90,8 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                     }
                 </p>
                 {query?.operation &&
-                    <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px' style={{ width: operationValuewidth }}></input>
+                    <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
+                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
                 }
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
