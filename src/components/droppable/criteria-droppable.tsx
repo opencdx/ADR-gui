@@ -9,7 +9,7 @@ const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
 }
 
-export interface CriteriaBoxProps {
+export interface CriteriaDroppableProps {
   showCopyIcon?: boolean
   criteria: TinkarConceptModel
 }
@@ -18,7 +18,7 @@ interface DropResult {
   criteria: string
 }
 
-export const CriteriaBox: FC<CriteriaBoxProps> = ({ showCopyIcon, criteria }) => {
+export const CriteriaDroppable: FC<CriteriaDroppableProps> = ({ showCopyIcon, criteria }) => {
   const { addCriteriaToQuery } = useQueryStore();
   const query = useQueryStore((state) => state.query);
   const [isHovered, setIsHovered] = useState(false);

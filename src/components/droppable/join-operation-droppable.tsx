@@ -9,7 +9,7 @@ const hoverStyle: CSSProperties = {
 
 }
 
-export interface OperatorBoxProps {
+export interface JoinOperatorDroppableProps {
   showCopyIcon?: boolean
   joinOperation: JoinOperation
   display: string
@@ -19,8 +19,8 @@ interface DropResult {
   criteria: string
 }
 
-export const JoinOperationBox: FC<OperatorBoxProps> = ({ showCopyIcon, joinOperation, display }) => {
-  const { addOperationToQuery } = useQueryStore();
+export const JoinOperationDroppable: FC<JoinOperatorDroppableProps> = ({ showCopyIcon, joinOperation, display }) => {
+  const { addJoinOperationToQuery } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
@@ -32,7 +32,7 @@ export const JoinOperationBox: FC<OperatorBoxProps> = ({ showCopyIcon, joinOpera
       end: (item, monitor) => {
         const dropResult = monitor.getDropResult<DropResult>()
         if (item && dropResult) {
-          addOperationToQuery(joinOperation);
+          addJoinOperationToQuery(joinOperation);
         }
       },
       collect: (monitor) => ({
