@@ -23,6 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/hooks/query-keys';
 import OperatorsDropdown from './droppable/operators-dropdown';
 import QueryRender from './query-builder/query-render';
+import { FormulaDroppable } from './droppable/formula-droppable';
 
 export default function QueryBuilder() {
 

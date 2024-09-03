@@ -1,4 +1,4 @@
-import { FC, memo, SetStateAction, useEffect, useMemo, useState } from "react";
+import { FC, memo, SetStateAction, useMemo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
 import { DroppableTypes } from '../droppable/droppable-types'

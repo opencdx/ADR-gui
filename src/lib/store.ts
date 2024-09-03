@@ -13,6 +13,7 @@ interface QueryStore {
     addOperationToQuery: (index: number, operation: Operation) => void;
     addOperationDoubleToQuery: (index: number, value: number) => void;
     addOperationStringToQuery: (index: number, value: string) => void;
+    addFormulaToQuery: () => void;
     removeFromQuery: (index: number) => void;
     resetQueryStore: () => void;
 }
@@ -65,6 +66,14 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].operationString = value;
+                })
+            ),
+        addFormulaToQuery: () =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries.push({
+                        formula: {}
+                    })
                 })
             ),
         removeFromQuery: (index) =>

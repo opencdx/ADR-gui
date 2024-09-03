@@ -1,16 +1,18 @@
 import { useQueryStore } from '@/lib/store';
-import { StatefulQueryBox as AddQueryBox } from './add-query-drop-area';
+import { AddQueryDropArea } from './add-query-drop-area';
 import { QueryDropArea } from './query-drop-area';
 import { JoinOperationBox } from './join-operation-box';
-import { useCallback } from 'react';
 import { Operation } from '@/api/adr/model/query';
+import { FormulaBox } from './formula-box';
 
 export default function QueryRender() {
 
-    const { query, addOperationToQuery } =  useQueryStore();
+    const { query, addCriteriaToQuery, addOperationToQuery } =  useQueryStore();
 
     const handleDrop = (index: number, item: any) => {
-        if (item.operation && isOperation(item.operation)) {
+        if (item.criteria) {
+            addCriteriaToQuery(item.criteria);
+        } else if (item.operation && isOperation(item.operation)) {
             addOperationToQuery(index, item.operation);
         }
     }
@@ -29,9 +31,15 @@ export default function QueryRender() {
                         onDrop={(item) => handleDrop(index, item)}
                         query={query}
                         index={index} />
+                } else if (query.formula) {
+                    return <FormulaBox
+                        onDrop={(item) => handleDrop(index, item)}
+                        query={query}
+                        index={index} />
                 }
             })}
-            <AddQueryBox />
+            <AddQueryDropArea 
+                onDrop={(item) => handleDrop(-1, item)} />
         </>
     )
 }
