@@ -6,15 +6,14 @@ import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
 import { Query } from "@/api/adr";
 import { OperationRender } from "../ui/operation-render";
-import { DragIcon } from "../icons";
 
-export interface QueryDropAreaProps {
+export interface UnitsDropAreaProps {
     onDrop: (item: any) => void
     query: Query,
-    index: number
+    index: number,
 }
 
-export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
+export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
     onDrop, query, index
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
@@ -39,25 +38,19 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     };
 
     const valueUpdated = useMemo(() => {
-        setOperationValuewidth((operationValue.length + 1) + 'ch');
-        if (operationValue && !isNaN(Number(operationValue))) {
-            addOperationDoubleToQuery(index, Number(operationValue));
-        } else if (operationValue) {
-            addOperationStringToQuery(index, operationValue);
+        if (operationValue.length) {
+            setOperationValuewidth((operationValue.length + 1) + 'ch');
+            if (operationValue && !isNaN(Number(operationValue))) {
+                addOperationDoubleToQuery(index, Number(operationValue));
+            } else if (operationValue) {
+                addOperationStringToQuery(index, operationValue);
+            }
         }
     }, [operationValue]);
 
-    const setValue = useMemo(() => {
-        if (query.operationDouble) {
-            setOperationValue(String(query.operationDouble));
-        } else if (query.operationText) {
-            setOperationValue(query.operationText);
-        }
-    }, []);
-
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.OPERATOR],
+            accept: [DroppableTypes.UNITS],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItem());
                 return undefined;
@@ -83,26 +76,14 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     }
 
     return (
-        <div
-            ref={drop}
-            className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between mb-2'
-            style={{ backgroundColor, color, opacity, border }}
-            key={index}>
-            <div className='my-auto flex'>
-                <div className='text-[#757575] m-auto'><DragIcon /></div>
-                <p className='text-[#001124] m-auto'>[{query.concept?.conceptName}]&nbsp;
-                    {query?.operation &&
-                        <>
-                            <OperationRender operation={query.operation} />
-                        </>
-                    }
-                </p>
-                {query?.operation &&
-                    <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
-                }
-            </div>
-            <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
+        <div ref={drop}>
+            {query.formula && query.formula.leftOperandUnit &&
+                <>({query.formula.leftOperandUnit.conceptName}) &nbsp;</>
+            }
+            {!query.formula?.leftOperandUnit &&
+                <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
+                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+            }
         </div>
     )
 })

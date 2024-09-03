@@ -118,10 +118,10 @@ export default function QueryBuilder() {
               <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
               <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
                 <Tab key='criteria' title='Available Criteria'>
-                  <CriteriaList criteriaList={criteriaList?.data} filter={searchTerm} />
+                  <CriteriaList criteriaList={criteriaList?.data} unitsList={undefined} filter={searchTerm} />
                 </Tab>
                 <Tab key='units' title='Units of Measure'>
-                  <CriteriaList criteriaList={unitsOfMeasure?.data} filter={searchTerm} />
+                  <CriteriaList unitsList={unitsOfMeasure?.data} criteriaList={undefined} filter={searchTerm} />
                 </Tab>
               </Tabs>
             </div>
@@ -138,6 +138,7 @@ export default function QueryBuilder() {
                 <JoinOperationDroppable joinOperation={JoinOperation.And} display='Add Grouping' showCopyIcon={true} />
                 <JoinOperationDroppable joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
                 <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
+                <FormulaDroppable showCopyIcon={true}/>
                 <OperatorsDropdown />
               </div>
               <QueryRender />

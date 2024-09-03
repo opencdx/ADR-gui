@@ -5,9 +5,11 @@ import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
 import { Button, Dropdown, DropdownItem, DropdownSection, DropdownTrigger } from 'ui-library';
 import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
-import { OperationBox } from './operation-droppable';
-import { Operation } from '@/api/adr/model/query';
+import { OperationQueryBox } from './operation-query-droppable';
+import { Operation as QueryOperation } from '@/api/adr/model/query';
+import { Operation as FormulaOperation } from '@/api/adr/model/formula';
 import { DownArrow, UpArrow } from '../icons';
+import { OperationFormulaBox } from './operation-formula-droppable';
 
 const hoverStyle: CSSProperties = {
     border: '1px solid #006FEE',
@@ -58,12 +60,17 @@ export default function OperatorsDropdown() {
                 <DropdownMenu className='w-[300px] rounded-none p-0'>
                     <DropdownSection className='rounded-none'>
                         <DropdownItem isReadOnly className='p-0 rounded-none mt-2'>
-                            <OperationBox operation={Operation.Equal} display='= Equal' />
-                            <OperationBox operation={Operation.NotEqual} display='!= Not Equal' />
-                            <OperationBox operation={Operation.GreaterThan} display='> Greater than' />
-                            <OperationBox operation={Operation.GreaterThanOrEqual} display='>= Greater than or equal to' />
-                            <OperationBox operation={Operation.LessThan} display='< Less than' />
-                            <OperationBox operation={Operation.LessThanOrEqual} display='<= Less than or equal to' />
+                            <OperationQueryBox operation={QueryOperation.Equal} display='= Equal' />
+                            <OperationQueryBox operation={QueryOperation.NotEqual} display='!= Not Equal' />
+                            <OperationQueryBox operation={QueryOperation.GreaterThan} display='> Greater than' />
+                            <OperationQueryBox operation={QueryOperation.GreaterThanOrEqual} display='>= Greater than or equal to' />
+                            <OperationQueryBox operation={QueryOperation.LessThan} display='< Less than' />
+                            <OperationQueryBox operation={QueryOperation.LessThanOrEqual} display='<= Less than or equal to' />
+                            <OperationFormulaBox operation={FormulaOperation.Add} display='+ Addition' />
+                            <OperationFormulaBox operation={FormulaOperation.Subtract} display='- Subtraction' />
+                            <OperationFormulaBox operation={FormulaOperation.Multiply} display='&#215; Multiplication' />
+                            <OperationFormulaBox operation={FormulaOperation.Divide} display='&#247; Division' />
+                            <OperationFormulaBox operation={FormulaOperation.Power} display='^ Power' />
                         </DropdownItem>
                     </DropdownSection>
                 </DropdownMenu>
