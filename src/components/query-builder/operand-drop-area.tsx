@@ -4,11 +4,10 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Formula, Query } from "@/api/adr";
+import { Formula } from "@/api/adr";
 import { UnitsDropArea } from "./units-drop-area";
-import { OperationDropArea } from "./operation-drop-area";
-import { FormulaBox } from "./formula-box";
 import { FormulaRender } from "./formula-render";
+import { OperandTypes } from "./operand-types";
 
 export interface OperandDropAreaProps {
     onDrop: (item: any) => void
@@ -21,7 +20,7 @@ export interface OperandDropAreaProps {
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index, operandLocation, parent
 }) {
-    const { removeFromQuery, addLeftOperandValue, addRightOperandValue, addLeftOperandUnits, addRightOperandUnits } = useQueryStore();
+    const { removeFromQuery, addOperandValue, addOperandUnits } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -46,10 +45,10 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
         if (item.units) {
             switch (operandLocation) {
                 case 'left':
-                    addLeftOperandUnits(index, item.units);
+                    addOperandUnits(index, item.units, OperandTypes.LEFT_OPERAND_UNIT);
                     break;
                 case 'right':
-                    addRightOperandUnits(index, item.units);
+                    addOperandUnits(index, item.units, OperandTypes.RIGHT_OPERAND_UNIT);
                     break;
             }
         }
@@ -93,10 +92,10 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             if (operandValue && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
-                        addLeftOperandValue(index, Number(operandValue));
+                        addOperandValue(index, Number(operandValue), OperandTypes.LEFT_OPERAND_VALUE);
                         break;
                     case 'right':
-                        addRightOperandValue(index, Number(operandValue));
+                        addOperandValue(index, Number(operandValue), OperandTypes.RIGHT_OPERAND_VALUE);
                         break;
                 }
             }
@@ -140,11 +139,11 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
 
     return (
         <div ref={drop} className='flex'>
-            {formula.leftOperandFormula && parent == 'formula' &&
+            {formula.leftOperandFormula && parent == 'formula' && operandLocation == 'left' &&
                 <FormulaRender
-                    formula={formula}
+                    formula={formula.leftOperandFormula}
                     index={index}
-                    parent='leftOperandFormula' />
+                    parent='operandFormula' />
             }
             {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
                 <>
@@ -155,11 +154,11 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                         operandLocation='left'/>
                 </>
             }
-            {!formula?.leftOperand && operandLocation == 'left' && !formula?.leftOperandFormula && !formula.leftOperandFormula &&
+            {!formula?.leftOperand && operandLocation == 'left' && !formula?.leftOperandFormula &&
                 <input value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
                     style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
             }
-            {formula && formula.rightOperand && operandLocation == 'right' && !formula.leftOperandFormula &&
+            {formula && formula.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <> {formula.rightOperand?.conceptName}
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'right')}
                         formula={formula}
@@ -167,7 +166,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                         operandLocation='right'/>
                 </>
             }
-            {!formula?.rightOperand && operandLocation == 'right' && !formula.leftOperandFormula &&
+            {!formula?.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <input value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
                     style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
             }

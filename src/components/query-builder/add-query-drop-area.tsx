@@ -3,7 +3,6 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
-import { useQueryStore } from "@/lib/store";
 
 export interface AddQueryDropAreaProps {
     onDrop: (item: any) => void
@@ -13,17 +12,6 @@ export interface AddQueryDropAreaProps {
 export const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQueryBox({
     onDrop,
 }) {
-    const { removeFromQuery } = useQueryStore();
-    const query = useQueryStore((state) => state.query);
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
-    };
-
-    const handleDrop = (index: number, item: any) => {
-        
-    }
-
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
             accept: [DroppableTypes.CRITERIA, DroppableTypes.JOIN_OPERATION, DroppableTypes.FORMULA],

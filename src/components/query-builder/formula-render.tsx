@@ -1,9 +1,10 @@
 import { FC, memo } from "react";
 
 import { useQueryStore } from "@/lib/store";
-import { Formula, Query } from "@/api/adr";
+import { Formula } from "@/api/adr";
 import { OperandDropArea } from "./operand-drop-area";
 import { OperationDropArea } from "./operation-drop-area";
+import { OperandTypes } from "./operand-types";
 
 export interface FormulaRenderProps {
     formula: Formula,
@@ -14,31 +15,42 @@ export interface FormulaRenderProps {
 export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     formula, index, parent
 }) {
-    const { removeFromQuery, addLeftOperandCriteria, addRightOperandCriteria, addOperationToFormula, addLeftOperandValue, addRightOperandValue,
-        addLeftOperandFormula, addRightOperandFormula
+    const { removeFromQuery, addOperandCriteria, addOperationToFormula, addOperandValue,
+        addOperandToFormula, addLeftOperandFormulaCriteria, addRightOperandFormulaCriteria
     } = useQueryStore();
 
-    const handleOperandDrop = (index: number, item: any, operandLocation: string) => {
-        if (item.criteria) {
+    const handleOperandDrop = (index: number, item: any, operandLocation: string, parent: string) => {
+        if (item.criteria && parent == 'formula') {
             switch (operandLocation) {
                 case 'left':
-                    addLeftOperandValue(index, null);
-                    addLeftOperandCriteria(index, item.criteria);
+                    addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                    addOperandCriteria(index, item.criteria, OperandTypes.LEFT_OPERAND);
                     break;
                 case 'right':
-                    addRightOperandValue(index, null);
-                    addRightOperandCriteria(index, item.criteria);
+                    addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                    addOperandCriteria(index, item.criteria, OperandTypes.RIGHT_OPERAND);
+                    break;
+            }
+        } if (item.criteria && parent == 'operandFormula') {
+            switch (operandLocation) {
+                case 'left':
+                    addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                    addLeftOperandFormulaCriteria(index, item.criteria);
+                    break;
+                case 'right':
+                    addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                    addRightOperandFormulaCriteria(index, item.criteria);
                     break;
             }
         } else if (item.formula) {
             switch (operandLocation) {
                 case 'left':
-                    addLeftOperandValue(index, null);
-                    addLeftOperandFormula(index);
+                    addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                    addOperandToFormula(index, OperandTypes.LEFT_OPERAND_FORMULA);
                     break;
                 case 'right':
-                    addRightOperandValue(index, null);
-                    addRightOperandFormula(index);
+                    addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                    addOperandToFormula(index, OperandTypes.RIGHT_OPERAND_FORMULA);
                     break;
             }
         }
@@ -58,7 +70,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
         <>
             &#40;
             <OperandDropArea
-                onDrop={(item) => handleOperandDrop(index, item, 'left')}
+                onDrop={(item) => handleOperandDrop(index, item, 'left', parent)}
                 formula={formula!}
                 index={index}
                 operandLocation='left'
@@ -67,7 +79,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                 formula={formula!}
                 index={index} />
             <OperandDropArea
-                onDrop={(item) => handleOperandDrop(index, item, 'right')}
+                onDrop={(item) => handleOperandDrop(index, item, 'right', parent)}
                 formula={formula!}
                 index={index}
                 operandLocation='right'

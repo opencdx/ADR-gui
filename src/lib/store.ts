@@ -10,19 +10,25 @@ interface QueryStore {
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
     addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
     addJoinOperationToQuery: (operation: JoinOperation) => void;
+    
     addOperationToQuery: (index: number, operation: QueryOperation) => void;
     addOperationDoubleToQuery: (index: number, value: number) => void;
     addOperationStringToQuery: (index: number, value: string) => void;
+    
     addFormulaToQuery: () => void;
-    addLeftOperandCriteria: (index: number, criteria: TinkarConceptModel) => void;
-    addRightOperandCriteria: (index: number, criteria: TinkarConceptModel) => void;
-    addLeftOperandFormula: (index: number) => void;
-    addRightOperandFormula: (index: number) => void;
-    addLeftOperandValue: (index: number, value: number | null) => void;
-    addRightOperandValue: (index: number, value: number | null) => void;
-    addLeftOperandUnits: (index: number, value: TinkarConceptModel | null) => void;
-    addRightOperandUnits: (index: number, value: TinkarConceptModel | null) => void;
+    addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
+    
+    addOperandToFormula: (index: number, field: string) => void;
+    
+    addLeftOperandFormulaCriteria: (index: number, criteria: TinkarConceptModel) => void;
+    addRightOperandFormulaCriteria: (index: number, criteria: TinkarConceptModel) => void;
+    
+    addOperandValue: (index: number, value: number | null, field: string) => void;
+    
+    addOperandUnits: (index: number, value: TinkarConceptModel | null, field: string) => void;
+    
     addOperationToFormula: (index: number, operation: any) => void;
+   
     removeFromQuery: (index: number) => void;
     resetQueryStore: () => void;
 }
@@ -85,28 +91,28 @@ export const useQueryStore = create<QueryStore>()(
                     })
                 })
             ),
-        addLeftOperandCriteria: (index, criteria) =>
+        addOperandCriteria: (index, criteria, field) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].formula.leftOperand = criteria;
+                    draft.query.query.queries[index].formula[field] = criteria;
                 })
             ),
-        addRightOperandCriteria: (index, criteria) =>
+        addOperandToFormula: (index, field) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].formula.rightOperand = criteria;
+                    draft.query.query.queries[index].formula[field] = {}
                 })
             ),
-        addLeftOperandFormula: (index) =>
+        addLeftOperandFormulaCriteria: (index, criteria) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].formula.leftOperandFormula = {}
+                    draft.query.query.queries[index].formula.leftOperandFormula.leftOperand = criteria;
                 })
             ),
-        addRightOperandFormula: (index) =>
+        addRightOperandFormulaCriteria: (index, criteria) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].formula.rightOperandFormula = {}
+                    draft.query.query.queries[index].formula.rightOperandFormula.leftOperand = criteria;
                 })
             ),
         addOperationToFormula: (index, operation) =>
@@ -115,28 +121,16 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].formula.operation = operation;
                 })
             ),
-        addLeftOperandValue: (index, value) =>
+        addOperandValue: (index, value, position) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].formula.leftOperandValue = value;
+                    draft.query.query.queries[index].formula[position] = value;
                 })
             ),
-        addRightOperandValue: (index, value) =>
+        addOperandUnits: (index, value, field) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].formula.rightOperandValue = value;
-                })
-            ),
-        addLeftOperandUnits: (index, value) =>
-            set(
-                produce((draft) => {
-                    draft.query.query.queries[index].formula.leftOperandUnit = value;
-                })
-            ),
-        addRightOperandUnits: (index, value) =>
-            set(
-                produce((draft) => {
-                    draft.query.query.queries[index].formula.rightOperandUnit = value;
+                    draft.query.query.queries[index].formula[field] = value;
                 })
             ),
         removeFromQuery: (index) =>

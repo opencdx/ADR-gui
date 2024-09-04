@@ -4,8 +4,7 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Formula, Query } from "@/api/adr";
-import { OperationRender } from "../ui/operation-render";
+import { Formula } from "@/api/adr";
 
 export interface UnitsDropAreaProps {
     onDrop: (item: any) => void
