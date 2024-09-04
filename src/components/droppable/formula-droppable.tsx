@@ -12,25 +12,14 @@ export interface FormulaDroppableProps {
   showCopyIcon?: boolean
 }
 
-interface DropResult {
-  criteria: string
-}
-
 export const FormulaDroppable: FC<FormulaDroppableProps> = ({ showCopyIcon }) => {
-  const { addFormulaToQuery } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
       type: DroppableTypes.FORMULA,
-      item: { },
+      item: { formula: true },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
-      },
-      end: (item, monitor) => {
-        const dropResult = monitor.getDropResult<DropResult>()
-        if (item && dropResult) {
-          addFormulaToQuery();
-        }
       },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.2 : 1,

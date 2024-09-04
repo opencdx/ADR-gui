@@ -7,13 +7,15 @@ import { FormulaBox } from './formula-box';
 
 export default function QueryRender() {
 
-    const { query, addCriteriaToQuery, addOperationToQuery } =  useQueryStore();
+    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery } =  useQueryStore();
 
     const handleDrop = (index: number, item: any) => {
         if (item.criteria) {
             addCriteriaToQuery(item.criteria);
         } else if (item.operation && isOperation(item.operation)) {
             addOperationToQuery(index, item.operation);
+        } else if (item.formula) {
+            addFormulaToQuery();
         }
     }
 
