@@ -4,17 +4,18 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Query } from "@/api/adr";
+import { Formula, Query } from "@/api/adr";
 import { OperationRender } from "../ui/operation-render";
 
 export interface UnitsDropAreaProps {
     onDrop: (item: any) => void
-    query: Query,
+    formula: Formula,
     index: number,
+    operandLocation: string,
 }
 
 export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
-    onDrop, query, index
+    onDrop, formula, index, operandLocation
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
@@ -77,10 +78,17 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
 
     return (
         <div ref={drop}>
-            {query.formula && query.formula.leftOperandUnit &&
-                <>({query.formula.leftOperandUnit.conceptName}) &nbsp;</>
+            {formula && formula.leftOperandUnit && operandLocation == 'left' &&
+                <>&nbsp;({formula.leftOperandUnit.conceptName})</>
             }
-            {!query.formula?.leftOperandUnit &&
+            {!formula?.leftOperandUnit && operandLocation == 'left' &&
+                <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
+                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+            }
+            {formula && formula.rightOperandUnit && operandLocation == 'right' &&
+                <>&nbsp;({formula.rightOperandUnit.conceptName})</>
+            }
+            {!formula?.rightOperandUnit && operandLocation == 'right' &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
                 style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
             }

@@ -35,8 +35,9 @@ export default function QueryRender() {
                         index={index} />
                 } else if (query.formula) {
                     return <FormulaBox
-                        query={query}
-                        index={index} />
+                        formula={query.formula}
+                        index={index}
+                        parent='formula'/>
                 }
             })}
             <AddQueryDropArea 

@@ -4,17 +4,17 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Query } from "@/api/adr";
+import { Formula, Query } from "@/api/adr";
 import { OperationRender } from "../ui/operation-render";
 
 export interface OperationDropAreaProps {
     onDrop: (item: any) => void
-    query: Query,
+    formula: Formula,
     index: number,
 }
 
 export const OperationDropArea: FC<OperationDropAreaProps> = memo(function QueryBox({
-    onDrop, query, index
+    onDrop, formula, index
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
@@ -77,10 +77,10 @@ export const OperationDropArea: FC<OperationDropAreaProps> = memo(function Query
 
     return (
         <div ref={drop}>
-            {query.formula && query.formula.operation &&
-                <OperationRender operation={query.formula.operation}/>
+            {formula && formula.operation &&
+                <OperationRender operation={formula.operation}/>
             }
-            {!query.formula?.operation &&
+            {!formula?.operation &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
                 style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}/>
             }

@@ -4,18 +4,22 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Query } from "@/api/adr";
+import { Formula, Query } from "@/api/adr";
 import { UnitsDropArea } from "./units-drop-area";
+import { OperationDropArea } from "./operation-drop-area";
+import { FormulaBox } from "./formula-box";
+import { FormulaRender } from "./formula-render";
 
 export interface OperandDropAreaProps {
     onDrop: (item: any) => void
-    query: Query,
+    formula: Formula,
     index: number,
     operandLocation: string,
+    parent: string
 }
 
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
-    onDrop, query, index, operandLocation
+    onDrop, formula, index, operandLocation, parent
 }) {
     const { removeFromQuery, addLeftOperandValue, addRightOperandValue, addLeftOperandUnits, addRightOperandUnits } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
@@ -51,6 +55,38 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
         }
     }
 
+    const handleOperandDrop = (index: number, item: any, operandLocation: string) => {
+        if (item.criteria) {
+            switch (operandLocation) {
+                case 'left':
+                    //addLeftOperandValue(index, null);
+                    //addLeftOperandCriteria(index, item.criteria);
+                    break;
+                case 'right':
+                    // addRightOperandValue(index, null);
+                    // addRightOperandCriteria(index, item.criteria);
+                    break;
+            }
+        } else if (item.formula) {
+            switch (operandLocation) {
+                case 'left':
+                    // addLeftOperandValue(index, null);
+                    // addLeftOperandFormula(index);
+                    break;
+                case 'right':
+                    // addRightOperandValue(index, null);
+                    // addRightOperandFormula(index);
+                    break;
+            }
+        }
+    }
+
+    const handleOperationDrop = (index: number, item: any) => {
+        if (item.operation) {
+            //addOperationToFormula(index, item.operation);
+        }
+    }
+
     const valueUpdated = useMemo(() => {
         if (operandValue.length) {
             setOperationValuewidth((operandValue.length + 1) + 'ch');
@@ -68,10 +104,10 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     }, [operandValue]);
 
     const setValue = useMemo(() => {
-        if (query.formula?.leftOperandValue) {
-            setOperandValue(String(query.formula.leftOperandValue));
-        } else if (query.formula?.rightOperandValue) {
-            setOperandValue(String(query.formula.rightOperandValue));
+        if (formula?.leftOperandValue) {
+            setOperandValue(String(formula.leftOperandValue));
+        } else if (formula?.rightOperandValue) {
+            setOperandValue(String(formula.rightOperandValue));
         }
     }, []);
 
@@ -103,23 +139,35 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     }
 
     return (
-        <div ref={drop}>
-            {query.formula && query.formula.leftOperand && operandLocation == 'left' &&
-                <div className='flex'>
-                    <div>{query.formula.leftOperand?.conceptName} &nbsp;</div>
-                    <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'left')}
-                        query={query}
-                        index={index} />
-                </div>
+        <div ref={drop} className='flex'>
+            {formula.leftOperandFormula && parent == 'formula' &&
+                <FormulaRender
+                    formula={formula}
+                    index={index}
+                    parent='leftOperandFormula' />
             }
-            {!query.formula?.leftOperand && operandLocation == 'left' &&
+            {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
+                <>
+                    <div>{formula.leftOperand?.conceptName} </div>
+                    <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'left')}
+                        formula={formula}
+                        index={index}
+                        operandLocation='left'/>
+                </>
+            }
+            {!formula?.leftOperand && operandLocation == 'left' && !formula?.leftOperandFormula && !formula.leftOperandFormula &&
                 <input value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
                     style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
             }
-            {query.formula && query.formula.rightOperand && operandLocation == 'right' &&
-                <div>&nbsp; {query.formula.leftOperand?.conceptName}</div>
+            {formula && formula.rightOperand && operandLocation == 'right' && !formula.leftOperandFormula &&
+                <> {formula.rightOperand?.conceptName}
+                    <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'right')}
+                        formula={formula}
+                        index={index}
+                        operandLocation='right'/>
+                </>
             }
-            {!query.formula?.rightOperand && operandLocation == 'right' &&
+            {!formula?.rightOperand && operandLocation == 'right' && !formula.leftOperandFormula &&
                 <input value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
                     style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
             }

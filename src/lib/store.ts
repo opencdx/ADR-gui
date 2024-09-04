@@ -16,6 +16,8 @@ interface QueryStore {
     addFormulaToQuery: () => void;
     addLeftOperandCriteria: (index: number, criteria: TinkarConceptModel) => void;
     addRightOperandCriteria: (index: number, criteria: TinkarConceptModel) => void;
+    addLeftOperandFormula: (index: number) => void;
+    addRightOperandFormula: (index: number) => void;
     addLeftOperandValue: (index: number, value: number | null) => void;
     addRightOperandValue: (index: number, value: number | null) => void;
     addLeftOperandUnits: (index: number, value: TinkarConceptModel | null) => void;
@@ -93,6 +95,18 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].formula.rightOperand = criteria;
+                })
+            ),
+        addLeftOperandFormula: (index) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].formula.leftOperandFormula = {}
+                })
+            ),
+        addRightOperandFormula: (index) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].formula.rightOperandFormula = {}
                 })
             ),
         addOperationToFormula: (index, operation) =>
