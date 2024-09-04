@@ -20,7 +20,7 @@ export interface OperandDropAreaProps {
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index, operandLocation, parent
 }) {
-    const { removeFromQuery, addOperandValue, addOperandUnits } = useQueryStore();
+    const { removeFromQuery, addOperandValue, addOperandUnits, addOperandValueToFormula } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -89,13 +89,22 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     const valueUpdated = useMemo(() => {
         if (operandValue.length) {
             setOperationValuewidth((operandValue.length + 1) + 'ch');
-            if (operandValue && !isNaN(Number(operandValue))) {
+            if (operandValue && parent == 'formula' && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
                         addOperandValue(index, Number(operandValue), OperandTypes.LEFT_OPERAND_VALUE);
                         break;
                     case 'right':
                         addOperandValue(index, Number(operandValue), OperandTypes.RIGHT_OPERAND_VALUE);
+                        break;
+                }
+            } else if (operandValue && (parent == OperandTypes.LEFT_OPERAND_FORMULA || parent == OperandTypes.RIGHT_OPERAND_FORMULA ) && !isNaN(Number(operandValue))) {
+                switch (operandLocation) {
+                    case 'left':
+                        addOperandValueToFormula(index, Number(operandValue), parent, OperandTypes.LEFT_OPERAND_VALUE, );
+                        break;
+                    case 'right':
+                        addOperandValueToFormula(index, Number(operandValue), parent, OperandTypes.RIGHT_OPERAND_VALUE);
                         break;
                 }
             }
@@ -143,7 +152,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                 <FormulaRender
                     formula={formula.leftOperandFormula}
                     index={index}
-                    parent='operandFormula' />
+                    parent={OperandTypes.LEFT_OPERAND_FORMULA}/>
             }
             {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
                 <>
@@ -157,6 +166,12 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             {!formula?.leftOperand && operandLocation == 'left' && !formula?.leftOperandFormula &&
                 <input value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
                     style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+            }
+            {formula.rightOperandFormula && parent == 'formula' && operandLocation == 'right' &&
+                <FormulaRender
+                    formula={formula.rightOperandFormula}
+                    index={index}
+                    parent={OperandTypes.RIGHT_OPERAND_FORMULA}/>
             }
             {formula && formula.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <> {formula.rightOperand?.conceptName}

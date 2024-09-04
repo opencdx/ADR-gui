@@ -31,7 +31,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                     addOperandCriteria(index, item.criteria, OperandTypes.RIGHT_OPERAND);
                     break;
             }
-        } if (item.criteria && parent == 'operandFormula') {
+        } else if (item.criteria && (parent == OperandTypes.LEFT_OPERAND_FORMULA || parent == OperandTypes.RIGHT_OPERAND_FORMULA)) {
             switch (operandLocation) {
                 case 'left':
                     addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
