@@ -16,7 +16,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     formula, index, parents
 }) {
     const { removeFromQuery, addOperandCriteria, addOperationToFormula, addOperandValue,
-        addOperandToFormula, addOperandCriteriaToFormula, addOperandValueToFormula, addFormulaToFormula
+        addOperandToFormula, addOperandCriteriaToFormula, addOperandValueToFormula, addFormulaToFormula, addToFormulaThirdDepth
     } = useQueryStore();
 
     const handleOperandDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
@@ -31,17 +31,6 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                     addOperandCriteria(index, item.criteria, OperandTypes.RIGHT_OPERAND);
                     break;
             }
-        } else if (parents.length == 2 && item.criteria && (parents[1] == OperandTypes.LEFT_OPERAND_FORMULA || parents[1] == OperandTypes.RIGHT_OPERAND_FORMULA)) {
-            switch (operandLocation) {
-                case 'left':
-                    addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
-                    addOperandCriteriaToFormula(index, item.criteria, parents[1], OperandTypes.LEFT_OPERAND);
-                    break;
-                case 'right':
-                    addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
-                    addOperandCriteriaToFormula(index, item.criteria, parents[1], OperandTypes.RIGHT_OPERAND);
-                    break;
-            }
         } else if (parents.length == 1 && item.formula && parents[0] == OperandTypes.FORMULA) {
             switch (operandLocation) {
                 case 'left':
@@ -53,7 +42,18 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                     addOperandToFormula(index, OperandTypes.RIGHT_OPERAND_FORMULA);
                     break;
             }
-        } else if (parents.length == 2 && item.formula && (parents[1] == OperandTypes.LEFT_OPERAND_FORMULA || parents[1] == OperandTypes.RIGHT_OPERAND_FORMULA)) {
+        } else if (parents.length == 2 && item.criteria) {
+            switch (operandLocation) {
+                case 'left':
+                    addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                    addOperandCriteriaToFormula(index, item.criteria, parents[1], OperandTypes.LEFT_OPERAND);
+                    break;
+                case 'right':
+                    addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                    addOperandCriteriaToFormula(index, item.criteria, parents[1], OperandTypes.RIGHT_OPERAND);
+                    break;
+            }
+        } else if (parents.length == 2 && item.formula) {
             switch (operandLocation) {
                 case 'left':
                     addFormulaToFormula(index, parents[1], OperandTypes.LEFT_OPERAND_FORMULA);
@@ -62,16 +62,27 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                     addFormulaToFormula(index, parents[1], OperandTypes.RIGHT_OPERAND_FORMULA);
                     break;
             }
+        } else if (parents.length == 3 && item.criteria) {
+            switch (operandLocation) {
+                case 'left':
+                    //addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                    addToFormulaThirdDepth(index, item.criteria, parents[1], parents[2], OperandTypes.LEFT_OPERAND);
+                    break;
+                case 'right':
+                    //addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                    addToFormulaThirdDepth(index, item.criteria, parents[1], parents[2], OperandTypes.RIGHT_OPERAND);
+                    break;
+            }
         }
     }
 
     const handleOperationDrop = (index: number, item: any, parents: string[]) => {
         if (parents.length == 1 && item.operation && parents[0] == OperandTypes.FORMULA) {
             addOperationToFormula(index, item.operation);
-        } else if (parents.length == 2 && item.operation && parents[1] == OperandTypes.LEFT_OPERAND_FORMULA) {
+        } else if (parents.length == 2 && item.operation) {
             addOperandValueToFormula(index, item.operation, parents[1], OperandTypes.OPERATION);
-        } else if (parents.length == 3 && item.operation && parents[2] == OperandTypes.LEFT_OPERAND_FORMULA) {
-            addOperandValueToFormula(index, item.operation, parents[2], OperandTypes.OPERATION);
+        } else if (parents.length == 3 && item.operation) {
+            addToFormulaThirdDepth(index, item.operation, parents[1], parents[2], OperandTypes.OPERATION);
         }
     }
 

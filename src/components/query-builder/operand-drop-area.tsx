@@ -20,7 +20,7 @@ export interface OperandDropAreaProps {
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index, operandLocation, parents
 }) {
-    const { removeFromQuery, addOperandValue, addOperandUnits, addOperandValueToFormula, addOperandCriteriaToFormula } = useQueryStore();
+    const { addOperandValue, addOperandUnits, addOperandValueToFormula, addOperandCriteriaToFormula, addToFormulaThirdDepth, addValueToFormulaThirdDepth } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -31,10 +31,6 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
 
     const handleHoverLeave = () => {
         setHovered(false);
-    };
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
     };
 
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
@@ -60,45 +56,22 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                     addOperandCriteriaToFormula(index, item.units, parents[1], OperandTypes.RIGHT_OPERAND_UNIT);
                     break;
             }
-        }
-    }
-
-    const handleOperandDrop = (index: number, item: any, operandLocation: string) => {
-        if (item.criteria) {
+        } else if (parents.length == 3 && item.units) {
             switch (operandLocation) {
                 case 'left':
-                    //addLeftOperandValue(index, null);
-                    //addLeftOperandCriteria(index, item.criteria);
+                    addToFormulaThirdDepth(index, item.units, parents[1], parents[2], OperandTypes.LEFT_OPERAND_UNIT);
                     break;
                 case 'right':
-                    // addRightOperandValue(index, null);
-                    // addRightOperandCriteria(index, item.criteria);
+                    addToFormulaThirdDepth(index, item.units, parents[1], parents[2], OperandTypes.RIGHT_OPERAND_UNIT);
                     break;
             }
-        } else if (item.formula) {
-            switch (operandLocation) {
-                case 'left':
-                    // addLeftOperandValue(index, null);
-                    // addLeftOperandFormula(index);
-                    break;
-                case 'right':
-                    // addRightOperandValue(index, null);
-                    // addRightOperandFormula(index);
-                    break;
-            }
-        }
-    }
-
-    const handleOperationDrop = (index: number, item: any) => {
-        if (item.operation) {
-            //addOperationToFormula(index, item.operation);
         }
     }
 
     const valueUpdated = useMemo(() => {
         if (operandValue.length) {
             setOperationValuewidth((operandValue.length + 1) + 'ch');
-            if (operandValue && parents[0] == 'formula' && !isNaN(Number(operandValue))) {
+            if (parents.length == 1 && operandValue && parents[0] == 'formula' && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
                         addOperandValue(index, Number(operandValue), OperandTypes.LEFT_OPERAND_VALUE);
@@ -107,13 +80,22 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                         addOperandValue(index, Number(operandValue), OperandTypes.RIGHT_OPERAND_VALUE);
                         break;
                 }
-            } else if (operandValue && (parents[3] == OperandTypes.LEFT_OPERAND_FORMULA || parents[3] == OperandTypes.RIGHT_OPERAND_FORMULA) && !isNaN(Number(operandValue))) {
+            } else if (parents.length == 2 &&  operandValue && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
-                        addOperandValueToFormula(index, Number(operandValue), parents[3], OperandTypes.LEFT_OPERAND_VALUE,);
+                        addOperandValueToFormula(index, Number(operandValue), parents[1], OperandTypes.LEFT_OPERAND_VALUE,);
                         break;
                     case 'right':
-                        addOperandValueToFormula(index, Number(operandValue), parents[3], OperandTypes.RIGHT_OPERAND_VALUE);
+                        addOperandValueToFormula(index, Number(operandValue), parents[1], OperandTypes.RIGHT_OPERAND_VALUE);
+                        break;
+                }
+            } else if (parents.length == 3 &&  operandValue && !isNaN(Number(operandValue))) {
+                switch (operandLocation) {
+                    case 'left':
+                        addValueToFormulaThirdDepth(index, Number(operandValue), parents[1], parents[2], OperandTypes.LEFT_OPERAND_VALUE,);
+                        break;
+                    case 'right':
+                        addValueToFormulaThirdDepth(index, Number(operandValue), parents[1], parents[2], OperandTypes.RIGHT_OPERAND_VALUE);
                         break;
                 }
             }

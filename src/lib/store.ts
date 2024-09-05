@@ -33,6 +33,8 @@ interface QueryStore {
     addOperationToFormula: (index: number, operation: any) => void;
 
     addFormulaToFormula: (index: number, parent: string, child: string) => void;
+    addToFormulaThirdDepth: (index: number, value: TinkarConceptModel, parent: string, child: string, child2: string) => void;
+    addValueToFormulaThirdDepth: (index: number, value: number, parent: string, child: string, child2: string) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -151,6 +153,18 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].formula[parent][child] = {};
+                })
+            ),
+        addToFormulaThirdDepth: (index, value, parent, child, child2) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].formula[parent][child][child2] = value;
+                })
+            ),
+        addValueToFormulaThirdDepth: (index, value, parent, child, child2) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].formula[parent][child][child2] = value;
                 })
             ),
     })

@@ -4,7 +4,7 @@ import { DropTargetMonitor, useDrop } from 'react-dnd'
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Formula, Query } from "@/api/adr";
+import { Formula } from "@/api/adr";
 import { OperationRender } from "../ui/operation-render";
 
 export interface OperationDropAreaProps {
@@ -16,26 +16,10 @@ export interface OperationDropAreaProps {
 export const OperationDropArea: FC<OperationDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
+    const { addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
-
-    const handleHoverEnter = () => {
-        setHovered(true);
-    };
-
-    const handleHoverLeave = () => {
-        setHovered(false);
-    };
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
-    };
-
-    const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setOperationValue(event.target.value);
-    };
 
     const valueUpdated = useMemo(() => {
         if (operationValue.length) {
