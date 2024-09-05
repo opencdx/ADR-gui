@@ -16,11 +16,11 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     formula, index, parent
 }) {
     const { removeFromQuery, addOperandCriteria, addOperationToFormula, addOperandValue,
-        addOperandToFormula, addLeftOperandFormulaCriteria, addRightOperandFormulaCriteria
+        addOperandToFormula, addOperandCriteriaToFormula, addOperandValueToFormula
     } = useQueryStore();
 
     const handleOperandDrop = (index: number, item: any, operandLocation: string, parent: string) => {
-        if (item.criteria && parent == 'formula') {
+        if (item.criteria && parent == OperandTypes.FORMULA) {
             switch (operandLocation) {
                 case 'left':
                     addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
@@ -32,15 +32,28 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                     break;
             }
         } else if (item.criteria && (parent == OperandTypes.LEFT_OPERAND_FORMULA || parent == OperandTypes.RIGHT_OPERAND_FORMULA)) {
-            switch (operandLocation) {
-                case 'left':
-                    addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
-                    addLeftOperandFormulaCriteria(index, item.criteria);
-                    break;
-                case 'right':
-                    addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
-                    addRightOperandFormulaCriteria(index, item.criteria);
-                    break;
+            if (parent == OperandTypes.LEFT_OPERAND_FORMULA) {
+                switch (operandLocation) {
+                    case 'left':
+                        addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                        addOperandCriteriaToFormula(index, item.criteria, OperandTypes.LEFT_OPERAND_FORMULA, OperandTypes.LEFT_OPERAND);
+                        break;
+                    case 'right':
+                        addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                        addOperandCriteriaToFormula(index, item.criteria, OperandTypes.LEFT_OPERAND_FORMULA, OperandTypes.RIGHT_OPERAND);
+                        break;
+                }
+            } else if (parent == OperandTypes.RIGHT_OPERAND_FORMULA) {
+                switch (operandLocation) {
+                    case 'left':
+                        addOperandValue(index, null, OperandTypes.LEFT_OPERAND_VALUE);
+                        addOperandCriteriaToFormula(index, item.criteria, OperandTypes.RIGHT_OPERAND_FORMULA, OperandTypes.LEFT_OPERAND);
+                        break;
+                    case 'right':
+                        addOperandValue(index, null, OperandTypes.RIGHT_OPERAND_VALUE);
+                        addOperandCriteriaToFormula(index, item.criteria, OperandTypes.RIGHT_OPERAND_FORMULA, OperandTypes.RIGHT_OPERAND);
+                        break;
+                }
             }
         } else if (item.formula) {
             switch (operandLocation) {
@@ -56,9 +69,13 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
         }
     }
 
-    const handleOperationDrop = (index: number, item: any) => {
-        if (item.operation) {
+    const handleOperationDrop = (index: number, item: any, parent: string) => {
+        if (item.operation && parent == OperandTypes.FORMULA) {
             addOperationToFormula(index, item.operation);
+        } else if (item.operation && parent == OperandTypes.LEFT_OPERAND_FORMULA) {
+            addOperandValueToFormula(index, item.operation, OperandTypes.LEFT_OPERAND_FORMULA, OperandTypes.OPERATION);
+        } else if (item.operation && parent == OperandTypes.RIGHT_OPERAND_FORMULA) {
+            addOperandValueToFormula(index, item.operation, OperandTypes.RIGHT_OPERAND_FORMULA, OperandTypes.OPERATION);
         }
     }
 
@@ -75,7 +92,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                 index={index}
                 operandLocation='left'
                 parent={parent} />
-            <OperationDropArea onDrop={(item) => handleOperationDrop(index, item)}
+            <OperationDropArea onDrop={(item) => handleOperationDrop(index, item, parent)}
                 formula={formula!}
                 index={index} />
             <OperandDropArea
