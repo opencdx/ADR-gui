@@ -1,20 +1,18 @@
 import { FC, memo } from "react";
 
 import { useQueryStore } from "@/lib/store";
-import { Formula, Query } from "@/api/adr";
-import { OperandDropArea } from "./operand-drop-area";
+import { Formula } from "@/api/adr";
 import { DragIcon } from "../icons";
 import { FormulaRender } from "./formula-render";
-import { OperandTypes } from "./operand-types";
 
 export interface FormulaBoxProps {
     formula: Formula,
     index: number,
-    parent: string,
+    parents: [],
 }
 
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
-    formula, index, parent
+    formula, index, parents
 }) {
     const { removeFromQuery } = useQueryStore();
 
@@ -29,7 +27,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                 <FormulaRender
                     formula={formula!}
                     index={index}
-                    parent={parent} />
+                    parents={parents} />
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
         </div>

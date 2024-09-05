@@ -8,29 +8,31 @@ interface QueryStore {
     queryList: Array<SavedQuery>;
     updateQueryStore: (query: SavedQuery) => void;
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
+    removeFromQuery: (index: number) => void;
+    resetQueryStore: () => void;
+
     addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
     addJoinOperationToQuery: (operation: JoinOperation) => void;
-    
+
     addOperationToQuery: (index: number, operation: QueryOperation) => void;
     addOperationDoubleToQuery: (index: number, value: number) => void;
     addOperationStringToQuery: (index: number, value: string) => void;
-    
+
     addFormulaToQuery: () => void;
     addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
-    
+
     addOperandToFormula: (index: number, field: string) => void;
-    
+
     addOperandCriteriaToFormula: (index: number, criteria: TinkarConceptModel, parent: string, field: string) => void;
-    
+
     addOperandValue: (index: number, value: number | null, field: string) => void;
-    addOperandValueToFormula:  (index: number, value: number | null, position: string, field: string) => void;
-    
+    addOperandValueToFormula: (index: number, value: number | null, position: string, field: string) => void;
+
     addOperandUnits: (index: number, value: TinkarConceptModel | null, field: string) => void;
-    
+
     addOperationToFormula: (index: number, operation: any) => void;
-   
-    removeFromQuery: (index: number) => void;
-    resetQueryStore: () => void;
+
+    addFormulaToFormula: (index: number, parent: string, child: string) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -143,6 +145,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query = { query: { queries: [], unitOutput: UnitOutput.Imperial }, name: '' };
+                })
+            ),
+        addFormulaToFormula: (index, parent, child) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].formula[parent][child] = {};
                 })
             ),
     })

@@ -14,11 +14,11 @@ export interface OperandDropAreaProps {
     formula: Formula,
     index: number,
     operandLocation: string,
-    parent: string
+    parents: string[],
 }
 
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
-    onDrop, formula, index, operandLocation, parent
+    onDrop, formula, index, operandLocation, parents
 }) {
     const { removeFromQuery, addOperandValue, addOperandUnits, addOperandValueToFormula, addOperandCriteriaToFormula } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
@@ -41,8 +41,8 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
         setOperandValue(String(event.target.value));
     };
 
-    const handleUnitsDrop = (index: number, item: any, operandLocation: string, parent: string) => {
-        if (item.units && parent == OperandTypes.FORMULA) {
+    const handleUnitsDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
+        if (parents.length == 1 && item.units && parents[0] == OperandTypes.FORMULA) {
             switch (operandLocation) {
                 case 'left':
                     addOperandUnits(index, item.units, OperandTypes.LEFT_OPERAND_UNIT);
@@ -51,8 +51,8 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                     addOperandUnits(index, item.units, OperandTypes.RIGHT_OPERAND_UNIT);
                     break;
             }
-        } else if (item.units && (parent == OperandTypes.LEFT_OPERAND_FORMULA || parent == OperandTypes.RIGHT_OPERAND_FORMULA)) {
-            if (parent == OperandTypes.LEFT_OPERAND_FORMULA) {
+        } else if (parents.length == 2 && item.units && (parents[1] == OperandTypes.LEFT_OPERAND_FORMULA || parents[1] == OperandTypes.RIGHT_OPERAND_FORMULA)) {
+            if (parents[1] == OperandTypes.LEFT_OPERAND_FORMULA) {
                 switch (operandLocation) {
                     case 'left':
                         addOperandCriteriaToFormula(index, item.units, OperandTypes.LEFT_OPERAND_FORMULA, OperandTypes.LEFT_OPERAND_UNIT);
@@ -61,7 +61,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                         addOperandCriteriaToFormula(index, item.units, OperandTypes.LEFT_OPERAND_FORMULA, OperandTypes.RIGHT_OPERAND_UNIT);
                         break;
                 }
-            } else if (parent == OperandTypes.RIGHT_OPERAND_FORMULA) { 
+            } else if (parents[1] == OperandTypes.RIGHT_OPERAND_FORMULA) { 
                 switch (operandLocation) {
                     case 'left':
                         addOperandCriteriaToFormula(index, item.units, OperandTypes.RIGHT_OPERAND_FORMULA, OperandTypes.LEFT_OPERAND_UNIT);
@@ -109,7 +109,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     const valueUpdated = useMemo(() => {
         if (operandValue.length) {
             setOperationValuewidth((operandValue.length + 1) + 'ch');
-            if (operandValue && parent == 'formula' && !isNaN(Number(operandValue))) {
+            if (operandValue && parents[0] == 'formula' && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
                         addOperandValue(index, Number(operandValue), OperandTypes.LEFT_OPERAND_VALUE);
@@ -118,13 +118,13 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                         addOperandValue(index, Number(operandValue), OperandTypes.RIGHT_OPERAND_VALUE);
                         break;
                 }
-            } else if (operandValue && (parent == OperandTypes.LEFT_OPERAND_FORMULA || parent == OperandTypes.RIGHT_OPERAND_FORMULA) && !isNaN(Number(operandValue))) {
+            } else if (operandValue && (parents[3] == OperandTypes.LEFT_OPERAND_FORMULA || parents[3] == OperandTypes.RIGHT_OPERAND_FORMULA) && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
-                        addOperandValueToFormula(index, Number(operandValue), parent, OperandTypes.LEFT_OPERAND_VALUE,);
+                        addOperandValueToFormula(index, Number(operandValue), parents[3], OperandTypes.LEFT_OPERAND_VALUE,);
                         break;
                     case 'right':
-                        addOperandValueToFormula(index, Number(operandValue), parent, OperandTypes.RIGHT_OPERAND_VALUE);
+                        addOperandValueToFormula(index, Number(operandValue), parents[3], OperandTypes.RIGHT_OPERAND_VALUE);
                         break;
                 }
             }

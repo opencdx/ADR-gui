@@ -4,6 +4,7 @@ import { QueryDropArea } from './query-drop-area';
 import { JoinOperationBox } from './join-operation-box';
 import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
+import { OperandTypes } from './operand-types';
 
 export default function QueryRender() {
 
@@ -37,7 +38,7 @@ export default function QueryRender() {
                     return <FormulaBox
                         formula={query.formula}
                         index={index}
-                        parent='formula'/>
+                        parents={[OperandTypes.FORMULA]}/>
                 }
             })}
             <AddQueryDropArea 

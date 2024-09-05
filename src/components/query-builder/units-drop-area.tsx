@@ -11,11 +11,11 @@ export interface UnitsDropAreaProps {
     formula: Formula,
     index: number,
     operandLocation: string,
-    parent: string,
+    parents: string[],
 }
 
 export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
-    onDrop, formula, index, operandLocation, parent
+    onDrop, formula, index, operandLocation, parents
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
