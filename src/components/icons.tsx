@@ -77,3 +77,11 @@ export const DownArrow = ({}) => (
 export const DragIcon = ({}) => (
   <span className="material-symbols-outlined">drag_indicator</span>
 );
+
+export const ReturnIcon = ({}) => (
+  <span className="material-symbols-outlined">keyboard_return</span>
+);
+
+export const DownloadIcon = ({}) => (
+  <span className="material-symbols-outlined">download</span>
+);
