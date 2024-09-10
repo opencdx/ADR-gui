@@ -77,7 +77,7 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
     }
 
     return (
-        <div ref={drop}>
+        <div ref={drop} className='text-[#001124]'>
             {formula && formula.leftOperandUnit && operandLocation == 'left' &&
                 <>&nbsp;({formula.leftOperandUnit.conceptName})</>
             }

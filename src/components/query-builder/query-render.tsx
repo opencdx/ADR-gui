@@ -36,7 +36,9 @@ export default function QueryRender() {
                         index={index} />
                 } else if (query.formula) {
                     return <FormulaBox
+                        onDrop={(item) => handleDrop(index, item)}
                         formula={query.formula}
+                        query={query}
                         index={index}
                         parents={[OperandTypes.FORMULA]}/>
                 }
