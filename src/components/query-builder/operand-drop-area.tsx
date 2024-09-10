@@ -139,14 +139,12 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
 
     if (hovered) {
         border = '1px solid #006FEE';
-    } else {
-        border = '1px dashed gray'
-    }
-
-    if (operandValue) {
+    } else if (operandValue) {
         border = 'none';
     }
-
+    else {
+        border = '1px dashed gray'
+    }
 
     return (
         <div className='flex items-center'>
