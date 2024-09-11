@@ -34,7 +34,7 @@ export default function QueryBuilder() {
   const { mutate: postQuery, data: queryResults } = usePostQuery();
   const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
-  const { query, updateQueryStore, updateQueryListStore, resetQueryStore } = useQueryStore();
+  const { query, updateQueryStore } = useQueryStore();
   const { data: queries } = useListQueries();
   const [searchTerm, setSearchTerm] = useState('');
   const [queryName, setQueryName] = useState('');
@@ -44,11 +44,6 @@ export default function QueryBuilder() {
   const queryClient = useQueryClient();
 
   const t = useTranslations('common');
-
-  const runQuery = async () => {
-    setQueryPreview('');
-    postQuery(query.query!);
-  };
 
   const getPreview = () => {
     setQueryPreview(JSON.stringify(query.query, null, 2))
@@ -150,14 +145,8 @@ export default function QueryBuilder() {
                     {queryPreview &&
                       <>Query Preview</>
                     }
-                    {queryResults?.data && !queryPreview &&
-                      <>{queryName} Results</>
-                    }
                   </ModalHeader>
                   <ModalBody>
-                    {queryResults?.data && !queryPreview &&
-                      <ResultsTable queryResults={queryResults?.data} />
-                    }
                     {queryPreview &&
                       <JsonView data={queryPreview} shouldExpandNode={allExpanded} style={defaultStyles} />
                     }
@@ -168,7 +157,6 @@ export default function QueryBuilder() {
             <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
               <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
               <div className='my-auto'>
-                <Button className='m-1' onClick={resetQueryStore} >New Query</Button>
                 <Button className='m-1' endContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
                 {!query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery} isDisabled={isDisabled()}>Save Query</Button>

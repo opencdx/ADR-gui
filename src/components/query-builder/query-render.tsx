@@ -5,10 +5,14 @@ import { JoinOperationBox } from './join-operation-box';
 import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';
+import { Button } from 'ui-library';
+import { useState } from 'react';
 
 export default function QueryRender() {
 
-    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery } =  useQueryStore();
+    const [newQueryField, setNewQueryField] = useState(true);
+
+    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery, resetQueryStore } = useQueryStore();
 
     const handleDrop = (index: number, item: any) => {
         if (item.criteria) {
@@ -18,10 +22,16 @@ export default function QueryRender() {
         } else if (item.formula) {
             addFormulaToQuery();
         }
+
+        setNewQueryField(false);
     }
 
     function isOperation(value: unknown): value is Operation {
         return Object.values(Operation).includes(value as Operation);
+    }
+
+    const updateNewQuery = () => {
+        setNewQueryField(true);
     }
 
     return (
@@ -40,11 +50,19 @@ export default function QueryRender() {
                         formula={query.formula}
                         query={query}
                         index={index}
-                        parents={[OperandTypes.FORMULA]}/>
+                        parents={[OperandTypes.FORMULA]} />
                 }
             })}
-            <AddQueryDropArea 
-                onDrop={(item) => handleDrop(-1, item)} />
+            {newQueryField && 
+                <AddQueryDropArea
+                    onDrop={(item) => handleDrop(-1, item)} />
+            }
+            {query?.query?.queries && query?.query?.queries.length > 0 && (
+                <div className='float-right'>
+                    <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={resetQueryStore}>Clear All</Button>
+                    <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={updateNewQuery}>New Query Field</Button>
+                </div>
+            )}
         </>
     )
 }
