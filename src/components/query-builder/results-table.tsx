@@ -25,6 +25,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
     const router = useRouter();
     const [columns, setColumns] = useState<string[]>([]);
     const [rows, setRows] = useState<any>([]);
+    const [isError, setIsError] = useState(false);
 
     const { readString } = usePapaParse();
 
@@ -39,12 +40,14 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                         position: 'top-right',
                         autoClose: 2000,
                     });
+                    setIsError(false);
                 },
                 onError: (error) => {
                     toast.error(error?.message, {
                         position: 'top-right',
                         autoClose: 2000,
                     });
+                    setIsError(true);
                 }
             });
         }
@@ -94,7 +97,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                     <p className='text-xl'>{query.name} Results</p>
                     <ToastContainer />
                     <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
-                    <Button color='primary' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv}>Download CSV</Button>
+                    <Button color='primary' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
                     <Divider className='my-4' />
                     {rows &&
                         <div className='w-[96vw]'>
