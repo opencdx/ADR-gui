@@ -74,7 +74,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
 
     return (
         <>
-            <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full h-screen'>
+            <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-screen h-screen'>
                 <div className='rounded-md bg-white p-4'>
                     <p className='text-xl'>{query.name} Results</p>
 
@@ -82,6 +82,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                     <Button color='primary' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv}>Download CSV</Button>
                     <Divider className='my-4' />
                     {rows &&
+                        <div className='w-[96vw]'>
                         <DataTable value={rows}
                             paginator rows={5}>
                             {columns?.map((column) => (
@@ -89,6 +90,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                             ),
                             )}
                         </DataTable>
+                        </div>
                     }
                 </div>
             </div>
