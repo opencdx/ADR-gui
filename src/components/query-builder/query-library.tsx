@@ -2,7 +2,7 @@ import { useDeleteQuery, useListQueries } from '@/hooks/hooks';
 import { DeleteIcon, EditIcon } from '../icons';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from 'ui-library';
 import { useQueryStore } from '@/lib/store';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function QueryLibrary() {
@@ -14,7 +14,7 @@ export default function QueryLibrary() {
     const [ queryId, setQueryId ] = useState<number | null>(null);
     const [ queryName, setQueryName ] = useState<string | null>(null);
 
-    const getQueryList = useMemo(() => {
+    const getQueryList = useEffect(() => {
         if (queries) {
             updateQueryListStore(queries.data);
         }
@@ -28,7 +28,7 @@ export default function QueryLibrary() {
     const runDeleteQuery = async () => {
         deleteQuery(queryId!, {
             onSuccess: () => {
-                toast.success("Query " + name + " Successfully Deleted!", {
+                toast.success("Query " + queryName + " Successfully Deleted!", {
                   position: 'top-right',
                   autoClose: 2000,
                 });
@@ -58,9 +58,9 @@ export default function QueryLibrary() {
     return (
         <>
             <h1>Query Library</h1>
-            {queryList?.map((query) => {
+            {queryList?.map((query, index) => {
                 return (
-                    <div className="mt-auto w-full justify-between flex">
+                    <div className='mt-auto w-full justify-between flex' key={index}>
                         <p className='max-w-xs p-3'>{query.name}</p>
                         <div className='my-auto'>
                             <div className='float-right'>
