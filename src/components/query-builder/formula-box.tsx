@@ -1,4 +1,4 @@
-import { FC, memo, useState, SetStateAction, useMemo } from "react";
+import { FC, memo, useState, SetStateAction, useMemo, useRef, useEffect } from "react";
 
 import { useQueryStore } from "@/lib/store";
 import { Formula, Query } from "@/api/adr";
@@ -20,10 +20,12 @@ export interface FormulaBoxProps {
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     onDrop, formula, query, index, parents
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
+    const formulaRef = useRef<HTMLDivElement>(null);
+    const [formulaText, setFormulaText] = useState('');
 
     const handleHoverEnter = () => {
         setHovered(true);
@@ -50,12 +52,32 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
         }
     }, [operationValue]);
 
+    const setFormulaName = useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            if (formulaRef.current?.textContent) {
+                addNameToFormula(index, formulaRef.current?.textContent);
+            }
+        });
+
+        if (formulaRef.current) {
+            observer.observe(formulaRef.current, { childList: true, subtree: true });
+        }
+
+        return () => {
+            if (observer) {
+                observer.disconnect();
+            }
+        };
+    }, [formulaRef, formulaText]);
+
     const setValue = useMemo(() => {
         if (query.operationDouble) {
             setOperationValue(String(query.operationDouble));
         } else if (query.operationText) {
             setOperationValue(query.operationText);
         }
+
+        setFormulaName;
     }, []);
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
@@ -91,6 +113,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
             style={{ backgroundColor, opacity, border }}>
             <div className='my-auto flex items-center'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
+                <div ref={formulaRef} className='flex items-center'>
                 <FormulaRender
                     formula={formula!}
                     index={index}
@@ -104,6 +127,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                     <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
                         style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
                 }
+                </div>
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
         </div>
