@@ -7,6 +7,8 @@ import { useQueryStore } from '@/lib/store';
 import { usePostQuery } from '@/hooks/hooks';
 import { useRouter } from 'next/navigation';
 import { DownloadIcon, ReturnIcon } from '../icons';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const tableStyle: CSSProperties = {}
 
@@ -31,7 +33,14 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
 
     const fetchData = useMemo(() => {
         if (query.query) {
-            postQuery(query.query);
+            postQuery(query.query, {
+                onSuccess: () => {
+                    toast.success('Query ready for review!', {
+                        position: 'top-right',
+                        autoClose: 2000,
+                    });
+                }
+            });
         }
     }, []);
 
@@ -77,19 +86,19 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
             <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-screen h-screen'>
                 <div className='rounded-md bg-white p-4'>
                     <p className='text-xl'>{query.name} Results</p>
-
+                    <ToastContainer />
                     <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
                     <Button color='primary' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv}>Download CSV</Button>
                     <Divider className='my-4' />
                     {rows &&
                         <div className='w-[96vw]'>
-                        <DataTable value={rows}
-                            paginator rows={5}>
-                            {columns?.map((column) => (
-                                <Column field={column} header={column} sortable />
-                            ),
-                            )}
-                        </DataTable>
+                            <DataTable value={rows}
+                                paginator rows={5}>
+                                {columns?.map((column) => (
+                                    <Column field={column} header={column} sortable />
+                                ),
+                                )}
+                            </DataTable>
                         </div>
                     }
                 </div>
