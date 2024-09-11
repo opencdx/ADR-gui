@@ -3,28 +3,29 @@ import { useDrag } from 'react-dnd'
 
 import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
-import { Operation } from '@/api/adr/model/query';
+import { TinkarConceptModel } from '@/api/adr';
 
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
 }
 
-export interface OperationBoxProps {
+export interface UnitsDroppableProps {
   showCopyIcon?: boolean
-  operation: Operation
-  display: string
+  units: TinkarConceptModel
 }
 
 interface DropResult {
   criteria: string
 }
 
-export const OperationBox: FC<OperationBoxProps> = ({ showCopyIcon, operation, display }) => {
+export const UnitsDroppable: FC<UnitsDroppableProps> = ({ showCopyIcon, units }) => {
+  const { addCriteriaToQuery } = useQueryStore();
+  const query = useQueryStore((state) => state.query);
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: DroppableTypes.OPERATOR,
-      item: { operation },
+      type: DroppableTypes.UNITS,
+      item: { units },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
       },
@@ -37,8 +38,8 @@ export const OperationBox: FC<OperationBoxProps> = ({ showCopyIcon, operation, d
 
   return (
     <>
-      <div ref={drag} className='flex rounded-none border-none bg-white w-auto h-[32px] items-center self-stretch gap-3 m-0 cursor-pointer font-medium' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        <span className="material-symbols-outlined text-blue-500 ml-3">add</span> { display }
+      <div ref={drag} className='flex rounded-md border border-gray-200 bg-white p-3 w-11/12 h-auto items-start self-stretch gap-3 m-1 cursor-pointer w-[98%]' style={{ opacity, ...(isHovered ? hoverStyle : {}) }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        {units.conceptName}
       </div>
     </>
   )

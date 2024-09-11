@@ -29,12 +29,6 @@ export const CriteriaDroppable: FC<CriteriaDroppableProps> = ({ showCopyIcon, cr
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
       },
-      end: (item, monitor) => {
-        const dropResult = monitor.getDropResult<DropResult>();
-        if (item && dropResult) {
-          addCriteriaToQuery(criteria);
-        }
-      },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.2 : 1,
       }),

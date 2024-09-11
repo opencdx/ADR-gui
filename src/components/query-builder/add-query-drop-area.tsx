@@ -1,31 +1,23 @@
-import { FC, memo, useCallback, useState } from "react";
+import { FC, memo } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
 import { DroppableTypes } from '../droppable/droppable-types'
 import type { DragItem } from './interfaces'
-import { useQueryStore } from "@/lib/store";
 
 export interface AddQueryDropAreaProps {
     onDrop: (item: any) => void
     criteria?: string
 }
 
-const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQueryBox({
+export const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQueryBox({
     onDrop,
 }) {
-    const { removeFromQuery } = useQueryStore();
-    const query = useQueryStore((state) => state.query);
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
-    };
-
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.CRITERIA, DroppableTypes.JOIN_OPERATION],
+            accept: [DroppableTypes.CRITERIA, DroppableTypes.JOIN_OPERATION, DroppableTypes.FORMULA],
             drop(_item: DragItem, monitor) {
-                onDrop(monitor.getItemType())
-                return undefined
+                onDrop(monitor.getItem());
+                return undefined;
             },
             collect: (monitor: DropTargetMonitor) => ({
                 isOver: monitor.isOver(),
@@ -58,23 +50,3 @@ const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQueryBox({
         </div>
     )
 })
-
-export interface StatefulQueryBoxState {
-    criteriaList: []
-}
-
-export const StatefulQueryBox: FC = (props) => {
-    const [criteria, setCriteria] = useState<string | null>(null)
-    const handleDrop = useCallback(
-        (criteria: string) => setCriteria(criteria),
-        [],
-    )
-
-    return (
-        <AddQueryDropArea
-            {...props}
-            criteria={criteria as string}
-            onDrop={handleDrop}
-        />
-    )
-}

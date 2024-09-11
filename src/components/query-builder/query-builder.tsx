@@ -7,25 +7,28 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useTranslations } from 'next-intl';
 import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from 'ui-library';
 import { Tabs, Tab } from '@nextui-org/react';
-import { CriteriaList } from './query-builder/criteria-list';
+import { CriteriaList } from './criteria-list';
 import { useGetQueryableData, useGetUnits, useListQueries, usePostQuery, useSaveQuery, useUpdateQuery } from '@/hooks/hooks';
-import { ArrowForwardIcon, PreviewIcon, SaveIcon } from './icons';
+import { ArrowForwardIcon, PreviewIcon, SaveIcon } from '../icons';
 import { JoinOperation, SavedQuery } from '@/api/adr';
-import { ResultsTable } from './query-builder/results-table';
+import { ResultsTable } from './results-table';
 import { useQueryStore } from '@/lib/store';
-import { JoinOperationDroppable } from './droppable/join-operation-droppable';
+import { JoinOperationDroppable } from '../droppable/join-operation-droppable';
 import { allExpanded, defaultStyles, JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import QueryLibrary from './query-builder/query-library';
+import QueryLibrary from './query-library';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/hooks/query-keys';
-import OperatorsDropdown from './droppable/operators-dropdown';
-import QueryRender from './query-builder/query-render';
+import OperatorsDropdown from '../droppable/operators-dropdown';
+import QueryRender from './query-render';
+import { FormulaDroppable } from '../droppable/formula-droppable';
+import { useRouter } from 'next/navigation';
 
 export default function QueryBuilder() {
 
+  const router = useRouter();
   const { data: criteriaList } = useGetQueryableData();
   const { data: unitsOfMeasure } = useGetUnits();
   const { mutate: postQuery, data: queryResults } = usePostQuery();
@@ -117,10 +120,10 @@ export default function QueryBuilder() {
               <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
               <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
                 <Tab key='criteria' title='Available Criteria'>
-                  <CriteriaList criteriaList={criteriaList?.data} filter={searchTerm} />
+                  <CriteriaList criteriaList={criteriaList?.data} unitsList={undefined} filter={searchTerm} />
                 </Tab>
                 <Tab key='units' title='Units of Measure'>
-                  <CriteriaList criteriaList={unitsOfMeasure?.data} filter={searchTerm} />
+                  <CriteriaList unitsList={unitsOfMeasure?.data} criteriaList={undefined} filter={searchTerm} />
                 </Tab>
               </Tabs>
             </div>
@@ -137,6 +140,7 @@ export default function QueryBuilder() {
                 <JoinOperationDroppable joinOperation={JoinOperation.And} display='Add Grouping' showCopyIcon={true} />
                 <JoinOperationDroppable joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
                 <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
+                <FormulaDroppable showCopyIcon={true}/>
                 <OperatorsDropdown />
               </div>
               <QueryRender />
@@ -147,7 +151,7 @@ export default function QueryBuilder() {
                       <>Query Preview</>
                     }
                     {queryResults?.data && !queryPreview &&
-                      <>Results</>
+                      <>{queryName} Results</>
                     }
                   </ModalHeader>
                   <ModalBody>
@@ -172,7 +176,7 @@ export default function QueryBuilder() {
                 {query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runUpdateQuery}>Update Query</Button>
                 }
-                <Button className='m-2' endContent={<ArrowForwardIcon />} onClick={runQuery} onPress={onOpen}>Run Query</Button>
+                <Button className='m-2' endContent={<ArrowForwardIcon />} onPress={() => router.push('/results')}>Continue</Button>
               </div>
             </div>
           </div>

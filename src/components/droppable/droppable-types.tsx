@@ -1,5 +1,7 @@
 export const DroppableTypes = {
     CRITERIA: 'criteria',
+    UNITS: 'units',
     JOIN_OPERATION: 'join-operation',
-    OPERATOR: 'operator'
+    OPERATOR: 'operator',
+    FORMULA: 'formula',
 }

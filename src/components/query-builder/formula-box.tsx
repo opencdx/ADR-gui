@@ -1,21 +1,24 @@
-import { FC, memo, SetStateAction, useMemo, useState } from "react";
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { FC, memo, useState, SetStateAction, useMemo } from "react";
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
 import { useQueryStore } from "@/lib/store";
-import { Query } from "@/api/adr";
-import { OperationRender } from "../ui/operation-render";
+import { Formula, Query } from "@/api/adr";
 import { DragIcon } from "../icons";
+import { FormulaRender } from "./formula-render";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import { DroppableTypes } from "../droppable/droppable-types";
+import type { DragItem } from './interfaces'
+import { OperationRender } from "../ui/operation-render";
 
-export interface QueryDropAreaProps {
+export interface FormulaBoxProps {
     onDrop: (item: any) => void
+    formula: Formula,
     query: Query,
-    index: number
+    index: number,
+    parents: string[],
 }
 
-export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
-    onDrop, query, index
+export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
+    onDrop, formula, query, index, parents
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
@@ -83,20 +86,20 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     }
 
     return (
-        <div
-            ref={drop}
-            className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between mb-2'
-            style={{ backgroundColor, color, opacity, border }}
-            key={index}>
-            <div className='my-auto flex'>
+        <div ref={drop}
+            className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'
+            style={{ backgroundColor, opacity, border }}>
+            <div className='my-auto flex items-center'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
-                <p className='text-[#001124] m-auto'>[{query.concept?.conceptName}]&nbsp;
-                    {query?.operation &&
-                        <>
-                            <OperationRender operation={query.operation} />
-                        </>
-                    }
-                </p>
+                <FormulaRender
+                    formula={formula!}
+                    index={index}
+                    parents={parents} />
+                {query?.operation &&
+                    <p className='ml-3'>
+                        <OperationRender operation={query.operation} />
+                    </p>
+                }
                 {query?.operation &&
                     <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
                         style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
