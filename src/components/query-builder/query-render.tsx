@@ -34,6 +34,11 @@ export default function QueryRender() {
         setNewQueryField(true);
     }
 
+    const clearAll = () => {
+        resetQueryStore();
+        setNewQueryField(true);
+    }
+
     return (
         <>
             {query?.query?.queries?.map((query, index) => {
@@ -59,7 +64,7 @@ export default function QueryRender() {
             }
             {query?.query?.queries && query?.query?.queries.length > 0 && (
                 <div className='float-right'>
-                    <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={resetQueryStore}>Clear All</Button>
+                    <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={clearAll}>Clear All</Button>
                     <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={updateNewQuery}>New Query Field</Button>
                 </div>
             )}
