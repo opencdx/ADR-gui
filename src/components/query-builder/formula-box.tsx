@@ -114,19 +114,22 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
             <div className='my-auto flex items-center'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
                 <div ref={formulaRef} className='flex items-center'>
-                <FormulaRender
-                    formula={formula!}
-                    index={index}
-                    parents={parents} />
-                {query?.operation &&
-                    <p className='ml-3'>
-                        <OperationRender operation={query.operation} />
-                    </p>
-                }
-                {query?.operation &&
-                    <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
-                }
+                    <FormulaRender
+                        formula={formula!}
+                        index={index}
+                        parents={parents} />
+                    {query?.operation &&
+                        <p className='ml-3'>
+                            <OperationRender operation={query.operation} />
+                        </p>
+                    }
+                    {query?.operation &&
+                        <>
+                            <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
+                                style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                            <p className='hidden'>{operationValue}</p>
+                        </>
+                    }
                 </div>
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
