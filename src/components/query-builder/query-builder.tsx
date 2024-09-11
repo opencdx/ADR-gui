@@ -11,7 +11,6 @@ import { CriteriaList } from './criteria-list';
 import { useGetQueryableData, useGetUnits, useListQueries, usePostQuery, useSaveQuery, useUpdateQuery } from '@/hooks/hooks';
 import { ArrowForwardIcon, PreviewIcon, SaveIcon } from '../icons';
 import { JoinOperation, SavedQuery } from '@/api/adr';
-import { ResultsTable } from './results-table';
 import { useQueryStore } from '@/lib/store';
 import { JoinOperationDroppable } from '../droppable/join-operation-droppable';
 import { allExpanded, defaultStyles, JsonView } from 'react-json-view-lite';

@@ -39,6 +39,12 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                         position: 'top-right',
                         autoClose: 2000,
                     });
+                },
+                onError: (error) => {
+                    toast.error(error?.message, {
+                        position: 'top-right',
+                        autoClose: 2000,
+                    });
                 }
             });
         }
