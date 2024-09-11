@@ -114,15 +114,15 @@ export default function QueryBuilder() {
               <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
               <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
               <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
-                <Tab key='criteria' title='Available Criteria'>
+                <Tab key='criteria' title='Available Criteria' className='h-full overflow-hidden'>
                   <CriteriaList criteriaList={criteriaList?.data} unitsList={undefined} filter={searchTerm} />
                 </Tab>
-                <Tab key='units' title='Units of Measure'>
+                <Tab key='units' title='Units of Measure' className='h-full overflow-hidden'>
                   <CriteriaList unitsList={unitsOfMeasure?.data} criteriaList={undefined} filter={searchTerm} />
                 </Tab>
               </Tabs>
             </div>
-            <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-[250px]'>
+            <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-[700px]'>
               {queries?.data &&
                 <QueryLibrary />
               }

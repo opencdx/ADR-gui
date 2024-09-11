@@ -27,7 +27,7 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, unitsList, f
     }, [unitsList, filter]);
 
     return (
-        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col h-screen' >
+        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col h-full' >
             {filteredCriteria?.map((criteria) => (
                 <>
                     <CriteriaDroppable key={criteria.id} showCopyIcon={true}
