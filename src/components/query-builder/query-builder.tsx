@@ -156,15 +156,15 @@ export default function QueryBuilder() {
             </div>
             <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
               <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
-              <div className='my-auto'>
-                <Button className='m-1' endContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
+              <div className='flex my-auto'>
+                <Button className='m-2' startContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
                 {!query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery} isDisabled={isDisabled()}>Save Query</Button>
                 }
                 {query?.id &&
                   <Button className='m-2' endContent={<SaveIcon />} onClick={runUpdateQuery}>Update Query</Button>
                 }
-                <Button className='m-2' endContent={<ArrowForwardIcon />} onPress={() => router.push('/results')}>Continue</Button>
+                <Button className='m-2' endContent={<ArrowForwardIcon />} onPress={() => router.push('/results')} isDisabled={isDisabled()}>Continue</Button>
               </div>
             </div>
           </div>
