@@ -2,7 +2,7 @@ import { useDeleteQuery, useListQueries } from '@/hooks/hooks';
 import { DeleteIcon, EditIcon } from '../icons';
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from 'ui-library';
 import { useQueryStore } from '@/lib/store';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function QueryLibrary() {

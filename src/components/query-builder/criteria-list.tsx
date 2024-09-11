@@ -27,20 +27,20 @@ export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, unitsList, f
     }, [unitsList, filter]);
 
     return (
-        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col h-full' >
+        <div className='rounded-md p-2 bg-gray-100 border border-gray-200 overflow-auto flex flex-col h-full' key={filteredCriteria ? 'criteria' : 'units'}>
             {filteredCriteria?.map((criteria, index) => (
-                <>
-                    <CriteriaDroppable key={criteria.id + '' + index} showCopyIcon={true}
+                <div key={criteria.id + '' + index}>
+                    <CriteriaDroppable showCopyIcon={true}
                         criteria={criteria}
                     />
-                </>
+                </div>
             ))}
             {filteredUnits?.map((units, index) => (
-                <>
-                    <UnitsDroppable key={units.id + '' + index} showCopyIcon={true}
+                <div key={units.id + '' + index}>
+                    <UnitsDroppable showCopyIcon={true}
                         units={units}
                     />
-                </>
+                </div>
             ))}
         </div>
     )

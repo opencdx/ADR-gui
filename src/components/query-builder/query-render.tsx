@@ -43,19 +43,21 @@ export default function QueryRender() {
         <>
             {query?.query?.queries?.map((query, index) => {
                 if (query.joinOperation) {
-                    return <JoinOperationBox joinOperation={query.joinOperation} index={index} />
+                    return <JoinOperationBox joinOperation={query.joinOperation} index={index} key={index}/>
                 } else if (query.concept) {
                     return <QueryDropArea
                         onDrop={(item) => handleDrop(index, item)}
                         query={query}
-                        index={index} />
+                        index={index}
+                        key={index} />
                 } else if (query.formula) {
                     return <FormulaBox
                         onDrop={(item) => handleDrop(index, item)}
                         formula={query.formula}
                         query={query}
                         index={index}
-                        parents={[OperandTypes.FORMULA]} />
+                        parents={[OperandTypes.FORMULA]}
+                        key={index} />
                 }
             })}
             {newQueryField && 
