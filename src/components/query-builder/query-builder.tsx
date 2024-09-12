@@ -24,6 +24,7 @@ import OperatorsDropdown from '../droppable/operators-dropdown';
 import QueryRender from './query-render';
 import { FormulaDroppable } from '../droppable/formula-droppable';
 import { useRouter } from 'next/navigation';
+import { GroupDroppable } from '../droppable/group-droppable';
 
 export default function QueryBuilder() {
 
@@ -131,7 +132,8 @@ export default function QueryBuilder() {
             <div className='p-3'>
               <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
               <div className='pb-3 flex items-center'>
-                <JoinOperationDroppable joinOperation={JoinOperation.And} display='Add Grouping' showCopyIcon={true} />
+                
+                <GroupDroppable showCopyIcon={true} group={[]} />
                 <JoinOperationDroppable joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
                 <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
                 <FormulaDroppable showCopyIcon={true}/>

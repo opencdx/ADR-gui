@@ -109,7 +109,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
 
     return (
         <div ref={drop}
-            className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'
+            className='flex rounded-md h-13 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'
             style={{ backgroundColor, opacity, border }}>
             <div className='my-auto flex items-center'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>

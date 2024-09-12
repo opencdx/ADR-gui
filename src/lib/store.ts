@@ -2,6 +2,7 @@ import { JoinOperation, SavedQuery, TinkarConceptModel, UnitOutput } from '@/api
 import { createWithEqualityFn as create } from 'zustand/traditional';
 import { produce } from 'immer';
 import { Operation as QueryOperation } from '@/api/adr/model/query';
+import { Query } from '@/api/adr';
 
 interface QueryStore {
     query: SavedQuery;
@@ -19,6 +20,14 @@ interface QueryStore {
     addOperationStringToQuery: (index: number, value: string) => void;
 
     addFormulaToQuery: () => void;
+    addGroupToQuery: () => void;
+
+    addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel, field: string) => void;
+    addJoinOperationToQueryGroup: (index: number, operation: JoinOperation) => void;
+    addFormulaToQueryGroup: (index: number, formula: Query) => void;
+    addOperationToQueryGroup: (index: number, group: Query, depth: number) => void;
+    
+
     addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
 
     addOperandToFormula: (index: number, field: string) => void;
@@ -61,6 +70,36 @@ export const useQueryStore = create<QueryStore>()(
                     });
                 })
             ),
+        addCriteraToQueryGroup: (index, criteria, field) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group.push({
+                        concept: criteria
+                    });
+                })
+            ),
+        addOperationToQueryGroup: (index, operation, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[depth].operation = operation;
+                })
+            ),
+        addJoinOperationToQueryGroup: (index, operation) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group.push({
+                        joinOperation: operation
+                    });
+                })
+            ),
+        addFormulaToQueryGroup: (index, formula) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group.push({
+                        formula: formula
+                    });
+                })
+            ),
         addJoinOperationToQuery: (operation) =>
             set(
                 produce((draft) => {
@@ -92,6 +131,14 @@ export const useQueryStore = create<QueryStore>()(
                 produce((draft) => {
                     draft.query.query.queries.push({
                         formula: {}
+                    })
+                })
+            ),
+        addGroupToQuery: () =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries.push({
+                        group: []
                     })
                 })
             ),
