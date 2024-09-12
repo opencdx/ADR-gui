@@ -77,10 +77,10 @@ export default function QueryRender() {
                     )}
                 </div>
             })}
-            {newQueryField && 
+            {(newQueryField || query?.query?.queries?.length == 0) && (
                 <AddQueryDropArea
                     onDrop={(item) => handleDrop(-1, item)} />
-            }
+            )}
             {query?.query?.queries && query?.query?.queries.length > 0 && (
                 <div className='float-right'>
                     <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={clearAll}>Clear All</Button>
