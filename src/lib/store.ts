@@ -26,7 +26,7 @@ interface QueryStore {
     addJoinOperationToQueryGroup: (index: number, operation: JoinOperation) => void;
     addFormulaToQueryGroup: (index: number, formula: Query) => void;
     addOperationToQueryGroup: (index: number, group: Query, depth: number) => void;
-    
+
 
     addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
 
@@ -44,6 +44,8 @@ interface QueryStore {
     addFormulaToFormula: (index: number, parent: string, child: string) => void;
     addToFormulaThirdDepth: (index: number, value: TinkarConceptModel, parent: string, child: string, child2: string) => void;
     addValueToFormulaThirdDepth: (index: number, value: number, parent: string, child: string, child2: string) => void;
+
+    addToQueryFormula: (index:number, value: any) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -218,6 +220,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].formula[parent][child][child2] = value;
+                })
+            ),
+        addToQueryFormula: (index, value) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].formula = value;
                 })
             ),
     })

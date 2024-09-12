@@ -109,27 +109,28 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
 
     return (
         <div ref={drop}
-            className='flex rounded-md h-13 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'
+            className='flex rounded-md h-14 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2'
             style={{ backgroundColor, opacity, border }}>
             <div className='my-auto flex items-center'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
                 <div ref={formulaRef} className='flex items-center'>
-                    <FormulaRender
-                        formula={formula!}
-                        index={index}
-                        parents={parents} />
-                    {query?.operation &&
-                        <p className='ml-3'>
-                            <OperationRender operation={query.operation} />
-                        </p>
-                    }
-                    {query?.operation &&
-                        <>
-                            <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                                style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
-                            <p className='hidden'>{operationValue}</p>
+                <FormulaRender
+                    formula={formula}
+                    parentFormula={formula}
+                    index={index}
+                    parents={parents} />
+                {query?.operation &&
+                    <p className='ml-3'>
+                        <OperationRender operation={query.operation} />
+                    </p>
+                }
+                {query?.operation &&
+                    <>
+                    <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
+                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                        <p className='hidden'>{operationValue}</p>
                         </>
-                    }
+                }
                 </div>
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
