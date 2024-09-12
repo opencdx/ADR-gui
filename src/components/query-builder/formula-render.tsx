@@ -22,19 +22,13 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
 
     const handleOperandDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
         let parentFormula = query.query?.queries![index].formula;
-        let clearValue;
-        let newValue;
-        let finalValue;
         if (item.criteria) {
             switch (operandLocation) {
                 case 'left':
-                    clearValue = createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null);
-                    newValue = createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], item.criteria);
-                    finalValue = _.merge({}, 
+                    addToQueryFormula(index, _.merge({}, 
                         parentFormula,
                         createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
-                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], item.criteria));
-                    addToQueryFormula(index, finalValue);
+                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], item.criteria)));
                     break;
                 case 'right':
                     addToQueryFormula(index, _.merge({}, 
