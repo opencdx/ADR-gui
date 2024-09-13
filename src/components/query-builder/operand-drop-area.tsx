@@ -17,12 +17,13 @@ export interface OperandDropAreaProps {
     index: number,
     operandLocation: string,
     parents: string[],
+    groupIndex?: number,
 }
 
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
-    onDrop, formula, index, operandLocation, parents
+    onDrop, formula, index, operandLocation, parents, groupIndex
 }) {
-    const { query, addOperandUnits, addToQueryFormula } = useQueryStore();
+    const { query, addToQueryFormula, addToQueryFormulaInGrouping } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -40,16 +41,35 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     };
 
     const handleUnitsDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
-        const parentFormula = query.query?.queries![index].formula;
+        let parentFormula;
+        if (typeof groupIndex === 'number') {
+            parentFormula = query.query?.queries![index].group![groupIndex].formula;
+        } else {
+            parentFormula = query.query?.queries![index].formula;
+        }
         if (item.units) {
             switch (operandLocation) {
                 case 'left':
-                    addToQueryFormula(index, _.merge({}, 
-                        parentFormula,
-                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)));
+                    if (typeof groupIndex === 'number') {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)), groupIndex);
+                    } else {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)));
+                    }
                     break;
                 case 'right':
-                    addOperandUnits(index, item.units, OperandTypes.RIGHT_OPERAND_UNIT);
+                    if (typeof groupIndex === 'number') {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_UNIT], item.units)), groupIndex);
+                    } else {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_UNIT], item.units)));
+                    }
                     break;
             }
         }
@@ -58,18 +78,35 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     useMemo(() => {
         if (operandValue.length) {
             setOperationValuewidth((operandValue.length + 1) + 'ch');
-            const parentFormula = query.query?.queries![index].formula;
+            let parentFormula;
+            if (typeof groupIndex === 'number') {
+                parentFormula = query.query?.queries![index].group![groupIndex].formula;
+            } else {
+                parentFormula = query.query?.queries![index].formula;
+            }
             if (operandValue && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
-                        addToQueryFormula(index, _.merge({}, 
-                            parentFormula,
-                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))));
+                        if (typeof groupIndex === 'number') {
+                            addToQueryFormulaInGrouping(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))), groupIndex);
+                        } else {
+                            addToQueryFormula(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))));
+                        }
                         break;
                     case 'right':
-                        addToQueryFormula(index, _.merge({}, 
-                            parentFormula,
-                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))));
+                        if (typeof groupIndex === 'number') {
+                            addToQueryFormulaInGrouping(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))), groupIndex);
+                        } else {
+                            addToQueryFormula(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))));
+                        }
                         break;
                 }
             }
@@ -126,7 +163,8 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                 <FormulaRender
                     formula={formula.leftOperandFormula}
                     index={index}
-                    parents={[...parents, OperandTypes.LEFT_OPERAND_FORMULA]} />
+                    parents={[...parents, OperandTypes.LEFT_OPERAND_FORMULA]}
+                    groupIndex={groupIndex}/>
             }
 
             {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
@@ -151,7 +189,8 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                 <FormulaRender
                     formula={formula.rightOperandFormula}
                     index={index}
-                    parents={[...parents, OperandTypes.RIGHT_OPERAND_FORMULA]} />
+                    parents={[...parents, OperandTypes.RIGHT_OPERAND_FORMULA]}
+                    groupIndex={groupIndex}/>
             }
             {formula && formula.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <>

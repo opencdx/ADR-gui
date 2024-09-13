@@ -80,7 +80,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                 {item.formula && (
                     <FormulaBox onDrop={(item) => handleDrop(index, item, depth)}
                         formula={item.formula}
-                        query={query}
+                        query={item}
                         index={index}
                         parents={[OperandTypes.FORMULA]}
                         key={index}

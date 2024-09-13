@@ -21,7 +21,12 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     const { query, addToQueryFormula, addToQueryFormulaInGrouping } = useQueryStore();
 
     const handleOperandDrop = (index: number, item: any, operandLocation: string, parents: string[], groupIndex: number | undefined) => {
-        const parentFormula = query.query?.queries![index].formula;
+        let parentFormula;
+        if (typeof groupIndex === 'number') {
+            parentFormula = query.query?.queries![index].group![groupIndex].formula;
+        } else {
+            parentFormula = query.query?.queries![index].formula;
+        }
         if (item.criteria) {
             switch (operandLocation) {
                 case 'left':
@@ -84,9 +89,14 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     }
 
     const handleOperationDrop = (index: number, item: any, parents: string[], groupIndex: number | undefined) => {
-        const parentFormula = query.query?.queries![index].formula;
+        let parentFormula;
+        if (typeof groupIndex === 'number') {
+            parentFormula = query.query?.queries![index].group![groupIndex].formula;
+        } else {
+            parentFormula = query.query?.queries![index].formula;
+        }
         if (item.operation) {
-            if (groupIndex) {
+            if (typeof groupIndex === 'number') {
                 addToQueryFormulaInGrouping(index, _.merge({},
                     parentFormula,
                     createNestedObject([...parents.slice(1), OperandTypes.OPERATION], item.operation)), groupIndex);
@@ -106,7 +116,8 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                 formula={formula!}
                 index={index}
                 operandLocation='left'
-                parents={parents} />
+                parents={parents}
+                groupIndex={groupIndex}/>
             <OperationDropArea onDrop={(item) => handleOperationDrop(index, item, parents, groupIndex)}
                 formula={formula!}
                 index={index} />
@@ -115,7 +126,8 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                 formula={formula!}
                 index={index}
                 operandLocation='right'
-                parents={parents} />
+                parents={parents}
+                groupIndex={groupIndex} />
             &#41;
         </>
     )
