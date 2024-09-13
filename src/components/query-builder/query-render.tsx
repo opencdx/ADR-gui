@@ -44,8 +44,9 @@ export default function QueryRender() {
 
     return (
         <>
+            <div className='max-h-[calc(100vh-200px)] overflow-y-auto'>
             {query?.query?.queries?.map((query, index) => {
-                return <div key={index}>
+                return <div key={index} >
                      {query.concept && (
                         <QueryDropArea
                             onDrop={(item) => handleDrop(index, item)}
@@ -77,6 +78,7 @@ export default function QueryRender() {
                     )}
                 </div>
             })}
+            </div>
             {(newQueryField || query?.query?.queries?.length == 0) && (
                 <AddQueryDropArea
                     onDrop={(item) => handleDrop(-1, item)} />

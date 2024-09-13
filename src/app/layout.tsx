@@ -9,9 +9,6 @@ import clsx from 'clsx';
 import { Providers } from './providers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { unstable_setRequestLocale } from 'next-intl/server';
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
-import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 export const metadata: Metadata = {
   title: {
@@ -53,15 +50,13 @@ export default async function RootLayout({
         <Providers
           themeProps={{ attribute: 'class', defaultTheme: 'light', children }}
         >
-          <PrimeReactProvider>
-            <div className="relative flex flex-col h-screen">
-              <main>
-                <NextIntlClientProvider messages={messages}>
-                  {children}
-                </NextIntlClientProvider>
-              </main>
-            </div>
-          </PrimeReactProvider>
+          <div className="relative flex flex-col h-screen">
+            <main>
+              <NextIntlClientProvider messages={messages}>
+                {children}
+              </NextIntlClientProvider>
+            </main>
+          </div>
         </Providers>
 
       </body>

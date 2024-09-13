@@ -48,14 +48,13 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
         }
     }
 
-    const renderQueryItem = (item: Query, depth: number = 0) => {
-
+    const renderQueryItem = (item: Query, depth: number = 0, index: number) => {
         return (
-            <React.Fragment>
+            <React.Fragment key={index}>
                 {item.concept && (
                     <div className="flex items-center w-full ">
-                        <div className={`w-[2px] bg-blue-200 ${depth === 0 ? 'h-[50px] mt-12' :
-                            depth === group.length - 1 ? 'h-[50px] mb-12' :
+                        <div className={`w-[2px] bg-blue-200 ${index === 0 ? 'h-[50px] mt-12' :
+                            index === group.length - 1 ? 'h-[50px] mb-12' :
                                 'h-[65px]'
                             }`}></div>
 
@@ -103,7 +102,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                 </div>
                 {isExpanded && (
                     <div className="accordion-content bg-[#F6FAFF] p-4 rounded-b-md border-t border-blue-200 w-full">
-                        {group.map(renderQueryItem)}
+                        {group.map((item, index) => renderQueryItem(item, group.length, index))}
                         <div className='flex items-center'>
                             <div className='w-full'>
                                 <AddQueryDropArea onDrop={(item) => handleDrop(index, item, group.length)} />
