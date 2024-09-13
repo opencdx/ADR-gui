@@ -208,10 +208,8 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                 <>
                     <CriteriaDropArea
                         onDrop={(item) => handleFocusDropFormula(index, formula, item, operandLocation, parents, groupIndex)}
-                        index={index}
                         formula={formula}
-                        operandLocation={operandLocation}
-                        parents={parents} />
+                        operandLocation={operandLocation} />
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'left', parents)}
                         formula={formula}
                         index={index}
@@ -238,10 +236,8 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                 <>
                     <CriteriaDropArea
                         onDrop={(item) => handleFocusDropFormula(index, formula, item, operandLocation, parents, groupIndex)}
-                        index={index}
                         formula={formula}
-                        operandLocation={operandLocation}
-                        parents={parents} />
+                        operandLocation={operandLocation} />
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'right', parents)}
                         formula={formula}
                         index={index}
