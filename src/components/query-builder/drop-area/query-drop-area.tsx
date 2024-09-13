@@ -1,12 +1,12 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 
-import { DroppableTypes } from '../../droppable/droppable-types'
-import type { DragItem } from '../interfaces'
-import { useQueryStore } from "@/lib/store";
 import { Query } from "@/api/adr";
-import { OperationRender } from "../../ui/operation-render";
+import { useQueryStore } from "@/lib/store";
+import { DroppableTypes } from '../../droppable/droppable-types';
 import { DragIcon } from "../../icons";
+import { OperationRender } from "../../ui/operation-render";
+import type { DragItem } from '../interfaces';
 import { CriteriaDropArea } from "./criteria-drop-area";
 
 export interface QueryDropAreaProps {
@@ -18,7 +18,7 @@ export interface QueryDropAreaProps {
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop, query, index
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery} = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -38,6 +38,10 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setOperationValue(event.target.value);
     };
+
+    const handleFocusDrop = (index: number, item: any) => {
+        addFocusToQuery(index, item.focus);
+    }
 
     const valueUpdated = useMemo(() => {
         setOperationValuewidth((operationValue.length + 1) + 'ch');
@@ -93,7 +97,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
                 <p className='text-[#001124] flex items-center'>
                     <CriteriaDropArea
-                        index={index}
+                        onDrop={(item) => handleFocusDrop(index, item)}
                         query={query}
                         />&nbsp;
                     {query?.operation &&

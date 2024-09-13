@@ -1,56 +1,27 @@
-import { FC, memo, useState } from "react";
+import { FC, memo } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 
 import { Formula, Query } from "@/api/adr";
 import { FocusRender } from "@/components/ui/focus-render";
-import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from '../../droppable/droppable-types';
 
 export interface CriteriaDropAreaProps {
+    onDrop: (item: any) => void
     query?: Query
     formula?: Formula,
-    index: number,
     operandLocation?: string,
-    parents?: string[],
-    groupIndex?: number,
 }
 
 export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBox({
-    query, formula, index, operandLocation, parents, groupIndex
+    onDrop, query, formula, operandLocation
 }) {
-    const { removeFromQuery, addFocusToQuery } = useQueryStore();
-    const [hovered, setHovered] = useState(false);
-
-    const handleHoverEnter = () => {
-        setHovered(true);
-    };
-
-    const handleHoverLeave = () => {
-        setHovered(false);
-    };
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
-    };
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
             accept: [DroppableTypes.FOCUS],
-            item: { },
+            item: {},
             drop(item: any, monitor) {
-                if (query) {
-                    addFocusToQuery(index, item.focus);
-                }
-                if (formula) {
-                    switch (operandLocation) {
-                        case 'left':
-                            break;
-                        case 'right':
-                            break;
-                    }
-                    if (typeof groupIndex === 'number') {
-                    }
-                }
+                onDrop(monitor.getItem());
                 return undefined;
             },
             collect: (monitor: DropTargetMonitor) => ({
@@ -59,7 +30,7 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
                 isActive: monitor.canDrop() && monitor.isOver(),
                 draggingColor: monitor.getItemType() as string,
             }),
-        })
+        }), [onDrop],
     );
 
     const opacity = isOver ? 0.7 : 1;
@@ -79,10 +50,10 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
             )}
             {formula && (
                 <>
-                    {formula.leftOperand && (
+                    {formula.leftOperand && operandLocation == 'left' && (
                         <div className='text-[#001124]'><FocusRender focus={formula.leftOperand.focus} /> [{formula.leftOperand.conceptName}] </div>
                     )}
-                    {formula.rightOperand && (
+                    {formula.rightOperand && operandLocation == 'right' && (
                         <div className='text-[#001124]'><FocusRender focus={formula.rightOperand.focus} /> [{formula.rightOperand.conceptName}] </div>
                     )}
                 </>

@@ -12,9 +12,9 @@ export const FocusRender: FC<FocusRenderProps> = ({ focus }) => {
         case Focus.AncestorsOrSelf:
             return <>Ancestors or Self</>;
         case Focus.Children:
-            return <>Children</>;
+            return <>Child</>;
         case Focus.ChildrenOrSelf:
-            return <>Children or Self</>;
+            return <>Child or Self</>;
         case Focus.Date:
             return <>Date</>;
         case Focus.Descendants:
