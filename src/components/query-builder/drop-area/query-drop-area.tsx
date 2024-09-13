@@ -7,6 +7,7 @@ import { useQueryStore } from "@/lib/store";
 import { Query } from "@/api/adr";
 import { OperationRender } from "../../ui/operation-render";
 import { DragIcon } from "../../icons";
+import { CriteriaDropArea } from "./criteria-drop-area";
 
 export interface QueryDropAreaProps {
     onDrop: (item: any) => void
@@ -90,7 +91,11 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
             key={index}>
             <div className='my-auto flex'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
-                <p className='text-[#001124] m-auto'>[{query.concept?.conceptName}]&nbsp;
+                <p className='text-[#001124] flex items-center'>
+                    <CriteriaDropArea
+                        index={index}
+                        query={query}
+                        />&nbsp;
                     {query?.operation &&
                         <>
                             <OperationRender operation={query.operation} />

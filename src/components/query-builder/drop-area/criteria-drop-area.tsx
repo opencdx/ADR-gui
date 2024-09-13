@@ -1,14 +1,14 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 
-import { DroppableTypes } from '../../droppable/droppable-types'
-import type { DragItem } from '../interfaces'
-import { useQueryStore } from "@/lib/store";
-import { Formula } from "@/api/adr";
-import { OperandTypes } from "../operand-types";
+import { Formula, Query } from "@/api/adr";
 import { FocusRender } from "@/components/ui/focus-render";
+import { useQueryStore } from "@/lib/store";
+import { DroppableTypes } from '../../droppable/droppable-types';
+import type { DragItem } from '../interfaces';
 
 export interface CriteriaDropAreaProps {
+    query?: Query
     formula?: Formula,
     index: number,
     operandLocation?: string,
@@ -17,7 +17,7 @@ export interface CriteriaDropAreaProps {
 }
 
 export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBox({
-    formula, index, operandLocation, parents, groupIndex
+    query, formula, index, operandLocation, parents, groupIndex
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
@@ -92,6 +92,9 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
 
     return (
         <div ref={drop}>
+            {query && query.concept && (
+                <div className='text-[#001124]'><FocusRender focus={query.concept.focus} /> [{query.concept.conceptName}] </div>
+            )}
             {formula && (
                 <>
                     {formula.leftOperand && (
