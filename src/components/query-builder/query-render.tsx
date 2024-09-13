@@ -13,7 +13,7 @@ export default function QueryRender() {
 
     const [newQueryField, setNewQueryField] = useState(true);
 
-    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery, resetQueryStore,addGroupToQuery } = useQueryStore();
+    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery, resetQueryStore, addGroupToQuery, addJoinOperationToQuery } = useQueryStore();
 
     const handleDrop = (index: number, item: any) => {
         if (item.criteria) {
@@ -24,6 +24,8 @@ export default function QueryRender() {
             addFormulaToQuery();
         } else if (item.group) {
             addGroupToQuery();
+        } else if (item.joinOperation) {
+            addJoinOperationToQuery(item.joinOperation);
         }
 
         setNewQueryField(false);
