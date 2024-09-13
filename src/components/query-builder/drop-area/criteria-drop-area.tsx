@@ -1,21 +1,23 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
+import { DroppableTypes } from '../../droppable/droppable-types'
+import type { DragItem } from '../interfaces'
 import { useQueryStore } from "@/lib/store";
 import { Formula } from "@/api/adr";
+import { OperandTypes } from "../operand-types";
+import { FocusRender } from "@/components/ui/focus-render";
 
-export interface UnitsDropAreaProps {
-    onDrop: (item: any) => void
-    formula: Formula,
+export interface CriteriaDropAreaProps {
+    formula?: Formula,
     index: number,
-    operandLocation: string,
-    parents: string[],
+    operandLocation?: string,
+    parents?: string[],
+    groupIndex?: number,
 }
 
-export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
-    onDrop, formula, index, operandLocation, parents
+export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBox({
+    formula, index, operandLocation, parents, groupIndex
 }) {
     const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
@@ -51,10 +53,23 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.UNITS],
+            accept: [DroppableTypes.FOCUS],
             drop(_item: DragItem, monitor) {
-                onDrop(monitor.getItem());
+                if (formula) {
+                    switch (operandLocation) {
+                        case 'left':
+                            break;
+                        case 'right':
+                            break;
+                    }
+                    if (typeof groupIndex === 'number') {
+                    }
+                }
                 return undefined;
+            },
+            end: (item: any, monitor: any) => {
+                console.log(item);
+                console.log(monitor);
             },
             collect: (monitor: DropTargetMonitor) => ({
                 isOver: monitor.isOver(),
@@ -62,8 +77,7 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
                 isActive: monitor.canDrop() && monitor.isOver(),
                 draggingColor: monitor.getItemType() as string,
             }),
-        }),
-        [onDrop],
+        })
     );
 
     const opacity = isOver ? 0.7 : 1;
@@ -77,21 +91,17 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
     }
 
     return (
-        <div ref={drop} className='text-[#001124]'>
-            {formula && formula.leftOperandUnit && operandLocation == 'left' &&
-                <div className='p-0.5'>({formula.leftOperandUnit.conceptName})</div>
-            }
-            {!formula?.leftOperandUnit && operandLocation == 'left' &&
-                <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
-            }
-            {formula && formula.rightOperandUnit && operandLocation == 'right' &&
-                <div className='p-0.5'>({formula.rightOperandUnit.conceptName})</div>
-            }
-            {!formula?.rightOperandUnit && operandLocation == 'right' &&
-                <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
-            }
+        <div ref={drop}>
+            {formula && (
+                <>
+                    {formula.leftOperand && (
+                        <div className='text-[#001124]'><FocusRender focus={formula.leftOperand.focus} /> [{formula.leftOperand.conceptName}] </div>
+                    )}
+                    {formula.rightOperand && (
+                        <div className='text-[#001124]'><FocusRender focus={formula.rightOperand.focus} /> [{formula.rightOperand.conceptName}] </div>
+                    )}
+                </>
+            )}
         </div>
     )
 })

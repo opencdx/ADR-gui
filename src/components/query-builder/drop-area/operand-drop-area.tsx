@@ -1,15 +1,16 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
+import { DroppableTypes } from '../../droppable/droppable-types'
+import type { DragItem } from '../interfaces'
 import { useQueryStore } from "@/lib/store";
 import { Formula } from "@/api/adr";
 import { UnitsDropArea } from "./units-drop-area";
-import { FormulaRender } from "./formula-render";
-import { OperandTypes } from "./operand-types";
+import { FormulaRender } from "../formula-render";
+import { OperandTypes } from "../operand-types";
 import _ from "lodash";
 import { createNestedObject } from "@/lib/utils";
+import { CriteriaDropArea } from "./criteria-drop-area";
 
 export interface OperandDropAreaProps {
     onDrop: (item: any) => void
@@ -169,11 +170,15 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
 
             {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
                 <>
-                    <div className='text-[#001124]'>{formula.leftOperand?.conceptName} </div>
+                    <CriteriaDropArea
+                        index={index}
+                        formula={formula}
+                        operandLocation={operandLocation}
+                        parents={parents} />
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'left', parents)}
                         formula={formula}
                         index={index}
-                        operandLocation='left'
+                        operandLocation={operandLocation}
                         parents={parents} />
                 </>
             }
@@ -194,7 +199,11 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             }
             {formula && formula.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <>
-                    <div className='text-[#001124]'>{formula.rightOperand?.conceptName}</div>
+                    <CriteriaDropArea
+                        index={index}
+                        formula={formula}
+                        operandLocation={operandLocation}
+                        parents={parents} />
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'right', parents)}
                         formula={formula}
                         index={index}

@@ -1,12 +1,12 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
+import { DroppableTypes } from '../../droppable/droppable-types'
+import type { DragItem } from '../interfaces'
 import { useQueryStore } from "@/lib/store";
 import { Query } from "@/api/adr";
-import { OperationRender } from "../ui/operation-render";
-import { DragIcon } from "../icons";
+import { OperationRender } from "../../ui/operation-render";
+import { DragIcon } from "../../icons";
 
 export interface QueryDropAreaProps {
     onDrop: (item: any) => void

@@ -27,23 +27,17 @@ interface QueryStore {
     addFormulaToQueryGroup: (index: number, formula: Query) => void;
     addOperationToQueryGroup: (index: number, group: Query, depth: number) => void;
 
-
     addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
 
     addOperandToFormula: (index: number, field: string) => void;
 
-    addOperandCriteriaToFormula: (index: number, criteria: TinkarConceptModel, parent: string, field: string) => void;
-
     addOperandValue: (index: number, value: number | null, field: string) => void;
-    addOperandValueToFormula: (index: number, value: number | null, position: string, field: string) => void;
 
     addOperandUnits: (index: number, value: TinkarConceptModel | null, field: string) => void;
 
-    addOperationToFormula: (index: number, operation: any) => void;
     addNameToFormula: (index: number, name: string) => void;
     addNameToGroupingFormula: (index: number, groupIndex: number, name: string) => void;
     addFormulaToFormula: (index: number, parent: string, child: string) => void;
-    addToFormulaThirdDepth: (index: number, value: TinkarConceptModel, parent: string, child: string, child2: string) => void;
     addValueToFormulaThirdDepth: (index: number, value: number, parent: string, child: string, child2: string) => void;
 
     addToQueryFormula: (index: number, value: any) => void;
@@ -158,28 +152,10 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].formula[field] = {}
                 })
             ),
-        addOperandCriteriaToFormula: (index, criteria, parent, field) =>
-            set(
-                produce((draft) => {
-                    draft.query.query.queries[index].formula[parent][field] = criteria;
-                })
-            ),
-        addOperationToFormula: (index, operation) =>
-            set(
-                produce((draft) => {
-                    draft.query.query.queries[index].formula.operation = operation;
-                })
-            ),
         addOperandValue: (index, value, position) =>
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].formula[position] = value;
-                })
-            ),
-        addOperandValueToFormula: (index, value, position, field) =>
-            set(
-                produce((draft) => {
-                    draft.query.query.queries[index].formula[position][field] = value;
                 })
             ),
         addOperandUnits: (index, value, field) =>
@@ -216,12 +192,6 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].formula[parent][child] = {};
-                })
-            ),
-        addToFormulaThirdDepth: (index, value, parent, child, child2) =>
-            set(
-                produce((draft) => {
-                    draft.query.query.queries[index].formula[parent][child][child2] = value;
                 })
             ),
         addValueToFormulaThirdDepth: (index, value, parent, child, child2) =>

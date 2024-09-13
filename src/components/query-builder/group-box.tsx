@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { Query } from "@/api/adr";
-import { QueryDropArea } from './query-drop-area';
+import { QueryDropArea } from './drop-area/query-drop-area';
 import { JoinOperationBox } from './join-operation-box';
 import { useQueryStore } from '@/lib/store';
 import { memo, FC } from 'react';
-import { AddQueryDropArea } from './add-query-drop-area';
+import { AddQueryDropArea } from './drop-area/add-query-drop-area';
 import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';

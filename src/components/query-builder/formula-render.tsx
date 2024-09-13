@@ -2,8 +2,8 @@ import { FC, memo } from "react";
 
 import { useQueryStore } from "@/lib/store";
 import { Formula } from "@/api/adr";
-import { OperandDropArea } from "./operand-drop-area";
-import { OperationDropArea } from "./operation-drop-area";
+import { OperandDropArea } from "./drop-area/operand-drop-area";
+import { OperationDropArea } from "./drop-area/operation-drop-area";
 import { OperandTypes } from "./operand-types";
 import { createNestedObject } from "@/lib/utils";
 import _ from "lodash";
