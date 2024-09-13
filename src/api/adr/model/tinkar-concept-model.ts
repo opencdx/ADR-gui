@@ -63,7 +63,7 @@ export const Focus = {
     Parent: 'PARENT',
     ParentOrSelf: 'PARENT_OR_SELF',
     Member: 'MEMBER',
-    Any: 'ANY'
+    Date: 'DATE'
 } as const;
 
 export type Focus = typeof Focus[keyof typeof Focus];
