@@ -21,7 +21,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     } = useQueryStore();
 
     const handleOperandDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
-        let parentFormula = query.query?.queries![index].formula;
+        const parentFormula = query.query?.queries![index].formula;
         if (item.criteria) {
             switch (operandLocation) {
                 case 'left':
