@@ -56,12 +56,11 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
     }
 
     const handleOperationDrop = (index: number, item: any, parents: string[]) => {
-        if (parents.length == 1 && item.operation && parents[0] == OperandTypes.FORMULA) {
-            addOperationToFormula(index, item.operation);
-        } else if (parents.length == 2 && item.operation) {
-            addOperandValueToFormula(index, item.operation, parents[1], OperandTypes.OPERATION);
-        } else if (parents.length == 3 && item.operation) {
-            addToFormulaThirdDepth(index, item.operation, parents[1], parents[2], OperandTypes.OPERATION);
+        const parentFormula = query.query?.queries![index].formula;
+        if (item.operation) {
+            addToQueryFormula(index, _.merge({}, 
+                parentFormula,
+                createNestedObject([...parents.slice(1), OperandTypes.OPERATION], item.operation)));
         }
     }
 
