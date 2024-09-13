@@ -63,7 +63,7 @@ export default function FocusDropdown() {
                             <FocusBox focus={Focus.DescendantsOrSelf} display='Descendants or Self' />
                             <FocusBox focus={Focus.ChildrenOrSelf} display='Child or Self' />
                             <FocusBox focus={Focus.Children} display='Child' />
-                            <FocusBox focus={Focus.Ancestors} display='Asncestors' />
+                            <FocusBox focus={Focus.Ancestors} display='Ancestors' />
                             <FocusBox focus={Focus.AncestorsOrSelf} display='Ancestors or Self' />
                             <FocusBox focus={Focus.Parent} display='Parent' />
                             <FocusBox focus={Focus.ParentOrSelf} display='Parent or Self' />
