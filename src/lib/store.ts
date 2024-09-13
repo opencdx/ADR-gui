@@ -41,11 +41,13 @@ interface QueryStore {
 
     addOperationToFormula: (index: number, operation: any) => void;
     addNameToFormula: (index: number, name: string) => void;
+    addNameToGroupingFormula: (index: number, groupIndex: number, name: string) => void;
     addFormulaToFormula: (index: number, parent: string, child: string) => void;
     addToFormulaThirdDepth: (index: number, value: TinkarConceptModel, parent: string, child: string, child2: string) => void;
     addValueToFormulaThirdDepth: (index: number, value: number, parent: string, child: string, child2: string) => void;
 
-    addToQueryFormula: (index:number, value: any) => void;
+    addToQueryFormula: (index: number, value: any) => void;
+    addToQueryFormulaInGrouping: (index: number, value: any, groupIndex: number) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -98,7 +100,7 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group.push({
-                        formula: formula
+                        formula: {}
                     });
                 })
             ),
@@ -204,6 +206,12 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].formula.name = name;
                 })
             ),
+        addNameToGroupingFormula: (index, groupIndex, name) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].formula.name = name;
+                })
+            ),
         addFormulaToFormula: (index, parent, child) =>
             set(
                 produce((draft) => {
@@ -226,6 +234,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].formula = value;
+                })
+            ),
+        addToQueryFormulaInGrouping: (index, value, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].formula = value;
                 })
             ),
     })

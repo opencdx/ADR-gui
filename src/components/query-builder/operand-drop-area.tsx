@@ -22,7 +22,7 @@ export interface OperandDropAreaProps {
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index, operandLocation, parents
 }) {
-    const { query, addOperandValue, addOperandUnits, addOperandValueToFormula, addOperandCriteriaToFormula, addToFormulaThirdDepth, addValueToFormulaThirdDepth, addToQueryFormula } = useQueryStore();
+    const { query, addOperandUnits, addToQueryFormula } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');

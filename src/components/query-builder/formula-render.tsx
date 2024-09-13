@@ -11,56 +11,90 @@ import _ from "lodash";
 export interface FormulaRenderProps {
     formula: Formula,
     index: number,
-    parents: string[]
+    parents: string[],
+    groupIndex?: number,
 }
 
 export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
-    formula, index, parents
+    formula, index, parents, groupIndex
 }) {
-    const { query, addOperationToFormula, addOperandValueToFormula, addToFormulaThirdDepth, addToQueryFormula
-    } = useQueryStore();
+    const { query, addToQueryFormula, addToQueryFormulaInGrouping } = useQueryStore();
 
-    const handleOperandDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
+    const handleOperandDrop = (index: number, item: any, operandLocation: string, parents: string[], groupIndex: number | undefined) => {
         const parentFormula = query.query?.queries![index].formula;
         if (item.criteria) {
             switch (operandLocation) {
                 case 'left':
-                    addToQueryFormula(index, _.merge({}, 
-                        parentFormula,
-                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
-                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], item.criteria)));
+                    if (typeof groupIndex === 'number') {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], item.criteria)), groupIndex);
+                    } else {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], item.criteria)));
+                    }
                     break;
                 case 'right':
-                    addToQueryFormula(index, _.merge({}, 
-                        parentFormula,
-                        createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], null),
-                        createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND], item.criteria)));
+                    if (typeof groupIndex === 'number') {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND], item.criteria)), groupIndex);
+                    } else {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND], item.criteria)));
+                    }
                     break;
             }
         } else if (item.formula) {
             switch (operandLocation) {
                 case 'left':
-                    addToQueryFormula(index, _.merge({}, 
-                        parentFormula,
-                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
-                        createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_FORMULA], {})));
+                    if (typeof groupIndex === 'number') {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_FORMULA], {})), groupIndex);
+                    } else {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_FORMULA], {})));
+                    }
                     break;
                 case 'right':
-                    addToQueryFormula(index, _.merge({}, 
-                        parentFormula,
-                        createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], null),
-                        createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_FORMULA], {})));
+                    if (typeof groupIndex === 'number') {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_FORMULA], {})), groupIndex);
+                    } else {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], null),
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_FORMULA], {})));
+                    }
                     break;
             }
         }
     }
 
-    const handleOperationDrop = (index: number, item: any, parents: string[]) => {
+    const handleOperationDrop = (index: number, item: any, parents: string[], groupIndex: number | undefined) => {
         const parentFormula = query.query?.queries![index].formula;
         if (item.operation) {
-            addToQueryFormula(index, _.merge({}, 
-                parentFormula,
-                createNestedObject([...parents.slice(1), OperandTypes.OPERATION], item.operation)));
+            if (groupIndex) {
+                addToQueryFormulaInGrouping(index, _.merge({},
+                    parentFormula,
+                    createNestedObject([...parents.slice(1), OperandTypes.OPERATION], item.operation)), groupIndex);
+            } else {
+                addToQueryFormula(index, _.merge({},
+                    parentFormula,
+                    createNestedObject([...parents.slice(1), OperandTypes.OPERATION], item.operation)));
+            }
         }
     }
 
@@ -68,16 +102,16 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
         <>
             &#40;
             <OperandDropArea
-                onDrop={(item) => handleOperandDrop(index, item, 'left', parents)}
+                onDrop={(item) => handleOperandDrop(index, item, 'left', parents, groupIndex)}
                 formula={formula!}
                 index={index}
                 operandLocation='left'
                 parents={parents} />
-            <OperationDropArea onDrop={(item) => handleOperationDrop(index, item, parents)}
+            <OperationDropArea onDrop={(item) => handleOperationDrop(index, item, parents, groupIndex)}
                 formula={formula!}
                 index={index} />
             <OperandDropArea
-                onDrop={(item) => handleOperandDrop(index, item, 'right', parents)}
+                onDrop={(item) => handleOperandDrop(index, item, 'right', parents, groupIndex)}
                 formula={formula!}
                 index={index}
                 operandLocation='right'

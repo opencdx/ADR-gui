@@ -7,6 +7,8 @@ import { useQueryStore } from '@/lib/store';
 import { memo, FC } from 'react';
 import { AddQueryDropArea } from './add-query-drop-area';
 import { Operation } from '@/api/adr/model/query';
+import { FormulaBox } from './formula-box';
+import { OperandTypes } from './operand-types';
 interface GroupBoxProps {
     onDrop: (item: any) => void;
     group: Array<Query>;
@@ -53,8 +55,8 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                 {item.concept && (
                     <div className="flex items-center w-full ">
                         <div className={`w-[2px] bg-blue-200 ${depth === 0 ? 'h-[50px] mt-12' :
-                                depth === group.length - 1 ? 'h-[50px] mb-12' :
-                                    'h-[65px]'
+                            depth === group.length - 1 ? 'h-[50px] mb-12' :
+                                'h-[65px]'
                             }`}></div>
 
                         <div className="w-4 h-[2px] bg-blue-200 "></div>
@@ -74,6 +76,15 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         <div className="w-4 h-[2px] bg-blue-200 "></div>
                         <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} />
                     </div>
+                )}
+                {item.formula && (
+                    <FormulaBox onDrop={(item) => handleDrop(index, item, depth)}
+                        formula={item.formula}
+                        query={query}
+                        index={index}
+                        parents={[OperandTypes.FORMULA]}
+                        key={index}
+                        groupIndex={depth} />
                 )}
 
             </React.Fragment>
