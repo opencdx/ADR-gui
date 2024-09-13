@@ -1,11 +1,10 @@
-import { FC, memo, SetStateAction, useMemo, useState } from "react";
+import { FC, memo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 
 import { Formula, Query } from "@/api/adr";
 import { FocusRender } from "@/components/ui/focus-render";
 import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from '../../droppable/droppable-types';
-import type { DragItem } from '../interfaces';
 
 export interface CriteriaDropAreaProps {
     query?: Query
@@ -19,10 +18,8 @@ export interface CriteriaDropAreaProps {
 export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBox({
     query, formula, index, operandLocation, parents, groupIndex
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
-    const [operationValue, setOperationValue] = useState('');
+    const { removeFromQuery, addFocusToQuery } = useQueryStore();
     const [hovered, setHovered] = useState(false);
-    const [operationValuewidth, setOperationValuewidth] = useState('3ch');
 
     const handleHoverEnter = () => {
         setHovered(true);
@@ -36,25 +33,14 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
         removeFromQuery(index);
     };
 
-    const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setOperationValue(event.target.value);
-    };
-
-    const valueUpdated = useMemo(() => {
-        if (operationValue.length) {
-            setOperationValuewidth((operationValue.length + 1) + 'ch');
-            if (operationValue && !isNaN(Number(operationValue))) {
-                addOperationDoubleToQuery(index, Number(operationValue));
-            } else if (operationValue) {
-                addOperationStringToQuery(index, operationValue);
-            }
-        }
-    }, [operationValue]);
-
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
             accept: [DroppableTypes.FOCUS],
-            drop(_item: DragItem, monitor) {
+            item: { },
+            drop(item: any, monitor) {
+                if (query) {
+                    addFocusToQuery(index, item.focus);
+                }
                 if (formula) {
                     switch (operandLocation) {
                         case 'left':
@@ -66,10 +52,6 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
                     }
                 }
                 return undefined;
-            },
-            end: (item: any, monitor: any) => {
-                console.log(item);
-                console.log(monitor);
             },
             collect: (monitor: DropTargetMonitor) => ({
                 isOver: monitor.isOver(),

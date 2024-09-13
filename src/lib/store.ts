@@ -1,8 +1,7 @@
-import { JoinOperation, SavedQuery, TinkarConceptModel, UnitOutput } from '@/api/adr';
-import { createWithEqualityFn as create } from 'zustand/traditional';
-import { produce } from 'immer';
+import { Focus, JoinOperation, Query, SavedQuery, TinkarConceptModel, UnitOutput } from '@/api/adr';
 import { Operation as QueryOperation } from '@/api/adr/model/query';
-import { Query } from '@/api/adr';
+import { produce } from 'immer';
+import { createWithEqualityFn as create } from 'zustand/traditional';
 
 interface QueryStore {
     query: SavedQuery;
@@ -42,6 +41,8 @@ interface QueryStore {
 
     addToQueryFormula: (index: number, value: any) => void;
     addToQueryFormulaInGrouping: (index: number, value: any, groupIndex: number) => void;
+
+    addFocusToQuery: (index: number, focus: Focus) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -210,6 +211,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group[groupIndex].formula = value;
+                })
+            ),
+        addFocusToQuery: (index, focus) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].concept.focus = focus;
                 })
             ),
     })
