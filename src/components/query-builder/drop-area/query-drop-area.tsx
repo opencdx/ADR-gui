@@ -12,13 +12,14 @@ import { CriteriaDropArea } from "./criteria-drop-area";
 export interface QueryDropAreaProps {
     onDrop: (item: any) => void
     query: Query,
-    index: number
+    index: number,
+    groupIndex?: number | undefined
 }
 
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
-    onDrop, query, index
+    onDrop, query, index, groupIndex
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery} = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -39,8 +40,12 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
         setOperationValue(event.target.value);
     };
 
-    const handleFocusDrop = (index: number, item: any) => {
-        addFocusToQuery(index, item.focus);
+    const handleFocusDrop = (index: number, item: any, groupIndex: number | undefined) => {
+        if (typeof groupIndex === 'number') {
+            addFocusToQueryGrouping(index, item.focus, groupIndex)
+        } else {
+            addFocusToQuery(index, item.focus);
+        }
     }
 
     const valueUpdated = useMemo(() => {
@@ -97,9 +102,9 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
                 <p className='text-[#001124] flex items-center'>
                     <CriteriaDropArea
-                        onDrop={(item) => handleFocusDrop(index, item)}
+                        onDrop={(item) => handleFocusDrop(index, item, groupIndex)}
                         query={query}
-                        />&nbsp;
+                    />&nbsp;
                     {query?.operation &&
                         <>
                             <OperationRender operation={query.operation} />

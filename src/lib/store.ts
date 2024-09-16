@@ -43,6 +43,7 @@ interface QueryStore {
     addToQueryFormulaInGrouping: (index: number, value: any, groupIndex: number) => void;
 
     addFocusToQuery: (index: number, focus: Focus) => void;
+    addFocusToQueryGrouping: (index: number, focus: Focus, groupIndex: number) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -217,6 +218,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].concept.focus = focus;
+                })
+            ),
+        addFocusToQueryGrouping: (index, focus, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].concept.focus = focus;
                 })
             ),
     })

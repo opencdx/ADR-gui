@@ -64,7 +64,8 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                 onDrop={(item1) => handleDrop(index, item1, groupIndex)}
                                 query={item}
                                 index={index}
-                                key={index} />
+                                key={index}
+                                groupIndex={groupIndex}/>
                         </div>
                     </div>
 
