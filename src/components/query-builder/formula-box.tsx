@@ -15,12 +15,13 @@ export interface FormulaBoxProps {
     query: Query,
     index: number,
     parents: string[],
+    groupIndex?: number
 }
 
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
-    onDrop, formula, query, index, parents
+    onDrop, formula, query, index, parents, groupIndex
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -55,7 +56,11 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     const setFormulaName = useEffect(() => {
         const observer = new MutationObserver((mutations) => {
             if (formulaRef.current?.textContent) {
-                addNameToFormula(index, formulaRef.current?.textContent);
+                if (typeof groupIndex === 'number') {
+                    addNameToGroupingFormula(index, groupIndex, formulaRef.current?.textContent);
+                } else {
+                    addNameToFormula(index, formulaRef.current?.textContent);
+                }
             }
         });
 
@@ -115,9 +120,10 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
                 <div ref={formulaRef} className='flex items-center'>
                     <FormulaRender
-                        formula={formula!}
+                        formula={formula}
                         index={index}
-                        parents={parents} />
+                        parents={parents}
+                        groupIndex={groupIndex} />
                     {query?.operation &&
                         <p className='ml-3'>
                             <OperationRender operation={query.operation} />

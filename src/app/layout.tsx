@@ -9,8 +9,7 @@ import clsx from 'clsx';
 import { Providers } from './providers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { unstable_setRequestLocale } from 'next-intl/server';
-import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 export const metadata: Metadata = {
@@ -75,4 +74,3 @@ const locales = ['en', 'es'];
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
-
