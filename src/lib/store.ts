@@ -26,7 +26,10 @@ interface QueryStore {
     addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel) => void;
     addGroupCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel, groupIndex1: number, depth: number) => void;
     addGroupJoinOperationToQueryGroup: (index: number, operation: JoinOperation, groupIndex1: number, depth: number) => void;
+    addOperationDoubleToGroup: (index: number, value: number, groupIndex: number) => void;
+    addOperationStringToGroup: (index: number, value: string, groupIndex: number) => void;
     addGroupOperationDoubleToQuery: (index: number, value: number, groupIndex1: number, depth: number) => void;
+    addGroupOperationStringToQuery: (index: number, value: string, groupIndex1: number, depth: number) => void;
     addGroupFormulaToQueryGroup: (index: number, groupIndex1: number) => void;
     addJoinOperationToQueryGroup: (index: number, operation: JoinOperation) => void;
     addFormulaToQueryGroup: (index: number, formula: Query) => void;
@@ -42,6 +45,7 @@ interface QueryStore {
 
     addNameToFormula: (index: number, name: string) => void;
     addNameToGroupingFormula: (index: number, groupIndex: number, name: string) => void;
+    addNameToSubGroupFormula: (index: number, groupIndex: number, subGroupIndex: number, name: string) => void;
     addFormulaToFormula: (index: number, parent: string, child: string) => void;
     addValueToFormulaThirdDepth: (index: number, value: number, parent: string, child: string, child2: string) => void;
 
@@ -100,13 +104,30 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].group[groupIndex1].group[depth].operation = operation;
                 })
             ),
+        addOperationDoubleToGroup: (index, value, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].operationDouble = value;
+                })
+            ),
+        addOperationStringToGroup: (index, value, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].operationString = value;
+                })
+            ),
         addGroupOperationDoubleToQuery: (index, value, groupIndex1, depth) =>
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group[groupIndex1].group[depth].operationDouble = value;
                 })
             ),
-
+        addGroupOperationStringToQuery: (index, value, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group[depth].operationString = value;
+                })
+            ),
         addGroupJoinOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
             set(
                 produce((draft) => {
@@ -245,6 +266,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group[groupIndex].formula.name = name;
+                })
+            ),
+        addNameToSubGroupFormula: (index, groupIndex, subGroupIndex, name) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].formula.name = name;
                 })
             ),
         addFormulaToFormula: (index, parent, child) =>
