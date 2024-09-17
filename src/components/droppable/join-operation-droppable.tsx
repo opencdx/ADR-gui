@@ -1,7 +1,6 @@
 import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
 import { JoinOperation } from '@/api/adr';
 
@@ -15,12 +14,7 @@ export interface JoinOperatorDroppableProps {
   display: string
 }
 
-interface DropResult {
-  criteria: string
-}
-
 export const JoinOperationDroppable: FC<JoinOperatorDroppableProps> = ({ showCopyIcon, joinOperation, display }) => {
-  const { addJoinOperationToQuery } = useQueryStore();
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
@@ -28,12 +22,6 @@ export const JoinOperationDroppable: FC<JoinOperatorDroppableProps> = ({ showCop
       item: { joinOperation },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
-      },
-      end: (item, monitor) => {
-        const dropResult = monitor.getDropResult<DropResult>()
-        if (item && dropResult) {
-          addJoinOperationToQuery(joinOperation);
-        }
       },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.2 : 1,

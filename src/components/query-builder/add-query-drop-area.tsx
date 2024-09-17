@@ -14,7 +14,7 @@ export const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQuer
 }) {
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.CRITERIA, DroppableTypes.JOIN_OPERATION, DroppableTypes.FORMULA],
+            accept: [DroppableTypes.CRITERIA, DroppableTypes.JOIN_OPERATION, DroppableTypes.FORMULA,DroppableTypes.GROUP],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItem());
                 return undefined;
@@ -42,7 +42,7 @@ export const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQuer
     return (
         <div
             ref={drop}
-            className='flex rounded-md h-14 w-auto px-4 py-2 items-center mb-2'
+            className='flex rounded-md h-13 w-auto px-4 py-2 items-center mb-2'
             style={{ backgroundColor, color, border, opacity }}
             role="AddQueryBox"
         >
