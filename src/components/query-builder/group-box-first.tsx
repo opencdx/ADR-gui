@@ -9,20 +9,19 @@ import { AddQueryDropArea } from './drop-area/add-query-drop-area';
 import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';
-import { GroupBoxFirst } from './group-box-first';
 interface GroupBoxProps {
     onDrop: (item: any) => void;
     group: Array<Query>;
     query: Query;
-    index: number;
+    index: number;  
+    groupIndex1: number;
 }
 
-export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
-    onDrop, group, index
+export const GroupBoxFirst: FC<GroupBoxProps> = memo(function GroupBoxFirst({
+    onDrop, group, index, groupIndex1
 }) {
-
     const [isExpanded, setIsExpanded] = useState(true);
-    const { addJoinOperationToQueryGroup, addFormulaToQueryGroup, addGroupToQuery, addCriteraToQueryGroup, addOperationToQueryGroup, addGroupToQueryGroup } = useQueryStore();
+    const { addGroupJoinOperationToQueryGroup,  addGroupToQueryGroup ,addGroupCriteraToQueryGroup,addGroupOperationToQueryGroup,addGroupFormulaToQueryGroup} = useQueryStore();
 
     const [, drop] = useDrop({
         accept: 'QUERY_ITEM',
@@ -36,25 +35,22 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
     }
     const handleDrop = (index: number, item: any, depth: number) => {
         if (item.criteria) {
-            addCriteraToQueryGroup(index, item.criteria);
+            addGroupCriteraToQueryGroup(index, item.criteria, groupIndex1, depth);
         } else if (item.operation && isOperation(item.operation)) {
-            addOperationToQueryGroup(index, item.operation, depth);
+            addGroupOperationToQueryGroup(index, item.operation,  groupIndex1,depth);
         } else if (item.joinOperation) {
-            addJoinOperationToQueryGroup(index, item.joinOperation);
+            
+            addGroupJoinOperationToQueryGroup(index, item.joinOperation,  groupIndex1,depth);
         } else if (item.formula) {
-            addFormulaToQueryGroup(index, item.formula);
+            addGroupFormulaToQueryGroup(index, item.formula, groupIndex1, depth);
         } else if (item.group) {
-            if (depth === 0) {
-                addGroupToQuery();
-            } else {
-                addGroupToQueryGroup(index, item.group, depth);
-            }
+            addGroupToQueryGroup(index, item.group, depth);
         }
     }
 
     const renderQueryItem = (index: number, item: Query, groupIndex: number = 0) => {
         return (
-            <React.Fragment key={groupIndex}>
+            <React.Fragment key={index}>
                 {item.concept && (
                     <div className="flex items-center w-full ">
                         <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
@@ -69,7 +65,9 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                 query={item}
                                 index={index}
                                 key={index}
-                                groupIndex={groupIndex} />
+                                groupIndex={groupIndex1}
+                                depth={groupIndex}
+                                />
                         </div>
                     </div>
 
@@ -82,25 +80,24 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                     </div>
                 )}
                 {item.formula && (
+                     <div className="flex items-center w-full ">
+                     <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
+                         groupIndex === group.length - 1 ? 'h-[50px] mb-12' :
+                             'h-[65px]'
+                         }`}></div>
 
-                    <div className="flex items-center w-full ">
-                        <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
-                            groupIndex === group.length - 1 ? 'h-[50px] mb-12' :
-                                'h-[65px]'
-                            }`}></div>
-
-                        <div className="w-4 h-[2px] bg-blue-200 "></div>
-                        <div className="w-full">
-                            <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex)}
-                                formula={item.formula}
-                                query={item}
-                                index={index}
-                                parents={[OperandTypes.FORMULA]}
-                                key={index}
-                                groupIndex={groupIndex} />
-                        </div>
-                    </div>
-
+                     <div className="w-4 h-[2px] bg-blue-200 "></div>
+                     <div className="w-full">
+                     <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex)}
+                        formula={item.formula}
+                        query={item}
+                        index={index}
+                        parents={[OperandTypes.FORMULA]}
+                        key={index}
+                        groupIndex={groupIndex} />
+                     </div>
+                 </div>
+                    
                 )}
                 {item.group && (
                     <GroupBoxFirst
@@ -108,9 +105,9 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         group={item.group}
                         query={item}
                         index={index}
-                        key={index}
+                        key={index} 
                         groupIndex1={group.length}
-                    />
+                        />
                 )}
 
             </React.Fragment>
@@ -133,7 +130,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
 
                         <div className='flex items-center'>
                             <div className='w-full'>
-                                <AddQueryDropArea onDrop={(item) => handleDrop(index, item, group.length + 1)} />
+                                <AddQueryDropArea onDrop={(item) => handleDrop(index, item, group.length)} />
                             </div>
                         </div>
                     </div>
@@ -144,4 +141,4 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
     );
 });
 
-export default GroupBox;
+export default GroupBoxFirst;

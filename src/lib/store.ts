@@ -20,12 +20,17 @@ interface QueryStore {
 
     addFormulaToQuery: () => void;
     addGroupToQuery: () => void;
+    addGroupToQueryGroup: (index: number, group: Query, depth: number) => void; 
 
-    addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel, field: string) => void;
+    addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel) => void;
+    addGroupCriteraToQueryGroup: (index: number,  criteria: TinkarConceptModel,groupIndex1: number, depth: number) => void; 
+    addGroupJoinOperationToQueryGroup: (index: number, operation: JoinOperation,  groupIndex1: number, depth: number) => void;
+    addGroupOperationDoubleToQuery: (index: number, value: number, groupIndex1: number, depth: number) => void;
+    addGroupFormulaToQueryGroup: (index: number, formula: Query, groupIndex1: number, depth: number) => void;
     addJoinOperationToQueryGroup: (index: number, operation: JoinOperation) => void;
     addFormulaToQueryGroup: (index: number, formula: Query) => void;
     addOperationToQueryGroup: (index: number, group: Query, depth: number) => void;
-
+    addGroupOperationToQueryGroup: (index: number, operation: QueryOperation, groupIndex1: number, depth: number) => void;
     addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
 
     addOperandToFormula: (index: number, field: string) => void;
@@ -70,11 +75,48 @@ export const useQueryStore = create<QueryStore>()(
                     });
                 })
             ),
-        addCriteraToQueryGroup: (index, criteria, field) =>
+        addCriteraToQueryGroup: (index, criteria) =>
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group.push({
                         concept: criteria
+                    });
+                })
+            ),
+        addGroupCriteraToQueryGroup: (index, criteria, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1-1].group.push({
+                        concept: criteria
+                    });
+                })
+            ),
+        addGroupOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1-1].group[depth].operation = operation;
+                })
+            ),
+        addGroupOperationDoubleToQuery: (index, value, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1-1].group[depth].operationDouble = value;
+                })
+            ),
+
+        addGroupJoinOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1-1].group.push({
+                        joinOperation: operation
+                    });
+                })
+            ),
+        addGroupFormulaToQueryGroup: (index, formula, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1-1].group.push({
+                        formula: formula
                     });
                 })
             ),
@@ -140,6 +182,12 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries.push({
                         group: []
                     })
+                })
+            ),
+        addGroupToQueryGroup: (index, group, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group.push({group:[]});
                 })
             ),
         addOperandCriteria: (index, criteria, field) =>
