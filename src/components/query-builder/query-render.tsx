@@ -74,6 +74,7 @@ export default function QueryRender() {
                         <GroupBox
                             onDrop={(item) => handleDrop(index, item)}
                             group={query.group}
+                            parentGroupIndex={[]}
                             query={query}
                             index={index}
                             key={index} />

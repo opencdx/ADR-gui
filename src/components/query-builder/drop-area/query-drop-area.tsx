@@ -13,14 +13,14 @@ export interface QueryDropAreaProps {
     onDrop: (item: any) => void
     query: Query,
     index: number,
-    groupIndex?: number | undefined
+    groupIndex?: number[] | undefined
     depth?: number | undefined
 }
 
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop, query, index, groupIndex, depth
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -41,9 +41,11 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
         setOperationValue(event.target.value);
     };
 
-    const handleFocusDrop = (index: number, item: any, groupIndex: number | undefined) => {
-        if (typeof groupIndex === 'number') {
-            addFocusToQueryGrouping(index, item.focus, groupIndex)
+    const handleFocusDrop = (index: number, item: any, depth: number| undefined, groupIndex: number[] | undefined) => {
+        if (groupIndex?.length == 0 && depth) {
+            addFocusToQueryGrouping(index, item.focus, depth);
+        } else if (groupIndex?.length == 1 && depth) {
+            addFocusToQuerySubGrouping(index, item.focus, groupIndex[0], depth);
         } else {
             addFocusToQuery(index, item.focus);
         }
@@ -107,7 +109,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
                 <p className='text-[#001124] flex items-center'>
                     <CriteriaDropArea
-                        onDrop={(item) => handleFocusDrop(index, item, groupIndex)}
+                        onDrop={(item) => handleFocusDrop(index, item, depth, groupIndex)}
                         query={query}
                     />&nbsp;
                     {query?.operation &&

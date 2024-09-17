@@ -15,7 +15,7 @@ export interface FormulaBoxProps {
     query: Query,
     index: number,
     parents: string[],
-    groupIndex?: number
+    groupIndex?: number[]
 }
 
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
@@ -56,9 +56,9 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     const setFormulaName = useEffect(() => {
         const observer = new MutationObserver((mutations) => {
             if (formulaRef.current?.textContent) {
-                if (typeof groupIndex === 'number') {
-                    addNameToGroupingFormula(index, groupIndex, formulaRef.current?.textContent);
-                } else {
+                if (groupIndex?.length === 1) {
+                    addNameToGroupingFormula(index, groupIndex[0], formulaRef.current?.textContent);
+                } else if (!groupIndex || groupIndex.length == 0) {
                     addNameToFormula(index, formulaRef.current?.textContent);
                 }
             }

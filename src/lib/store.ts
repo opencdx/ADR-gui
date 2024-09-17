@@ -20,13 +20,14 @@ interface QueryStore {
 
     addFormulaToQuery: () => void;
     addGroupToQuery: () => void;
-    addGroupToQueryGroup: (index: number, group: Query, depth: number) => void; 
+    addGroupToQueryGroup: (index: number) => void;
+    addSubGroupToQueryGroup: (index: number, group: number) => void;
 
     addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel) => void;
-    addGroupCriteraToQueryGroup: (index: number,  criteria: TinkarConceptModel,groupIndex1: number, depth: number) => void; 
-    addGroupJoinOperationToQueryGroup: (index: number, operation: JoinOperation,  groupIndex1: number, depth: number) => void;
+    addGroupCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel, groupIndex1: number, depth: number) => void;
+    addGroupJoinOperationToQueryGroup: (index: number, operation: JoinOperation, groupIndex1: number, depth: number) => void;
     addGroupOperationDoubleToQuery: (index: number, value: number, groupIndex1: number, depth: number) => void;
-    addGroupFormulaToQueryGroup: (index: number, formula: Query, groupIndex1: number, depth: number) => void;
+    addGroupFormulaToQueryGroup: (index: number, groupIndex1: number) => void;
     addJoinOperationToQueryGroup: (index: number, operation: JoinOperation) => void;
     addFormulaToQueryGroup: (index: number, formula: Query) => void;
     addOperationToQueryGroup: (index: number, group: Query, depth: number) => void;
@@ -46,9 +47,11 @@ interface QueryStore {
 
     addToQueryFormula: (index: number, value: any) => void;
     addToQueryFormulaInGrouping: (index: number, value: any, groupIndex: number) => void;
+    addToQueryFormulaInSubGrouping: (index: number, value: any, groupIndex: number, subGroupIndex: number) => void;
 
     addFocusToQuery: (index: number, focus: Focus) => void;
     addFocusToQueryGrouping: (index: number, focus: Focus, groupIndex: number) => void;
+    addFocusToQuerySubGrouping: (index: number, focus: Focus, groupIndex: number, subGroupIndex: number) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -86,7 +89,7 @@ export const useQueryStore = create<QueryStore>()(
         addGroupCriteraToQueryGroup: (index, criteria, groupIndex1, depth) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].group[groupIndex1-1].group.push({
+                    draft.query.query.queries[index].group[groupIndex1].group.push({
                         concept: criteria
                     });
                 })
@@ -94,29 +97,29 @@ export const useQueryStore = create<QueryStore>()(
         addGroupOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].group[groupIndex1-1].group[depth].operation = operation;
+                    draft.query.query.queries[index].group[groupIndex1].group[depth].operation = operation;
                 })
             ),
         addGroupOperationDoubleToQuery: (index, value, groupIndex1, depth) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].group[groupIndex1-1].group[depth].operationDouble = value;
+                    draft.query.query.queries[index].group[groupIndex1].group[depth].operationDouble = value;
                 })
             ),
 
         addGroupJoinOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].group[groupIndex1-1].group.push({
+                    draft.query.query.queries[index].group[groupIndex1].group.push({
                         joinOperation: operation
                     });
                 })
             ),
-        addGroupFormulaToQueryGroup: (index, formula, groupIndex1, depth) =>
+        addGroupFormulaToQueryGroup: (index, groupIndex1) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].group[groupIndex1-1].group.push({
-                        formula: formula
+                    draft.query.query.queries[index].group[groupIndex1].group.push({
+                        formula: {}
                     });
                 })
             ),
@@ -184,10 +187,16 @@ export const useQueryStore = create<QueryStore>()(
                     })
                 })
             ),
-        addGroupToQueryGroup: (index, group, depth) =>
+        addGroupToQueryGroup: (index) =>
             set(
                 produce((draft) => {
-                    draft.query.query.queries[index].group.push({group:[]});
+                    draft.query.query.queries[index].group.push({ group: [] });
+                })
+            ),
+        addSubGroupToQueryGroup: (index, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].push({ group: [] });
                 })
             ),
         addOperandCriteria: (index, criteria, field) =>
@@ -262,6 +271,12 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].group[groupIndex].formula = value;
                 })
             ),
+        addToQueryFormulaInSubGrouping: (index, value, groupIndex, subGroupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].formula = value;
+                })
+            ),
         addFocusToQuery: (index, focus) =>
             set(
                 produce((draft) => {
@@ -272,6 +287,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group[groupIndex].concept.focus = focus;
+                })
+            ),
+        addFocusToQuerySubGrouping: (index, focus, groupIndex, subGroupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].concept.focus = focus;
                 })
             ),
     })
