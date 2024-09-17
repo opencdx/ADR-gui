@@ -20,11 +20,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import QueryLibrary from './query-library';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/hooks/query-keys';
-import OperatorsDropdown from '../droppable/operators-dropdown';
+import OperatorsDropdown from '../droppable/operators/operators-dropdown';
 import QueryRender from './query-render';
 import { FormulaDroppable } from '../droppable/formula-droppable';
 import { useRouter } from 'next/navigation';
 import { GroupDroppable } from '../droppable/group-droppable';
+import FocusDropdown from '../droppable/focus/focus-dropdown';
 
 export default function QueryBuilder() {
 
@@ -138,6 +139,7 @@ export default function QueryBuilder() {
                 <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
                 <FormulaDroppable showCopyIcon={true}/>
                 <OperatorsDropdown />
+                <FocusDropdown />
               </div>
               <QueryRender />
               <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' scrollBehavior='inside'>

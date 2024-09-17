@@ -1,23 +1,25 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
-import { useQueryStore } from "@/lib/store";
 import { Query } from "@/api/adr";
-import { OperationRender } from "../ui/operation-render";
-import { DragIcon } from "../icons";
+import { useQueryStore } from "@/lib/store";
+import { DroppableTypes } from '../../droppable/droppable-types';
+import { DragIcon } from "../../icons";
+import { OperationRender } from "../../ui/operation-render";
+import type { DragItem } from '../interfaces';
+import { CriteriaDropArea } from "./criteria-drop-area";
 
 export interface QueryDropAreaProps {
     onDrop: (item: any) => void
     query: Query,
-    index: number
+    index: number,
+    groupIndex?: number | undefined
 }
 
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
-    onDrop, query, index
+    onDrop, query, index, groupIndex
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -37,6 +39,14 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setOperationValue(event.target.value);
     };
+
+    const handleFocusDrop = (index: number, item: any, groupIndex: number | undefined) => {
+        if (typeof groupIndex === 'number') {
+            addFocusToQueryGrouping(index, item.focus, groupIndex)
+        } else {
+            addFocusToQuery(index, item.focus);
+        }
+    }
 
     const valueUpdated = useMemo(() => {
         setOperationValuewidth((operationValue.length + 1) + 'ch');
@@ -90,7 +100,11 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
             key={index}>
             <div className='my-auto flex'>
                 <div className='text-[#757575] m-auto'><DragIcon /></div>
-                <p className='text-[#001124] m-auto'>[{query.concept?.conceptName}]&nbsp;
+                <p className='text-[#001124] flex items-center'>
+                    <CriteriaDropArea
+                        onDrop={(item) => handleFocusDrop(index, item, groupIndex)}
+                        query={query}
+                    />&nbsp;
                     {query?.operation &&
                         <>
                             <OperationRender operation={query.operation} />

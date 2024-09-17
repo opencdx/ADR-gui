@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { Query } from "@/api/adr";
-import { QueryDropArea } from './query-drop-area';
+import { QueryDropArea } from './drop-area/query-drop-area';
 import { JoinOperationBox } from './join-operation-box';
 import { useQueryStore } from '@/lib/store';
 import { memo, FC } from 'react';
-import { AddQueryDropArea } from './add-query-drop-area';
+import { AddQueryDropArea } from './drop-area/add-query-drop-area';
 import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';
@@ -48,7 +48,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
         }
     }
 
-    const renderQueryItem = (item: Query, depth: number = 0, index: number) => {
+    const renderQueryItem = (index: number, item: Query, groupIndex: number = 0) => {
         return (
             <React.Fragment key={index}>
                 {item.concept && (
@@ -61,10 +61,11 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         <div className="w-4 h-[2px] bg-blue-200 "></div>
                         <div className="w-full">
                             <QueryDropArea
-                                onDrop={(item1) => handleDrop(index, item1, depth)}
+                                onDrop={(item1) => handleDrop(index, item1, groupIndex)}
                                 query={item}
                                 index={index}
-                                key={index} />
+                                key={index}
+                                groupIndex={groupIndex}/>
                         </div>
                     </div>
 
@@ -77,13 +78,13 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                     </div>
                 )}
                 {item.formula && (
-                    <FormulaBox onDrop={(item) => handleDrop(index, item, depth)}
+                    <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex)}
                         formula={item.formula}
                         query={item}
                         index={index}
                         parents={[OperandTypes.FORMULA]}
                         key={index}
-                        groupIndex={depth} />
+                        groupIndex={groupIndex} />
                 )}
 
             </React.Fragment>
@@ -102,7 +103,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                 </div>
                 {isExpanded && (
                     <div className="accordion-content bg-[#F6FAFF] p-4 rounded-b-md border-t border-blue-200 w-full">
-                        {group.map((item, index) => renderQueryItem(item, group.length, index))}
+                        {group.map((item, groupIndex) => renderQueryItem(index, item, groupIndex))}
                         <div className='flex items-center'>
                             <div className='w-full'>
                                 <AddQueryDropArea onDrop={(item) => handleDrop(index, item, group.length)} />

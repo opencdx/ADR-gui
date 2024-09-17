@@ -1,42 +1,25 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
+import { DroppableTypes } from '../../droppable/droppable-types'
+import type { DragItem } from '../interfaces'
 import { useQueryStore } from "@/lib/store";
 import { Formula } from "@/api/adr";
+import { OperationRender } from "../../ui/operation-render";
 
-export interface UnitsDropAreaProps {
+export interface OperationDropAreaProps {
     onDrop: (item: any) => void
     formula: Formula,
     index: number,
-    operandLocation: string,
-    parents: string[],
 }
 
-export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
-    onDrop, formula, index, operandLocation, parents
+export const OperationDropArea: FC<OperationDropAreaProps> = memo(function QueryBox({
+    onDrop, formula, index
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
+    const { addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
-
-    const handleHoverEnter = () => {
-        setHovered(true);
-    };
-
-    const handleHoverLeave = () => {
-        setHovered(false);
-    };
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
-    };
-
-    const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setOperationValue(event.target.value);
-    };
 
     const valueUpdated = useMemo(() => {
         if (operationValue.length) {
@@ -51,7 +34,7 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.UNITS],
+            accept: [DroppableTypes.OPERATOR],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItem());
                 return undefined;
@@ -77,20 +60,13 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
     }
 
     return (
-        <div ref={drop} className='text-[#001124]'>
-            {formula && formula.leftOperandUnit && operandLocation == 'left' &&
-                <div className='p-0.5'>({formula.leftOperandUnit.conceptName})</div>
+        <div ref={drop}>
+            {formula && formula.operation &&
+                <OperationRender operation={formula.operation}/>
             }
-            {!formula?.leftOperandUnit && operandLocation == 'left' &&
+            {!formula?.operation &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
-            }
-            {formula && formula.rightOperandUnit && operandLocation == 'right' &&
-                <div className='p-0.5'>({formula.rightOperandUnit.conceptName})</div>
-            }
-            {!formula?.rightOperandUnit && operandLocation == 'right' &&
-                <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+                style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}/>
             }
         </div>
     )

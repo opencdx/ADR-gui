@@ -4,6 +4,6 @@ export const DroppableTypes = {
     JOIN_OPERATION: 'join-operation',
     OPERATOR: 'operator',
     FORMULA: 'formula',
-    GROUP: 'group'
-
+    GROUP: 'group',
+    FOCUS: 'focus'
 }

@@ -1,8 +1,8 @@
 import { FC, memo } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
+import { DroppableTypes } from '../../droppable/droppable-types'
+import type { DragItem } from '../interfaces'
 
 export interface AddQueryDropAreaProps {
     onDrop: (item: any) => void

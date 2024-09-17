@@ -1,15 +1,16 @@
 import { FC, memo, SetStateAction, useMemo, useState } from "react";
-import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { DropTargetMonitor, useDrop } from 'react-dnd';
 
-import { DroppableTypes } from '../droppable/droppable-types'
-import type { DragItem } from './interfaces'
-import { useQueryStore } from "@/lib/store";
 import { Formula } from "@/api/adr";
-import { UnitsDropArea } from "./units-drop-area";
-import { FormulaRender } from "./formula-render";
-import { OperandTypes } from "./operand-types";
-import _ from "lodash";
+import { useQueryStore } from "@/lib/store";
 import { createNestedObject } from "@/lib/utils";
+import _ from "lodash";
+import { DroppableTypes } from '../../droppable/droppable-types';
+import { FormulaRender } from "../formula-render";
+import type { DragItem } from '../interfaces';
+import { OperandTypes } from "../operand-types";
+import { CriteriaDropArea } from "./criteria-drop-area";
+import { UnitsDropArea } from "./units-drop-area";
 
 export interface OperandDropAreaProps {
     onDrop: (item: any) => void
@@ -27,6 +28,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
+    const FOCUS = 'focus';
 
     const handleHoverEnter = () => {
         setHovered(true);
@@ -74,6 +76,41 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             }
         }
     }
+
+    const handleFocusDropFormula = (index: number, formula: Formula, item: any, operandLocation: string, parents: string[], groupIndex: number | undefined) => {
+        if (formula && parents) {
+          let parentFormula;
+          if (typeof groupIndex === 'number') {
+            parentFormula = query.query?.queries![index].group![groupIndex].formula;
+          } else {
+            parentFormula = query.query?.queries![index].formula;
+          }
+          switch (operandLocation) {
+            case 'left':
+              if (typeof groupIndex === 'number') {
+                addToQueryFormulaInGrouping(index, _.merge({},
+                  parentFormula,
+                  createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)), groupIndex);
+              } else {
+                addToQueryFormula(index, _.merge({},
+                  parentFormula,
+                  createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)));
+              }
+              break;
+            case 'right':
+              if (typeof groupIndex === 'number') {
+                addToQueryFormulaInGrouping(index, _.merge({},
+                  parentFormula,
+                  createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)), groupIndex);
+              } else {
+                addToQueryFormula(index, _.merge({},
+                  parentFormula,
+                  createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)));
+              }
+              break;
+          }
+        }
+      }
 
     useMemo(() => {
         if (operandValue.length) {
@@ -169,11 +206,14 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
 
             {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
                 <>
-                    <div className='text-[#001124]'>{formula.leftOperand?.conceptName} </div>
+                    <CriteriaDropArea
+                        onDrop={(item) => handleFocusDropFormula(index, formula, item, operandLocation, parents, groupIndex)}
+                        formula={formula}
+                        operandLocation={operandLocation} />
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'left', parents)}
                         formula={formula}
                         index={index}
-                        operandLocation='left'
+                        operandLocation={operandLocation}
                         parents={parents} />
                 </>
             }
@@ -194,7 +234,10 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             }
             {formula && formula.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <>
-                    <div className='text-[#001124]'>{formula.rightOperand?.conceptName}</div>
+                    <CriteriaDropArea
+                        onDrop={(item) => handleFocusDropFormula(index, formula, item, operandLocation, parents, groupIndex)}
+                        formula={formula}
+                        operandLocation={operandLocation} />
                     <UnitsDropArea onDrop={(item) => handleUnitsDrop(index, item, 'right', parents)}
                         formula={formula}
                         index={index}
