@@ -20,7 +20,7 @@ export interface QueryDropAreaProps {
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop, query, index, groupIndex, depth
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping, addOperationDoubleToGroup } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -54,8 +54,11 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     const valueUpdated = useMemo(() => {
         setOperationValuewidth((operationValue.length + 1) + 'ch');
         if (operationValue && !isNaN(Number(operationValue))) {
-            if (typeof groupIndex === 'number' && typeof depth === 'number') {
-                addGroupOperationDoubleToQuery(index, Number(operationValue), groupIndex, depth);
+            if (groupIndex?.length === 0 && typeof depth === 'number') {
+                addOperationDoubleToGroup(index, Number(operationValue), depth);
+            }
+            if (groupIndex?.length === 1 && typeof depth === 'number') {
+                addGroupOperationDoubleToQuery(index, Number(operationValue), groupIndex[0], depth);
             } else {
                 addOperationDoubleToQuery(index, Number(operationValue));
             }
