@@ -129,7 +129,7 @@ export default function QueryBuilder() {
               }
             </div>
           </div>
-          <div className='rounded-md bg-white clear-both flex flex-col overflow-hidden w-full ml-5'>
+          <div className='rounded-md bg-white clear-both flex flex-col overflow-auto w-full ml-5'>
             <div className='p-3'>
               <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
               <div className='pb-3 flex items-center'>
