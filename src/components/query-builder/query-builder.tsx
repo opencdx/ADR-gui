@@ -26,6 +26,7 @@ import { FormulaDroppable } from '../droppable/formula-droppable';
 import { useRouter } from 'next/navigation';
 import { GroupDroppable } from '../droppable/group-droppable';
 import FocusDropdown from '../droppable/focus/focus-dropdown';
+import { Navbar } from '@/components/navbar';
 
 export default function QueryBuilder() {
 
@@ -108,28 +109,31 @@ export default function QueryBuilder() {
 
   return (
     <>
-      <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-full h-screen'>
+
+      <div className='flex py-4 bg-blue-100 p-4 flex-row w-full h-screen overflow-hidden'>
         <DndProvider backend={HTML5Backend}>
-          <div className='float-left w-[420px] flex-col flex'>
-            <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden grow mb-4'>
+          <div className='float-left w-[420px] flex-col flex h-full'>
+            
+            <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden grow mb-4 h-2/3'>
               <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
               <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
-              <Tabs aria-label='Available Criteria' className='mt-4' fullWidth>
-                <Tab key='criteria' title='Available Criteria' className='h-full overflow-hidden'>
+              <Tabs aria-label='Available Criteria' className='mt-4 flex-grow overflow-hidden h-[80px]' fullWidth>
+                <Tab key='criteria' title='Available Criteria' className='h-full overflow-auto'>
                   <CriteriaList criteriaList={criteriaList?.data} unitsList={undefined} filter={searchTerm} />
                 </Tab>
-                <Tab key='units' title='Units of Measure' className='h-full overflow-hidden'>
+                <Tab key='units' title='Units of Measure' className='h-full overflow-auto'>
                   <CriteriaList unitsList={unitsOfMeasure?.data} criteriaList={undefined} filter={searchTerm} />
                 </Tab>
               </Tabs>
             </div>
-            <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-[700px]'>
+            <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden h-1/3'>
+            
               {queries?.data &&
                 <QueryLibrary />
               }
             </div>
           </div>
-          <div className='rounded-md bg-white clear-both flex flex-col overflow-auto w-full ml-5'>
+          <div className='rounded-md bg-white clear-both flex flex-col  w-full ml-5'>
             <div className='p-3'>
               <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
               <div className='pb-3 flex items-center'>
@@ -171,6 +175,7 @@ export default function QueryBuilder() {
               </div>
             </div>
           </div>
+          
         </DndProvider>
         <ToastContainer />
       </div>

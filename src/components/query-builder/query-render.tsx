@@ -46,7 +46,7 @@ export default function QueryRender() {
 
     return (
         <>
-            <div className='max-h-[calc(100vh-200px)] overflow-y-auto'>
+        <div className='max-h-[calc(100vh-400px)] overflow-y-auto'>
             {query?.query?.queries?.map((query, index) => {
                 return <div key={index} >
                      {query.concept && (
@@ -81,17 +81,19 @@ export default function QueryRender() {
                     )}
                 </div>
             })}
+            
+           
+        </div>
+         {(newQueryField || query?.query?.queries?.length == 0) && (
+            <AddQueryDropArea
+                onDrop={(item) => handleDrop(-1, item)} />
+        )}
+        {query?.query?.queries && query?.query?.queries.length > 0 && (
+            <div className='float-right'>
+                <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={clearAll}>Clear All</Button>
+                <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={updateNewQuery}>New Query Field</Button>
             </div>
-            {(newQueryField || query?.query?.queries?.length == 0) && (
-                <AddQueryDropArea
-                    onDrop={(item) => handleDrop(-1, item)} />
-            )}
-            {query?.query?.queries && query?.query?.queries.length > 0 && (
-                <div className='float-right'>
-                    <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={clearAll}>Clear All</Button>
-                    <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={updateNewQuery}>New Query Field</Button>
-                </div>
-            )}
+        )}
         </>
     )
 }
