@@ -45,7 +45,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
         setOperationValue(event.target.value);
     };
 
-    const handleFocusDrop = (index: number, item: any, depth: number| undefined, groupIndex: number[] | undefined) => {
+    const handleFocusDrop = (index: number, item: any, depth: number | undefined, groupIndex: number[] | undefined) => {
         if (groupIndex?.length == 0 && typeof depth === 'number') {
             addFocusToQueryGrouping(index, item.focus, depth);
         } else if (groupIndex?.length === 1 && typeof depth === 'number') {

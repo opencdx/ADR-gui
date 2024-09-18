@@ -135,7 +135,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
         )
     }
     const handleRemove = (
-        index: number, 
+        index: number,
     ) => {
         removeFromQueryGroupSection(index, groupIndex || []);
     }

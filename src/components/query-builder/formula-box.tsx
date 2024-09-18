@@ -143,7 +143,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                         index={index}
                         parents={parents}
                         groupIndex={groupIndex} />
-                    {query?.operation  &&
+                    {query?.operation &&
                         <p className='ml-3'>
                             <OperationRender operation={query.operation} />
                         </p>
