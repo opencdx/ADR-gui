@@ -1,42 +1,41 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
 import Loading from '@/components/ui/loading';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useTranslations } from 'next-intl';
-import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from 'ui-library';
-import { Tabs, Tab } from '@nextui-org/react';
-import { CriteriaList } from './criteria-list';
-import { useGetQueryableData, useGetUnits, useListQueries, usePostQuery, useSaveQuery, useUpdateQuery } from '@/hooks/hooks';
-import { ArrowForwardIcon, PreviewIcon, SaveIcon } from '../icons';
 import { JoinOperation, SavedQuery } from '@/api/adr';
+import { useGetQueryableData, useGetUnits, useListQueries, useSaveQuery, useUpdateQuery } from '@/hooks/hooks';
+import { QUERY_KEYS } from '@/hooks/query-keys';
 import { useQueryStore } from '@/lib/store';
-import { JoinOperationDroppable } from '../droppable/join-operation-droppable';
+import { Tab, Tabs } from '@nextui-org/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { allExpanded, defaultStyles, JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import QueryLibrary from './query-library';
-import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '@/hooks/query-keys';
-import OperatorsDropdown from '../droppable/operators/operators-dropdown';
-import QueryRender from './query-render';
-import { FormulaDroppable } from '../droppable/formula-droppable';
-import { useRouter } from 'next/navigation';
-import { GroupDroppable } from '../droppable/group-droppable';
+import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from 'ui-library';
 import FocusDropdown from '../droppable/focus/focus-dropdown';
+import { FormulaDroppable } from '../droppable/formula-droppable';
+import { GroupDroppable } from '../droppable/group-droppable';
+import { JoinOperationDroppable } from '../droppable/join-operation-droppable';
+import OperatorsDropdown from '../droppable/operators/operators-dropdown';
+import { ArrowForwardIcon, PreviewIcon, SaveIcon } from '../icons';
+import { CriteriaList } from './criteria-list';
+import QueryLibrary from './query-library';
+import QueryRender from './query-render';
 
 export default function QueryBuilder() {
 
   const router = useRouter();
   const { data: criteriaList } = useGetQueryableData();
   const { data: unitsOfMeasure } = useGetUnits();
-  const { mutate: postQuery, data: queryResults } = usePostQuery();
   const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
-  const { query, updateQueryStore } = useQueryStore();
+  const { query, updateQueryStore, updateQueryName } = useQueryStore();
   const { data: queries } = useListQueries();
   const [searchTerm, setSearchTerm] = useState('');
   const [queryName, setQueryName] = useState('');
@@ -110,14 +109,18 @@ export default function QueryBuilder() {
     });
   }
 
-  useEffect(() => {
+  useMemo(() => {
     if (query) {
       setQueryName(query.name!);
     }
-  }, [query]);
+  }, []);
+
+  useEffect(() => {
+    updateQueryName(queryName);
+  }, [queryName]);
 
   const isDisabled = () => {
-    return !queryName;
+    return !query.name;
   };
 
   return (
@@ -176,7 +179,7 @@ export default function QueryBuilder() {
                   </Modal>
                 </div>
                 <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
-                  <Input label='Add Query Name' value={queryName} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
+                  <Input label='Add Query Name' value={query.name} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
                   <div className='flex my-auto'>
                     <Button className='m-2' startContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
                     {!query?.id &&
