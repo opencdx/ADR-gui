@@ -108,8 +108,12 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
         () => ({
             accept: [DroppableTypes.OPERATOR],
             drop(_item: DragItem, monitor) {
+                const didDrop = monitor.didDrop();
+                if (didDrop) {
+                    return;
+                }
                 onDrop(monitor.getItem());
-                return undefined;
+                return;
             },
             collect: (monitor: DropTargetMonitor) => ({
                 isOver: monitor.isOver(),
