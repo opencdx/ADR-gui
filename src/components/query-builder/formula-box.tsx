@@ -147,19 +147,19 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                         index={index}
                         parents={parents}
                         groupIndex={groupIndex} />
-                    {query?.operation &&
-                        <p className='ml-3'>
-                            <OperationRender operation={query.operation} />
-                        </p>
-                    }
-                    {query?.operation &&
-                        <>
-                            <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                                style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
-                            <p className='hidden'>{operationValue}</p>
-                        </>
-                    }
                 </div>
+                {query?.operation &&
+                    <p className='ml-3'>
+                        <OperationRender operation={query.operation} />
+                    </p>
+                }
+                {query?.operation &&
+                    <>
+                        <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
+                            style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                        <p className='hidden'>{operationValue}</p>
+                    </>
+                }
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
         </div>
