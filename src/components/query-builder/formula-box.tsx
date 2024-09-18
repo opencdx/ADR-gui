@@ -1,4 +1,4 @@
-import { FC, memo, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { FC, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 
 import { Formula, Query } from "@/api/adr";
 import { useQueryStore } from "@/lib/store";
@@ -28,6 +28,37 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
     const formulaRef = useRef<HTMLDivElement>(null);
     const [formulaText, setFormulaText] = useState('');
+
+    const useMutationObserver = (
+        ref: RefObject<HTMLDivElement>,
+        callback: MutationCallback,
+        options = {
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributes: true,
+        }
+    ) => {
+        useEffect(() => {
+            if (ref.current) {
+                const observer = new MutationObserver(callback);
+                observer.observe(ref.current, options);
+                return () => observer.disconnect();
+            }
+        }, [ref])
+    };
+    const updateFormulaName = () => {
+        if (formulaRef.current?.textContent) {
+            if (!groupIndex || groupIndex.length == 0) {
+                addNameToFormula(index, formulaRef.current?.textContent);
+            } else if (groupIndex?.length === 1) {
+                addNameToGroupingFormula(index, groupIndex[0], formulaRef.current?.textContent);
+            } else if (groupIndex?.length === 2) {
+                addNameToSubGroupFormula(index, groupIndex[0], groupIndex[1], formulaRef.current?.textContent);
+            }
+        }
+    };
+    useMutationObserver(formulaRef, updateFormulaName);
 
     const handleHoverEnter = () => {
         setHovered(true);
@@ -70,38 +101,12 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
         }
     }, [operationValue]);
 
-    const setFormulaName = useEffect(() => {
-        const observer = new MutationObserver((mutations) => {
-            if (formulaRef.current?.textContent) {
-                if (!groupIndex || groupIndex.length == 0) {
-                    addNameToFormula(index, formulaRef.current?.textContent);
-                } else if (groupIndex?.length === 1) {
-                    addNameToGroupingFormula(index, groupIndex[0], formulaRef.current?.textContent);
-                } else if (groupIndex?.length === 2) {
-                    addNameToSubGroupFormula(index, groupIndex[0], groupIndex[1], formulaRef.current?.textContent);
-                }
-            }
-        });
-
-        if (formulaRef.current) {
-            observer.observe(formulaRef.current, { childList: true, subtree: true });
-        }
-
-        return () => {
-            if (observer) {
-                observer.disconnect();
-            }
-        };
-    }, [formulaRef, formulaText]);
-
     const setValue = useMemo(() => {
         if (query.operationDouble) {
             setOperationValue(String(query.operationDouble));
         } else if (query.operationText) {
             setOperationValue(query.operationText);
         }
-
-        setFormulaName;
     }, []);
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
