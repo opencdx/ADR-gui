@@ -52,14 +52,14 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
             }
             {!formula?.leftOperandUnit && operandLocation == 'left' &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+                style={{ border: '1px dashed gray', backgroundColor, color, opacity }}>units</div>
             }
             {formula && formula.rightOperandUnit && operandLocation == 'right' &&
                 <div className='p-0.5'>({formula.rightOperandUnit.conceptName})</div>
             }
             {!formula?.rightOperandUnit && operandLocation == 'right' &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+                style={{ border: '1px dashed gray', backgroundColor, color, opacity }}>units</div>
             }
         </div>
     )
