@@ -1,7 +1,7 @@
 import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { DroppableTypes } from './droppable-types';
+import { DroppableTypes } from '../droppable-types';
 import { Operation } from '@/api/adr/model/formula';
 
 const hoverStyle: CSSProperties = {

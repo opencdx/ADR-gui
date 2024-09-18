@@ -2,13 +2,13 @@ import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
 import { useQueryStore } from "@/lib/store";
-import { DroppableTypes } from './droppable-types';
+import { DroppableTypes } from '../droppable-types';
 import { Button, Dropdown, DropdownItem, DropdownSection, DropdownTrigger } from 'ui-library';
 import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
 import { OperationQueryBox } from './operation-query-droppable';
 import { Operation as QueryOperation } from '@/api/adr/model/query';
 import { Operation as FormulaOperation } from '@/api/adr/model/formula';
-import { DownArrow, UpArrow } from '../icons';
+import { DownArrow, UpArrow } from '../../icons';
 import { OperationFormulaBox } from './operation-formula-droppable';
 
 const hoverStyle: CSSProperties = {
@@ -45,7 +45,7 @@ export default function OperatorsDropdown() {
         <>
             <Dropdown isOpen={isOpen} onOpenChange={handleOpenChange} classNames={{ content: ['rounded-none', 'p-0'] }}>
                 <DropdownTrigger>
-                    <Button className='w-[300px] h-8 px-3 justify-start items-center gap-3 shrink-0 '>
+                    <Button className='w-[250px] h-8 px-3 justify-start items-center gap-3 shrink-0 mr-2.5'>
                         <div className='w-full justify-between flex items-center'>
                             + Operators
                             <div className='my-auto'>
@@ -57,7 +57,7 @@ export default function OperatorsDropdown() {
                         </div>
                     </Button>
                 </DropdownTrigger>
-                <DropdownMenu className='w-[300px] rounded-none p-0'>
+                <DropdownMenu className='w-[250px] rounded-none p-0'>
                     <DropdownSection className='rounded-none'>
                         <DropdownItem isReadOnly className='p-0 rounded-none mt-2'>
                             <OperationQueryBox operation={QueryOperation.Equal} display='= Equal' />

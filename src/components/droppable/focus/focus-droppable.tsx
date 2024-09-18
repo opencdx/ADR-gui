@@ -1,25 +1,25 @@
-import { useState, type CSSProperties, type FC } from 'react'
-import { useDrag } from 'react-dnd'
+import { useState, type CSSProperties, type FC } from 'react';
+import { useDrag } from 'react-dnd';
 
-import { DroppableTypes } from './droppable-types';
-import { Operation } from '@/api/adr/model/query';
+import { Focus } from '@/api/adr';
+import { DroppableTypes } from '../droppable-types';
 
 const hoverStyle: CSSProperties = {
   border: '1px solid #006FEE',
 }
 
-export interface OperationQueryBoxProps {
+export interface FocusBoxProps {
   showCopyIcon?: boolean
-  operation: Operation
+  focus: Focus
   display: string
 }
 
-export const OperationQueryBox: FC<OperationQueryBoxProps> = ({ showCopyIcon, operation, display }) => {
+export const FocusBox: FC<FocusBoxProps> = ({ showCopyIcon, focus, display }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: DroppableTypes.OPERATOR,
-      item: { operation },
+      type: DroppableTypes.FOCUS,
+      item: { focus },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',
       },
