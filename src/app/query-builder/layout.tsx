@@ -44,11 +44,11 @@ export default async function RootLayout({
       <PrimeReactProvider>
         <NextIntlClientProvider messages={messages}>
 
-        <div className="flex h-screen w-full overflow-auto bg-neutral-900 transition-all duration-300 ease-in-out">
-          <div className="flex flex-col flex-1">
-            {/* <Navbar /> */}
-            <div className="bg-white w-screen h-screen overflow-auto">
-              <div className="h-auto  bg-[#F4F9FF] dark:bg-[#1a1a1a]">
+        <div className="flex h-screen w-screen overflow-hidden bg-neutral-900 transition-all duration-300 ease-in-out">
+          <div className="flex flex-col flex-1 bg-white">
+            <Navbar />
+            <div className="bg-white w-screen h-screen">
+              <div className="h-[calc(100vh-64px)] overflow-auto flex flex-col flex-grow  bg-[#F4F9FF] dark:bg-[#1a1a1a]">
                     {children}
               </div>
             </div>
