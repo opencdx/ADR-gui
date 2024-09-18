@@ -18,13 +18,13 @@ export interface OperandDropAreaProps {
     index: number,
     operandLocation: string,
     parents: string[],
-    groupIndex?: number,
+    groupIndex?: number[],
 }
 
 export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index, operandLocation, parents, groupIndex
 }) {
-    const { query, addToQueryFormula, addToQueryFormulaInGrouping } = useQueryStore();
+    const { query, addToQueryFormula, addToQueryFormulaInGrouping, addToQueryFormulaInSubGrouping } = useQueryStore();
     const [operandValue, setOperandValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -42,107 +42,126 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
         setOperandValue(String(event.target.value));
     };
 
-    const handleUnitsDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
-        let parentFormula;
-        if (typeof groupIndex === 'number') {
-            parentFormula = query.query?.queries![index].group![groupIndex].formula;
+    function getParentFormula(): Formula | undefined {
+        if (groupIndex?.length == 1) {
+            return query.query?.queries![index].group![groupIndex[0]].formula;
+        } else if (groupIndex?.length == 2) {
+            return query.query?.queries![index].group![groupIndex[0]].group![groupIndex[1]].formula;
         } else {
-            parentFormula = query.query?.queries![index].formula;
+            return query.query?.queries![index].formula;
         }
+    }
+
+    const handleUnitsDrop = (index: number, item: any, operandLocation: string, parents: string[]) => {
+        const parentFormula = getParentFormula();
         if (item.units) {
             switch (operandLocation) {
                 case 'left':
-                    if (typeof groupIndex === 'number') {
-                        addToQueryFormulaInGrouping(index, _.merge({},
-                            parentFormula,
-                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)), groupIndex);
-                    } else {
+                    if (!groupIndex || groupIndex.length == 0) {
                         addToQueryFormula(index, _.merge({},
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)));
+                    } else if (groupIndex?.length == 1) {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)), groupIndex[0]);
+                    } else if (groupIndex?.length == 2) {
+                        addToQueryFormulaInSubGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_UNIT], item.units)), groupIndex[0], groupIndex[1]);
                     }
                     break;
                 case 'right':
-                    if (typeof groupIndex === 'number') {
-                        addToQueryFormulaInGrouping(index, _.merge({},
-                            parentFormula,
-                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_UNIT], item.units)), groupIndex);
-                    } else {
+                    if (!groupIndex || groupIndex.length == 0) {
                         addToQueryFormula(index, _.merge({},
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_UNIT], item.units)));
+                    } else if (groupIndex?.length == 1) {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_UNIT], item.units)), groupIndex[0]);
+                    } else if (groupIndex?.length == 2) {
+                        addToQueryFormulaInSubGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_UNIT], item.units)), groupIndex[0], groupIndex[1]);
                     }
                     break;
             }
         }
     }
 
-    const handleFocusDropFormula = (index: number, formula: Formula, item: any, operandLocation: string, parents: string[], groupIndex: number | undefined) => {
+    const handleFocusDropFormula = (index: number, formula: Formula, item: any, operandLocation: string, parents: string[], groupIndex: number[] | undefined) => {
         if (formula && parents) {
-          let parentFormula;
-          if (typeof groupIndex === 'number') {
-            parentFormula = query.query?.queries![index].group![groupIndex].formula;
-          } else {
-            parentFormula = query.query?.queries![index].formula;
-          }
-          switch (operandLocation) {
-            case 'left':
-              if (typeof groupIndex === 'number') {
-                addToQueryFormulaInGrouping(index, _.merge({},
-                  parentFormula,
-                  createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)), groupIndex);
-              } else {
-                addToQueryFormula(index, _.merge({},
-                  parentFormula,
-                  createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)));
-              }
-              break;
-            case 'right':
-              if (typeof groupIndex === 'number') {
-                addToQueryFormulaInGrouping(index, _.merge({},
-                  parentFormula,
-                  createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)), groupIndex);
-              } else {
-                addToQueryFormula(index, _.merge({},
-                  parentFormula,
-                  createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)));
-              }
-              break;
-          }
+            const parentFormula = getParentFormula();
+            switch (operandLocation) {
+                case 'left':
+                    if (!groupIndex || groupIndex.length == 0) {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)));
+                    } else if (groupIndex?.length == 1) {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)), groupIndex[0]);
+                    } else if (groupIndex?.length == 2) {
+                        addToQueryFormulaInSubGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, FOCUS], item.focus)), groupIndex[0], groupIndex[1]);
+                    }
+                    break;
+                case 'right':
+                    if (!groupIndex || groupIndex.length == 0) {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)));
+                    } else if (groupIndex?.length == 1) {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)), groupIndex[0]);
+                    } else if (groupIndex?.length == 2) {
+                        addToQueryFormulaInSubGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, FOCUS], item.focus)), groupIndex[0], groupIndex[1]);
+                    }
+                    break;
+            }
         }
-      }
+    }
 
     useMemo(() => {
         if (operandValue.length) {
             setOperationValuewidth((operandValue.length + 1) + 'ch');
-            let parentFormula;
-            if (typeof groupIndex === 'number') {
-                parentFormula = query.query?.queries![index].group![groupIndex].formula;
-            } else {
-                parentFormula = query.query?.queries![index].formula;
-            }
+            const parentFormula = getParentFormula();
             if (operandValue && !isNaN(Number(operandValue))) {
                 switch (operandLocation) {
                     case 'left':
-                        if (typeof groupIndex === 'number') {
-                            addToQueryFormulaInGrouping(index, _.merge({},
-                                parentFormula,
-                                createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))), groupIndex);
-                        } else {
+                        if (!groupIndex || groupIndex.length == 0) {
                             addToQueryFormula(index, _.merge({},
                                 parentFormula,
                                 createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))));
+                        } else if (groupIndex?.length == 1) {
+                            addToQueryFormulaInGrouping(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))), groupIndex[0]);
+                        } else if (groupIndex?.length == 2) {
+                            addToQueryFormulaInSubGrouping(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND_VALUE], Number(operandValue))), groupIndex[0], groupIndex[1]);
                         }
                         break;
                     case 'right':
-                        if (typeof groupIndex === 'number') {
-                            addToQueryFormulaInGrouping(index, _.merge({},
-                                parentFormula,
-                                createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))), groupIndex);
-                        } else {
+                        if (!groupIndex || groupIndex.length == 0) {
                             addToQueryFormula(index, _.merge({},
                                 parentFormula,
                                 createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))));
+                        } else if (groupIndex?.length == 1) {
+                            addToQueryFormulaInGrouping(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))), groupIndex[0]);
+                        } else if (groupIndex?.length == 2) {
+                            addToQueryFormulaInSubGrouping(index, _.merge({},
+                                parentFormula,
+                                createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND_VALUE], Number(operandValue))), groupIndex[0], groupIndex[1]);
                         }
                         break;
                 }
@@ -201,7 +220,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                     formula={formula.leftOperandFormula}
                     index={index}
                     parents={[...parents, OperandTypes.LEFT_OPERAND_FORMULA]}
-                    groupIndex={groupIndex}/>
+                    groupIndex={groupIndex} />
             }
 
             {formula && formula.leftOperand && !formula.leftOperandFormula && operandLocation == 'left' &&
@@ -230,7 +249,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
                     formula={formula.rightOperandFormula}
                     index={index}
                     parents={[...parents, OperandTypes.RIGHT_OPERAND_FORMULA]}
-                    groupIndex={groupIndex}/>
+                    groupIndex={groupIndex} />
             }
             {formula && formula.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <>

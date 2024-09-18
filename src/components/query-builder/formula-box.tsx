@@ -1,13 +1,13 @@
-import { FC, memo, useState, SetStateAction, useMemo, useRef, useEffect } from "react";
+import { FC, memo, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 
-import { useQueryStore } from "@/lib/store";
 import { Formula, Query } from "@/api/adr";
-import { DragIcon } from "../icons";
-import { FormulaRender } from "./formula-render";
+import { useQueryStore } from "@/lib/store";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { DroppableTypes } from "../droppable/droppable-types";
-import type { DragItem } from './interfaces'
+import { DragIcon } from "../icons";
 import { OperationRender } from "../ui/operation-render";
+import { FormulaRender } from "./formula-render";
+import type { DragItem } from './interfaces';
 
 export interface FormulaBoxProps {
     onDrop: (item: any) => void
@@ -15,13 +15,13 @@ export interface FormulaBoxProps {
     query: Query,
     index: number,
     parents: string[],
-    groupIndex?: number
+    groupIndex?: number[]
 }
 
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     onDrop, formula, query, index, parents, groupIndex
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula, addNameToSubGroupFormula, addGroupOperationDoubleToQuery, addOperationDoubleToGroup, addOperationStringToGroup, addGroupOperationStringToQuery } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -47,19 +47,33 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     const valueUpdated = useMemo(() => {
         setOperationValuewidth((operationValue.length + 1) + 'ch');
         if (operationValue && !isNaN(Number(operationValue))) {
-            addOperationDoubleToQuery(index, Number(operationValue));
+            if (groupIndex?.length && groupIndex?.length === 1) {
+                addOperationDoubleToGroup(index, Number(operationValue), groupIndex[0]);
+            } else if (groupIndex?.length && groupIndex?.length === 2) {
+                addGroupOperationDoubleToQuery(index, Number(operationValue), groupIndex[0], groupIndex[1]);
+            } else {
+                addOperationDoubleToQuery(index, Number(operationValue));
+            }
         } else if (operationValue) {
-            addOperationStringToQuery(index, operationValue);
+            if (groupIndex?.length && groupIndex?.length === 1) {
+                addOperationStringToGroup(index, operationValue, groupIndex[0]);
+            } else if (groupIndex?.length && groupIndex?.length === 2) {
+                addGroupOperationStringToQuery(index, operationValue, groupIndex[0], groupIndex[1]);
+            } else {
+                addOperationStringToQuery(index, operationValue);
+            }
         }
     }, [operationValue]);
 
     const setFormulaName = useEffect(() => {
         const observer = new MutationObserver((mutations) => {
             if (formulaRef.current?.textContent) {
-                if (typeof groupIndex === 'number') {
-                    addNameToGroupingFormula(index, groupIndex, formulaRef.current?.textContent);
-                } else {
+                if (!groupIndex || groupIndex.length == 0) {
                     addNameToFormula(index, formulaRef.current?.textContent);
+                } else if (groupIndex?.length === 1) {
+                    addNameToGroupingFormula(index, groupIndex[0], formulaRef.current?.textContent);
+                } else if (groupIndex?.length === 2) {
+                    addNameToSubGroupFormula(index, groupIndex[0], groupIndex[1], formulaRef.current?.textContent);
                 }
             }
         });
@@ -124,7 +138,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                         index={index}
                         parents={parents}
                         groupIndex={groupIndex} />
-                    {query?.operation &&
+                    {query?.operation  &&
                         <p className='ml-3'>
                             <OperationRender operation={query.operation} />
                         </p>
