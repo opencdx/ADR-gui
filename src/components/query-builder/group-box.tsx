@@ -15,14 +15,16 @@ interface GroupBoxProps {
     parentGroupIndex: number[];
     query: Query;
     index: number;
+    groupIndex?: number[];
+    depth?: number;
 }
 
 export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
-    onDrop, group, parentGroupIndex, index
+    onDrop, group, parentGroupIndex, index, groupIndex, depth
 }) {
 
     const [isExpanded, setIsExpanded] = useState(true);
-    const { addJoinOperationToQueryGroup, addFormulaToQueryGroup, addCriteraToQueryGroup, addOperationToQueryGroup, addGroupToQueryGroup, addSubGroupToQueryGroup, addGroupCriteraToQueryGroup, addGroupOperationToQueryGroup, addGroupJoinOperationToQueryGroup, addGroupFormulaToQueryGroup } = useQueryStore();
+    const { addJoinOperationToQueryGroup, addFormulaToQueryGroup, addCriteraToQueryGroup, addOperationToQueryGroup, addGroupToQueryGroup, addGroupCriteraToQueryGroup, addGroupOperationToQueryGroup, addGroupJoinOperationToQueryGroup, addGroupFormulaToQueryGroup, removeFromQueryGroupSection } = useQueryStore();
 
     const [, drop] = useDrop({
         accept: 'QUERY_ITEM',
@@ -91,7 +93,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                     <div className=" flex items-center">
                         <div className='w-[2px] h-[60px] bg-blue-200'></div>
                         <div className="w-4 h-[2px] bg-blue-200 "></div>
-                        <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} />
+                        <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={parentGroupIndex} depth={groupIndex} />
                     </div>
                 )}
                 {item.formula && (
@@ -110,7 +112,8 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                 index={index}
                                 parents={[OperandTypes.FORMULA]}
                                 key={index}
-                                groupIndex={[...parentGroupIndex, groupIndex]} />
+                                groupIndex={[...parentGroupIndex, groupIndex]}
+                                depth={groupIndex} />
                         </div>
                     </div>
 
@@ -123,11 +126,18 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         query={item}
                         index={index}
                         key={index}
+                        groupIndex={[...parentGroupIndex, groupIndex]}
+                        depth={groupIndex}
                     />
                 )}
 
             </React.Fragment>
         )
+    }
+    const handleRemove = (
+        index: number, 
+    ) => {
+        removeFromQueryGroupSection(index, groupIndex || []);
     }
 
     return (
@@ -139,6 +149,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                     >
                         {isExpanded ? 'expand_more' : 'chevron_right'}
                     </span>
+                    <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
                 </div>
                 {isExpanded && (
                     <div className="accordion-content bg-[#F6FAFF] p-4 rounded-b-md border-t border-blue-200 w-full">
@@ -153,6 +164,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
 
                 )}
             </div>
+
         </div>
     );
 });

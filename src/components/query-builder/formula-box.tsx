@@ -15,13 +15,14 @@ export interface FormulaBoxProps {
     query: Query,
     index: number,
     parents: string[],
-    groupIndex?: number[]
+    groupIndex?: number[],
+    depth?: number
 }
 
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
-    onDrop, formula, query, index, parents, groupIndex
+    onDrop, formula, query, index, parents, groupIndex, depth
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula, addNameToSubGroupFormula, addGroupOperationDoubleToQuery, addOperationDoubleToGroup, addOperationStringToGroup, addGroupOperationStringToQuery } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula, addNameToSubGroupFormula, addGroupOperationDoubleToQuery, addOperationDoubleToGroup, addOperationStringToGroup, addGroupOperationStringToQuery, removeFromQueryGroup } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -37,7 +38,11 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     };
 
     const handleRemove = (index: number) => {
-        removeFromQuery(index);
+        if (depth !== undefined) {
+            removeFromQueryGroup(index, groupIndex as number[], depth as number);
+        } else {
+            removeFromQuery(index);
+        }
     };
 
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
