@@ -152,12 +152,6 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         initialState: {
             density: 'xs',
         },
-        renderTopToolbarCustomActions: ({ table }) => (
-            <div>
-                <Button color='primary' radius='full' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
-            </div>
-        )
-
     });
 
 
@@ -165,9 +159,12 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         <>
             <div className='flex py-4 bg-blue-100 p-4 flex flex-row  w-screen h-screen overflow-hidden'>
                 <div className='rounded-md bg-white p-4 h-full  w-full flex-grow '>
-                    <div className='flex flex-row justify-between'>
-                        <p className='text-xl'>{query.name} Results</p>
+                    <p className='text-xl'>{query.name} Results</p>
+
+                    <div className='flex flex-row justify-start'>
                         <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
+                        <Button color='primary' radius='md' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
+
                     </div>
                     <ToastContainer />
 
