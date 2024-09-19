@@ -131,7 +131,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
             },
         },
         mantineTableProps: {
-            height: '500px',
+            height: '400px',
             striped: true,
             highlightOnHover: true,
             withColumnBorders: true,
