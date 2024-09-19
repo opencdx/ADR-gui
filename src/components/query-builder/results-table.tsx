@@ -134,6 +134,9 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                         {rows && rows.length > 0 && columns && columns.length > 0 &&
                             <MantineReactTable table={table} />
                         }
+                        {rows && rows.length == 0 &&
+                            <p>No results returned</p>
+                        }
                     </div>
                 </div>
             </div>
