@@ -1,14 +1,13 @@
-import { CSSProperties, FC, useMemo, useState } from 'react'
-import { usePapaParse } from 'react-papaparse';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button, Divider } from 'ui-library';
-import { useQueryStore } from '@/lib/store';
 import { usePostQuery } from '@/hooks/hooks';
+import { useQueryStore } from '@/lib/store';
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { useRouter } from 'next/navigation';
-import { DownloadIcon, ReturnIcon } from '../icons';
+import { CSSProperties, FC, useMemo, useState } from 'react';
+import { usePapaParse } from 'react-papaparse';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button, Divider } from 'ui-library';
+import { DownloadIcon, ReturnIcon } from '../icons';
 
 const tableStyle: CSSProperties = {}
 
@@ -23,7 +22,7 @@ export interface ResultsTableProps {
 export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
 
     const router = useRouter();
-    const [columns, setColumns] = useState<string[]>([]);
+    const [columns, setColumns] = useState<any>([]);
     const [rows, setRows] = useState<any>([]);
     const [isError, setIsError] = useState(false);
 
@@ -55,14 +54,36 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
 
     const setData = useMemo(() => {
         if (queryResults?.data) {
-            readString(queryResults.data.join("\n"), {
+            let sanitizedResult;
+            if (queryResults.data[0].endsWith(',')) {
+                sanitizedResult = queryResults.data[0].slice(0, -1);
+            } else {
+                sanitizedResult = queryResults.data[0];
+            }
+
+            let updateResults = [...queryResults.data];
+            
+            if (queryResults.data[0].endsWith(',')) {
+                queryResults.data.map(row => updateResults.push(row.slice(0, -1)));
+            } 
+            updateResults[0] = sanitizedResult;
+            readString(updateResults.join("\n"), {
                 worker: true,
                 header: true,
                 complete: (results) => {
+                    let updatedRows: any[] = [];
+                    results.data.map((row, index) => updatedRows.push({ id: index, ...row! }));
                     setRows(results.data);
                 },
             });
-            setColumns(queryResults.data[0].split(','));
+            let updatedColumns: { id: string, accessorKey: string; header: string; }[] = [];
+            let columnId = sanitizedResult.split(',');
+            if (queryResults.data[0].endsWith(',')) {
+                queryResults.data[0].slice(0, -1).split(',').map((column, index) => updatedColumns.push({ id: columnId[index], accessorKey: columnId[index], header: column }));
+            } else {
+                queryResults.data[0].split(',').map((column, index) => updatedColumns.push({ id: columnId[index], accessorKey: columnId[index], header: column }));
+            }
+            setColumns(updatedColumns);
         }
 
     }, [queryResults]);
@@ -90,6 +111,15 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         }
     };
 
+    const table = useMantineReactTable({
+        columns: columns,
+        data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+        enableRowSelection: true, //enable some features
+        enableColumnOrdering: true,
+        enableGlobalFilter: false, //turn off a feature
+    });
+
+
     return (
         <>
             <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-screen h-screen'>
@@ -99,17 +129,11 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                     <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
                     <Button color='primary' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
                     <Divider className='my-4' />
-                    {rows &&
-                        <div className='w-[96vw]'>
-                            <DataTable value={rows}
-                                paginator rows={5}>
-                                {columns?.map((column) => (
-                                    <Column field={column} header={column} sortable />
-                                ),
-                                )}
-                            </DataTable>
-                        </div>
-                    }
+                    <div className='w-[96vw]'>
+                        {rows && rows.length > 0 && columns && columns.length > 0 &&
+                            <MantineReactTable table={table} />
+                        }
+                    </div>
                 </div>
             </div>
         </>
