@@ -7,7 +7,7 @@ import { siteConfig } from '@/config/site';
 import clsx from 'clsx';
 
 import { Providers } from './providers';
-// import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/navbar';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { PrimeReactProvider } from 'primereact/api';
@@ -49,19 +49,29 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-         <div className="relative flex flex-col h-screen">
-         <main>
+        <div className="relative flex flex-col h-screen">
+          <main>
 
-        <Providers
-          themeProps={{ attribute: 'class', defaultTheme: 'light', children }}
-        >
-          <PrimeReactProvider>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
-          </PrimeReactProvider>
-        </Providers>
-        </main>
+            <Providers
+              themeProps={{ attribute: 'class', defaultTheme: 'light', children }}
+            >
+              <PrimeReactProvider>
+                <NextIntlClientProvider messages={messages}>
+
+                  <div className="flex h-screen w-screen overflow-hidden bg-neutral-900 transition-all duration-300 ease-in-out">
+                    <div className="flex flex-col flex-1 bg-white">
+                      <Navbar />
+                      <div className="bg-white w-screen h-screen">
+                        <div className="h-[calc(100vh-64px)] overflow-auto flex flex-col flex-grow  bg-[#F4F9FF] dark:bg-[#1a1a1a]">
+                          {children}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </NextIntlClientProvider>
+              </PrimeReactProvider>
+            </Providers>
+          </main>
         </div>
 
       </body>
