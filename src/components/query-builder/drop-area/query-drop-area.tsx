@@ -20,7 +20,7 @@ export interface QueryDropAreaProps {
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop, query, index, groupIndex, depth
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping, addOperationDoubleToGroup } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping, addOperationDoubleToGroup, removeFromQueryGroup } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -34,14 +34,18 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     };
 
     const handleRemove = (index: number) => {
-        removeFromQuery(index);
+        if (depth !== undefined) {
+            removeFromQueryGroup(index, groupIndex as number[], depth as number);
+        } else {
+            removeFromQuery(index);
+        }
     };
 
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setOperationValue(event.target.value);
     };
 
-    const handleFocusDrop = (index: number, item: any, depth: number| undefined, groupIndex: number[] | undefined) => {
+    const handleFocusDrop = (index: number, item: any, depth: number | undefined, groupIndex: number[] | undefined) => {
         if (groupIndex?.length == 0 && typeof depth === 'number') {
             addFocusToQueryGrouping(index, item.focus, depth);
         } else if (groupIndex?.length === 1 && typeof depth === 'number') {

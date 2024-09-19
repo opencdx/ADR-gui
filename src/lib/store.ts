@@ -9,6 +9,8 @@ interface QueryStore {
     updateQueryStore: (query: SavedQuery) => void;
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
     removeFromQuery: (index: number) => void;
+    removeFromQueryGroup: (index: number, groupIndex: number[], depth: number) => void;
+    removeFromQueryGroupSection: (index: number, groupIndex: number[]) => void;
     resetQueryStore: () => void;
 
     addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
@@ -166,6 +168,31 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].group.push({
                         formula: {}
                     });
+                })
+            ),
+        removeFromQueryGroup: (index, groupIndex, depth) =>
+            set(
+                produce((draft) => {
+                    if (groupIndex && groupIndex.length === 0) {
+                        draft.query.query.queries[index].group.splice(depth, 1);
+                    } else {
+                        draft.query.query.queries[index].group[groupIndex[0]].group.splice(depth, 1);
+
+                    }
+                })
+            ),
+        removeFromQueryGroupSection: (index, groupIndex) =>
+            set(
+                produce((draft) => {
+                    if (groupIndex.length === 0) {
+                        draft.query.query.queries.splice(index, 1);
+                    } else {
+                        let target = draft.query.query.queries[index];
+                        for (let i = 0; i < groupIndex.length - 1; i++) {
+                            target = target.group[groupIndex[i]];
+                        }
+                        target.group.splice(groupIndex[groupIndex.length - 1], 1);
+                    }
                 })
             ),
         addJoinOperationToQuery: (operation) =>

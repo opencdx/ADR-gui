@@ -5,13 +5,19 @@ import { JoinOperation } from "@/api/adr";
 export interface JoinOperationBoxProps {
     joinOperation: JoinOperation,
     index: number,
+    groupIndex?: number[],
+    depth?: number
 }
 
-export const JoinOperationBox: FC<JoinOperationBoxProps> = ({ joinOperation, index }) => {
-    const { removeFromQuery } = useQueryStore();
+export const JoinOperationBox: FC<JoinOperationBoxProps> = ({ joinOperation, index, groupIndex, depth }) => {
+    const { removeFromQuery , removeFromQueryGroup} = useQueryStore();
 
     const handleRemove = (index: number) => {
-        removeFromQuery(index);
+        if (depth !== undefined) {
+            removeFromQueryGroup(index, groupIndex as number[], depth as number);
+        } else {
+            removeFromQuery(index);
+        }
     };
 
     return (
