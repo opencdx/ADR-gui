@@ -2,18 +2,12 @@ import { usePostQuery } from '@/hooks/hooks';
 import { useQueryStore } from '@/lib/store';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { useRouter } from 'next/navigation';
-import { CSSProperties, FC, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { usePapaParse } from 'react-papaparse';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Divider } from 'ui-library';
 import { DownloadIcon, ReturnIcon } from '../icons';
-
-const tableStyle: CSSProperties = {}
-
-const windowHeight = window.innerHeight;
-const containerHeight = windowHeight * 0.70; // Adjust percentage as needed
-tableStyle.height = `${containerHeight}px`;
 
 export interface ResultsTableProps {
 
@@ -62,10 +56,10 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
             }
 
             let updateResults = [...queryResults.data];
-            
+
             if (queryResults.data[0].endsWith(',')) {
                 queryResults.data.map(row => updateResults.push(row.slice(0, -1)));
-            } 
+            }
             updateResults[0] = sanitizedResult;
             readString(updateResults.join("\n"), {
                 worker: true,
@@ -111,28 +105,78 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         }
     };
 
+
     const table = useMantineReactTable({
         columns: columns,
         data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
-        enableRowSelection: true, //enable some features
+        enableRowSelection: false, //enable some features
         enableColumnOrdering: true,
-        enableGlobalFilter: false, //turn off a feature
-        initialState: { density: 'xs' },
+        enableGlobalFilter: true, //turn off a feature
+        enablePagination: true,
+        enableColumnActions: true,
+        enableColumnFilters: true,
+        enableSorting: true,
+        enableRowActions: false,
+        enableGrouping: true,
+        enableStickyHeader: true,
+        enableStickyFooter: true,
+        enableRowVirtualization: true,
+        enableColumnResizing: true,
+        layoutMode: "grid",
+        mantineTableHeadCellProps: {
+            sx: {
+                fontWeight: 'bold',
+                textAlign: 'center',
+            },
+        },
+        mantineTableProps: {
+            height: '500px',
+            striped: true,
+            highlightOnHover: true,
+            withColumnBorders: true,
+
+            sx: {
+                '& tr:nth-of-type(odd)': {
+                    backgroundColor: '#F7FAFE !important',
+                },
+                '& tr:nth-of-type(even)': {
+                    backgroundColor: '#FFFFFF !important',
+                },
+                '& thead tr:nth-of-type(1)': {
+                    backgroundColor: '#E5F0FF !important',
+                },
+            },
+            withBorder: true,
+
+        },
+        initialState: {
+            density: 'xs',
+        },
+        renderTopToolbarCustomActions: ({ table }) => (
+            <div>
+                <Button color='primary' radius='full' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
+            </div>
+        )
+
     });
 
 
     return (
         <>
-            <div className='flex py-4 bg-blue-100 p-4 flex flex-row overflow-hidden w-screen h-screen'>
-                <div className='rounded-md bg-white p-4'>
-                    <p className='text-xl'>{query.name} Results</p>
+            <div className='flex py-4 bg-blue-100 p-4 flex flex-row  w-screen h-screen overflow-hidden'>
+                <div className='rounded-md bg-white p-4 h-full  w-full flex-grow '>
+                    <div className='flex flex-row justify-between'>
+                        <p className='text-xl'>{query.name} Results</p>
+                        <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
+                    </div>
                     <ToastContainer />
-                    <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
-                    <Button color='primary' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
+
                     <Divider className='my-4' />
-                    <div className='w-[96vw]'>
+                    <div className='w-full h-full  flex-grow'>
                         {rows && rows.length > 0 && columns && columns.length > 0 &&
-                            <MantineReactTable table={table} />
+                            <MantineReactTable
+
+                                table={table} />
                         }
                         {rows && rows.length == 0 &&
                             <p>No results returned</p>
