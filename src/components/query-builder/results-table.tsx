@@ -117,6 +117,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         enableRowSelection: true, //enable some features
         enableColumnOrdering: true,
         enableGlobalFilter: false, //turn off a feature
+        initialState: { density: 'xs' },
     });
 
 
