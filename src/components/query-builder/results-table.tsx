@@ -58,6 +58,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
             let updateResults = [...queryResults.data];
 
             if (queryResults.data[0].endsWith(',')) {
+                updateResults = [];
                 queryResults.data.map(row => updateResults.push(row.slice(0, -1)));
             }
             updateResults[0] = sanitizedResult;
