@@ -17,37 +17,6 @@ export interface UnitsDropAreaProps {
 export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
     onDrop, formula, index, operandLocation, parents
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery } = useQueryStore();
-    const [operationValue, setOperationValue] = useState('');
-    const [hovered, setHovered] = useState(false);
-    const [operationValuewidth, setOperationValuewidth] = useState('3ch');
-
-    const handleHoverEnter = () => {
-        setHovered(true);
-    };
-
-    const handleHoverLeave = () => {
-        setHovered(false);
-    };
-
-    const handleRemove = (index: number) => {
-        removeFromQuery(index);
-    };
-
-    const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setOperationValue(event.target.value);
-    };
-
-    const valueUpdated = useMemo(() => {
-        if (operationValue.length) {
-            setOperationValuewidth((operationValue.length + 1) + 'ch');
-            if (operationValue && !isNaN(Number(operationValue))) {
-                addOperationDoubleToQuery(index, Number(operationValue));
-            } else if (operationValue) {
-                addOperationStringToQuery(index, operationValue);
-            }
-        }
-    }, [operationValue]);
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
@@ -83,14 +52,14 @@ export const UnitsDropArea: FC<UnitsDropAreaProps> = memo(function QueryBox({
             }
             {!formula?.leftOperandUnit && operandLocation == 'left' &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+                style={{ border: '1px dashed gray', backgroundColor, color, opacity }}>units</div>
             }
             {formula && formula.rightOperandUnit && operandLocation == 'right' &&
                 <div className='p-0.5'>({formula.rightOperandUnit.conceptName})</div>
             }
             {!formula?.rightOperandUnit && operandLocation == 'right' &&
                 <div className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                style={{ border: hovered ? '1px solid #006FEE' : '1px dashed gray', backgroundColor, color, opacity }}>units</div>
+                style={{ border: '1px dashed gray', backgroundColor, color, opacity }}>units</div>
             }
         </div>
     )

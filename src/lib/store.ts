@@ -20,12 +20,21 @@ interface QueryStore {
 
     addFormulaToQuery: () => void;
     addGroupToQuery: () => void;
+    addGroupToQueryGroup: (index: number) => void;
+    addSubGroupToQueryGroup: (index: number, group: number) => void;
 
-    addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel, field: string) => void;
+    addCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel) => void;
+    addGroupCriteraToQueryGroup: (index: number, criteria: TinkarConceptModel, groupIndex1: number, depth: number) => void;
+    addGroupJoinOperationToQueryGroup: (index: number, operation: JoinOperation, groupIndex1: number, depth: number) => void;
+    addOperationDoubleToGroup: (index: number, value: number, groupIndex: number) => void;
+    addOperationStringToGroup: (index: number, value: string, groupIndex: number) => void;
+    addGroupOperationDoubleToQuery: (index: number, value: number, groupIndex1: number, depth: number) => void;
+    addGroupOperationStringToQuery: (index: number, value: string, groupIndex1: number, depth: number) => void;
+    addGroupFormulaToQueryGroup: (index: number, groupIndex1: number) => void;
     addJoinOperationToQueryGroup: (index: number, operation: JoinOperation) => void;
     addFormulaToQueryGroup: (index: number, formula: Query) => void;
     addOperationToQueryGroup: (index: number, group: Query, depth: number) => void;
-
+    addGroupOperationToQueryGroup: (index: number, operation: QueryOperation, groupIndex1: number, depth: number) => void;
     addOperandCriteria: (index: number, criteria: TinkarConceptModel, field: string) => void;
 
     addOperandToFormula: (index: number, field: string) => void;
@@ -36,14 +45,19 @@ interface QueryStore {
 
     addNameToFormula: (index: number, name: string) => void;
     addNameToGroupingFormula: (index: number, groupIndex: number, name: string) => void;
+    addNameToSubGroupFormula: (index: number, groupIndex: number, subGroupIndex: number, name: string) => void;
     addFormulaToFormula: (index: number, parent: string, child: string) => void;
     addValueToFormulaThirdDepth: (index: number, value: number, parent: string, child: string, child2: string) => void;
 
     addToQueryFormula: (index: number, value: any) => void;
     addToQueryFormulaInGrouping: (index: number, value: any, groupIndex: number) => void;
+    addToQueryFormulaInSubGrouping: (index: number, value: any, groupIndex: number, subGroupIndex: number) => void;
 
     addFocusToQuery: (index: number, focus: Focus) => void;
     addFocusToQueryGrouping: (index: number, focus: Focus, groupIndex: number) => void;
+    addFocusToQuerySubGrouping: (index: number, focus: Focus, groupIndex: number, subGroupIndex: number) => void;
+
+    updateQueryName: (name: string) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -70,11 +84,65 @@ export const useQueryStore = create<QueryStore>()(
                     });
                 })
             ),
-        addCriteraToQueryGroup: (index, criteria, field) =>
+        addCriteraToQueryGroup: (index, criteria) =>
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group.push({
                         concept: criteria
+                    });
+                })
+            ),
+        addGroupCriteraToQueryGroup: (index, criteria, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group.push({
+                        concept: criteria
+                    });
+                })
+            ),
+        addGroupOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group[depth].operation = operation;
+                })
+            ),
+        addOperationDoubleToGroup: (index, value, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].operationDouble = value;
+                })
+            ),
+        addOperationStringToGroup: (index, value, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].operationString = value;
+                })
+            ),
+        addGroupOperationDoubleToQuery: (index, value, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group[depth].operationDouble = value;
+                })
+            ),
+        addGroupOperationStringToQuery: (index, value, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group[depth].operationString = value;
+                })
+            ),
+        addGroupJoinOperationToQueryGroup: (index, operation, groupIndex1, depth) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group.push({
+                        joinOperation: operation
+                    });
+                })
+            ),
+        addGroupFormulaToQueryGroup: (index, groupIndex1) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex1].group.push({
+                        formula: {}
                     });
                 })
             ),
@@ -142,6 +210,18 @@ export const useQueryStore = create<QueryStore>()(
                     })
                 })
             ),
+        addGroupToQueryGroup: (index) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group.push({ group: [] });
+                })
+            ),
+        addSubGroupToQueryGroup: (index, groupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].push({ group: [] });
+                })
+            ),
         addOperandCriteria: (index, criteria, field) =>
             set(
                 produce((draft) => {
@@ -190,6 +270,12 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].group[groupIndex].formula.name = name;
                 })
             ),
+        addNameToSubGroupFormula: (index, groupIndex, subGroupIndex, name) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].formula.name = name;
+                })
+            ),
         addFormulaToFormula: (index, parent, child) =>
             set(
                 produce((draft) => {
@@ -214,6 +300,12 @@ export const useQueryStore = create<QueryStore>()(
                     draft.query.query.queries[index].group[groupIndex].formula = value;
                 })
             ),
+        addToQueryFormulaInSubGrouping: (index, value, groupIndex, subGroupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].formula = value;
+                })
+            ),
         addFocusToQuery: (index, focus) =>
             set(
                 produce((draft) => {
@@ -224,6 +316,18 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.query.queries[index].group[groupIndex].concept.focus = focus;
+                })
+            ),
+        addFocusToQuerySubGrouping: (index, focus, groupIndex, subGroupIndex) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].concept.focus = focus;
+                })
+            ),
+        updateQueryName: (name) =>
+            set(
+                produce((draft) => {
+                    draft.query.name = name;
                 })
             ),
     })

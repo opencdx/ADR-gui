@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { User } from "@nextui-org/react";
+import { User } from "ui-library";
 import { useLocale } from 'next-intl';
 import {useTransition} from 'react';
 
@@ -21,11 +21,9 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Image,
-} from '@nextui-org/react';
+} from 'ui-library';
 
 import { ChevronDown, ChevronUp, LogOut } from 'lucide-react';
-import {Locale} from '@/config';
-import {setUserLocale} from '@/services/locale';
 export const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -52,14 +50,7 @@ export const Navbar = () => {
     spanish: 'Es',
   };
   const [isPending, startTransition] = useTransition();
-  function handleLocaleChange(key: string) {
-    // If the locale is the same as the current locale, return.
-    if (key === locale) return;
-    const locales = key as Locale;
-    startTransition(() => {
-      setUserLocale(locales);
-    });
-  }
+  
   const handleClick = () => {
     setIsOpen(!isOpen);
   };
@@ -67,15 +58,8 @@ export const Navbar = () => {
   const selectedOptionValue = Array.from(selectedOption)[0];
 
   return (
-    <NextUINavbar maxWidth="full" position="sticky">
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-        <NavbarBrand as="li" className="gap-3 max-w-fit">
-            ADR
-        </NavbarBrand>
-      </NavbarContent>
-
+    <NextUINavbar maxWidth="full" className=" rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full" position="sticky">
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
         <NavbarItem className="hidden md:flex">
@@ -85,6 +69,7 @@ export const Navbar = () => {
                   variant="light"
                   onClick={handleClick}
                   disableAnimation
+                  className="w-full p-0"
                   endContent={
                     isOpen ? (
                       <ChevronUp />
@@ -104,16 +89,10 @@ export const Navbar = () => {
               selectionMode="single"
                 onAction={(key) => {
                   if (key === 'logout') {
-                    window.location.href = "/";
+                    router.push('/');
                   } else if (key === 'settings') {
-                  } else if (key === 'locale') {
-                    localeOptions.map((language) => {
-                      if (language.key !== locale) {
-                        handleLocaleChange(language.key)
-
-                      }
-                    }
-                    )
+                  } else if (key === 'change_password') {
+                    router.push('/password-change');
                   }
                 }
               }
@@ -122,10 +101,8 @@ export const Navbar = () => {
                   key="locale"
                   tabIndex={0}
                   startContent={<Image
-                    alt="nextui logo"
-                    height={20}
+                    alt="locale logo"
                     src="/language.png"
-                    width={20}
                   />}
                 >
                   {
@@ -140,23 +117,31 @@ export const Navbar = () => {
                   key="settings"
                   tabIndex={0}
                   startContent={<Image
-                    alt="nextui logo"
-                    height={20}
+                    alt="settings logo"
                     src="/settings.png"
-                    width={20}
                   />
+                  
                   }
                 >
                   Settings
                 </DropdownItem>
                 <DropdownItem
+                  key="change_password"
+                  tabIndex={0}
+                  startContent={<Image
+                    alt="change logo"
+                    src="/language.png"
+                  />
+                  }
+                >
+                  Change Password
+                </DropdownItem>
+                <DropdownItem
                   key="logout"
                   tabIndex={0}
                   startContent={<Image
-                    alt="nextui logo"
-                    height={20}
+                    alt="logout logo"
                     src="/logout.png"
-                    width={20}
                   />}
                 >
                   Logout
@@ -168,3 +153,4 @@ export const Navbar = () => {
     </NextUINavbar>
   );
 };
+
