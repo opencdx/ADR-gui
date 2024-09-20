@@ -111,7 +111,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.OPERATOR],
+            accept: [DroppableTypes.ARITHMETIC_OPERATOR, DroppableTypes.RELATIONAL_OPERATOR],
             drop(_item: DragItem, monitor) {
                 const didDrop = monitor.didDrop();
                 if (didDrop) {

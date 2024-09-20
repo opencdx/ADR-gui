@@ -34,7 +34,7 @@ export const OperationDropArea: FC<OperationDropAreaProps> = memo(function Query
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.OPERATOR],
+            accept: [DroppableTypes.ARITHMETIC_OPERATOR],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItem());
                 return undefined;
