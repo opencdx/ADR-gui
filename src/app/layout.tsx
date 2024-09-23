@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import '@/styles/globalicons.css';
 
 import { Metadata, Viewport } from 'next';
 
@@ -40,12 +41,9 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html suppressHydrationWarning lang={locale}>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-      </head>
       <body
         className={clsx(
-          ' min-h-screen bg-background font-sans antialiased',
+          'min-h-screen bg-background font-sans antialiased',
           fontSans.variable,
         )}
       >
