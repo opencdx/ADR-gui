@@ -143,7 +143,7 @@ export default function QueryBuilder() {
                     </Tab>
                   </Tabs>
                 </div>
-                <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-1/3'>
+                <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-[250px]'>
 
                   {queries?.data &&
                     <QueryLibrary />
