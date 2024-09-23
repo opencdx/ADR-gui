@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import '@/styles/globalicons.css';
 
 import { Metadata, Viewport } from 'next';
 
@@ -7,7 +8,7 @@ import { siteConfig } from '@/config/site';
 import clsx from 'clsx';
 
 import { Providers } from './providers';
-// import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/navbar';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { PrimeReactProvider } from 'primereact/api';
@@ -40,28 +41,35 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html suppressHydrationWarning lang={locale}>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-      </head>
       <body
         className={clsx(
-          ' min-h-screen bg-background font-sans antialiased',
+          'min-h-screen bg-background font-sans antialiased',
           fontSans.variable,
         )}
       >
-         <div className="relative flex flex-col h-screen">
-         <main>
+        <div className="relative flex flex-col h-screen">
+          <main>
 
-        <Providers
-          themeProps={{ attribute: 'class', defaultTheme: 'light', children }}
-        >
-          <PrimeReactProvider>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
-          </PrimeReactProvider>
-        </Providers>
-        </main>
+            <Providers
+              themeProps={{ attribute: 'class', defaultTheme: 'light', children }}
+            >
+              <PrimeReactProvider>
+                <NextIntlClientProvider messages={messages}>
+
+                  <div className="flex h-screen w-screen overflow-hidden bg-neutral-900 transition-all duration-300 ease-in-out">
+                    <div className="flex flex-col flex-1 bg-white">
+                      <Navbar />
+                      <div className="bg-white w-screen h-screen">
+                        <div className="h-[calc(100vh-64px)] overflow-auto flex flex-col flex-grow  bg-[#F4F9FF] dark:bg-[#1a1a1a]">
+                          {children}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </NextIntlClientProvider>
+              </PrimeReactProvider>
+            </Providers>
+          </main>
         </div>
 
       </body>

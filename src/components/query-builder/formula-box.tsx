@@ -1,4 +1,4 @@
-import { FC, memo, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { FC, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 
 import { Formula, Query } from "@/api/adr";
 import { useQueryStore } from "@/lib/store";
@@ -15,18 +15,50 @@ export interface FormulaBoxProps {
     query: Query,
     index: number,
     parents: string[],
-    groupIndex?: number[]
+    groupIndex?: number[],
+    depth?: number
 }
 
 export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
-    onDrop, formula, query, index, parents, groupIndex
+    onDrop, formula, query, index, parents, groupIndex, depth
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula, addNameToSubGroupFormula, addGroupOperationDoubleToQuery, addOperationDoubleToGroup, addOperationStringToGroup, addGroupOperationStringToQuery } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addNameToFormula, addNameToGroupingFormula, addNameToSubGroupFormula, addGroupOperationDoubleToQuery, addOperationDoubleToGroup, addOperationStringToGroup, addGroupOperationStringToQuery, removeFromQueryGroup } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
     const formulaRef = useRef<HTMLDivElement>(null);
     const [formulaText, setFormulaText] = useState('');
+
+    const useMutationObserver = (
+        ref: RefObject<HTMLDivElement>,
+        callback: MutationCallback,
+        options = {
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributes: true,
+        }
+    ) => {
+        useEffect(() => {
+            if (ref.current) {
+                const observer = new MutationObserver(callback);
+                observer.observe(ref.current, options);
+                return () => observer.disconnect();
+            }
+        }, [ref])
+    };
+    const updateFormulaName = () => {
+        if (formulaRef.current?.textContent) {
+            if (!groupIndex || groupIndex.length == 0) {
+                addNameToFormula(index, formulaRef.current?.textContent);
+            } else if (groupIndex?.length === 1) {
+                addNameToGroupingFormula(index, groupIndex[0], formulaRef.current?.textContent);
+            } else if (groupIndex?.length === 2) {
+                addNameToSubGroupFormula(index, groupIndex[0], groupIndex[1], formulaRef.current?.textContent);
+            }
+        }
+    };
+    useMutationObserver(formulaRef, updateFormulaName);
 
     const handleHoverEnter = () => {
         setHovered(true);
@@ -37,7 +69,11 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
     };
 
     const handleRemove = (index: number) => {
-        removeFromQuery(index);
+        if (depth !== undefined) {
+            removeFromQueryGroup(index, groupIndex as number[], depth as number);
+        } else {
+            removeFromQuery(index);
+        }
     };
 
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
@@ -65,46 +101,24 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
         }
     }, [operationValue]);
 
-    const setFormulaName = useEffect(() => {
-        const observer = new MutationObserver((mutations) => {
-            if (formulaRef.current?.textContent) {
-                if (!groupIndex || groupIndex.length == 0) {
-                    addNameToFormula(index, formulaRef.current?.textContent);
-                } else if (groupIndex?.length === 1) {
-                    addNameToGroupingFormula(index, groupIndex[0], formulaRef.current?.textContent);
-                } else if (groupIndex?.length === 2) {
-                    addNameToSubGroupFormula(index, groupIndex[0], groupIndex[1], formulaRef.current?.textContent);
-                }
-            }
-        });
-
-        if (formulaRef.current) {
-            observer.observe(formulaRef.current, { childList: true, subtree: true });
-        }
-
-        return () => {
-            if (observer) {
-                observer.disconnect();
-            }
-        };
-    }, [formulaRef, formulaText]);
-
     const setValue = useMemo(() => {
         if (query.operationDouble) {
             setOperationValue(String(query.operationDouble));
         } else if (query.operationText) {
             setOperationValue(query.operationText);
         }
-
-        setFormulaName;
     }, []);
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
             accept: [DroppableTypes.OPERATOR],
             drop(_item: DragItem, monitor) {
+                const didDrop = monitor.didDrop();
+                if (didDrop) {
+                    return;
+                }
                 onDrop(monitor.getItem());
-                return undefined;
+                return;
             },
             collect: (monitor: DropTargetMonitor) => ({
                 isOver: monitor.isOver(),
@@ -138,19 +152,19 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                         index={index}
                         parents={parents}
                         groupIndex={groupIndex} />
-                    {query?.operation  &&
-                        <p className='ml-3'>
-                            <OperationRender operation={query.operation} />
-                        </p>
-                    }
-                    {query?.operation &&
-                        <>
-                            <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                                style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
-                            <p className='hidden'>{operationValue}</p>
-                        </>
-                    }
                 </div>
+                {query?.operation &&
+                    <p className='ml-3'>
+                        <OperationRender operation={query.operation} />
+                    </p>
+                }
+                {query?.operation &&
+                    <>
+                        <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
+                            style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                        <p className='hidden'>{operationValue}</p>
+                    </>
+                }
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
         </div>
