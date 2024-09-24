@@ -9,4 +9,5 @@ export const OperandTypes = {
     LEFT_OPERAND_VALUE: 'leftOperandValue',
     RIGHT_OPERAND_VALUE: 'rightOperandValue',
     OPERATION: 'operation',
+    FOCUS: 'focus',
 }
