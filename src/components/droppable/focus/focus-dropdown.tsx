@@ -1,12 +1,10 @@
 import { useState, type CSSProperties } from 'react';
-import { useDrag } from 'react-dnd';
 
 import { Focus } from '@/api/adr';
 import { useQueryStore } from "@/lib/store";
 import { Button, Dropdown, DropdownItem, DropdownSection, DropdownTrigger } from 'ui-library';
 import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
 import { DownArrow, UpArrow } from '../../icons';
-import { DroppableTypes } from '../droppable-types';
 import { FocusBox } from './focus-droppable';
 
 const hoverStyle: CSSProperties = {

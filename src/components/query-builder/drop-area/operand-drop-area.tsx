@@ -239,7 +239,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             {!formula?.leftOperand && operandLocation == 'left' && !formula?.leftOperandFormula &&
                 <>
                     <input ref={drop} value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                        style={{ width: operationValuewidth, border, backgroundColor, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                        style={{ width: operationValuewidth, border, backgroundColor, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
                     <p className='hidden'>{operandValue}</p>
                 </>
             }
@@ -267,7 +267,7 @@ export const OperandDropArea: FC<OperandDropAreaProps> = memo(function QueryBox(
             {!formula?.rightOperand && operandLocation == 'right' && !formula.rightOperandFormula &&
                 <>
                     <input ref={drop} value={operandValue} onChange={handleChange} className='h-[30px] border-dashed text-[#001124] text-center p-px'
-                        style={{ width: operationValuewidth, border, backgroundColor, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                        style={{ width: operationValuewidth, border, backgroundColor, opacity }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
                     <p className='hidden'>{operandValue}</p>
                 </>
             }

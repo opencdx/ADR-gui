@@ -161,7 +161,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                 {query?.operation &&
                     <>
                         <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                            style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                            style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
                         <p className='hidden'>{operationValue}</p>
                     </>
                 }

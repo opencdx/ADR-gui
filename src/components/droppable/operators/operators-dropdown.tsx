@@ -1,8 +1,6 @@
-import { useState, type CSSProperties, type FC } from 'react'
-import { useDrag } from 'react-dnd'
+import { useState, type CSSProperties } from 'react'
 
 import { useQueryStore } from "@/lib/store";
-import { DroppableTypes } from '../droppable-types';
 import { Button, Dropdown, DropdownItem, DropdownSection, DropdownTrigger } from 'ui-library';
 import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
 import { OperationQueryBox } from './operation-query-droppable';

@@ -9,8 +9,8 @@ import { useRouter } from 'next/navigation';
 
 
 import { Link } from '@nextui-org/link';
-import { Card, CardBody, CardFooter, CardHeader, Divider, Image } from '@nextui-org/react';
-import { toast, ToastContainer } from 'react-toastify';
+import { Card, CardBody, CardFooter, CardHeader, Image } from '@nextui-org/react';
+import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 

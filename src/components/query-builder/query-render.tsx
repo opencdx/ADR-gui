@@ -2,7 +2,7 @@ import { useQueryStore } from '@/lib/store';
 import { AddQueryDropArea } from './drop-area/add-query-drop-area';
 import { QueryDropArea } from './drop-area/query-drop-area';
 import { JoinOperationBox } from './join-operation-box';
-import { JoinOperation, Operation } from '@/api/adr/model/query';
+import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';
 import { Button } from 'ui-library';

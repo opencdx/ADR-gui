@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties, type FC } from 'react'
+import { useMemo, type FC } from 'react'
 import { CriteriaDroppable } from '../droppable/criteria-droppable'
 import { TinkarConceptModel } from '@/api/adr';
 import { UnitsDroppable } from '../droppable/units-droppable';

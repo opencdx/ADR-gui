@@ -8,7 +8,6 @@ import { useLocale } from 'next-intl';
 import {useTransition} from 'react';
 
 import {
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   Navbar as NextUINavbar,
@@ -23,7 +22,7 @@ import {
   Image,
 } from 'ui-library';
 
-import { ChevronDown, ChevronUp, LogOut } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 export const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();

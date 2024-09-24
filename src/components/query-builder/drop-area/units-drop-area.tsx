@@ -1,9 +1,8 @@
-import { FC, memo, SetStateAction, useMemo, useState } from "react";
+import { FC, memo } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd'
 
 import { DroppableTypes } from '../../droppable/droppable-types'
 import type { DragItem } from '../interfaces'
-import { useQueryStore } from "@/lib/store";
 import { Formula } from "@/api/adr";
 
 export interface UnitsDropAreaProps {

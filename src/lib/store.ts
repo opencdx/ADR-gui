@@ -60,6 +60,10 @@ interface QueryStore {
     addFocusToQuerySubGrouping: (index: number, focus: Focus, groupIndex: number, subGroupIndex: number) => void;
 
     updateQueryName: (name: string) => void;
+
+    updateCriteriaByIndex: (index: number, criteria: TinkarConceptModel) => void;
+    updateCriteriaByGrouping: (index: number, groupIndex: number, criteria: TinkarConceptModel) => void;
+    updateCriteriaBySubGrouping: (index: number, groupIndex: number, subGroupIndex: number, criteria: TinkarConceptModel) => void;
 }
 
 export const useQueryStore = create<QueryStore>()(
@@ -355,6 +359,24 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query.name = name;
+                })
+            ),
+        updateCriteriaByIndex: (index, criteria) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].concept = criteria;
+                })
+            ),
+        updateCriteriaByGrouping: (index, groupIndex, criteria) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].concept = criteria;
+                })
+            ),
+        updateCriteriaBySubGrouping: (index, groupIndex, subGroupIndex, criteria) =>
+            set(
+                produce((draft) => {
+                    draft.query.query.queries[index].group[groupIndex].group[subGroupIndex].concept = criteria;
                 })
             ),
     })
