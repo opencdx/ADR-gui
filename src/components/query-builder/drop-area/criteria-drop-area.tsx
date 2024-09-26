@@ -9,7 +9,7 @@ import _ from "lodash";
 import { Link, Tooltip } from "ui-library";
 import { DroppableTypes } from '../../droppable/droppable-types';
 import { OperandTypes } from "../operand-types";
-import { createNestedObject } from "@/lib/utils";
+import { createNestedObject, mergeWithEmptyObj, successToast } from "@/lib/utils";
 
 export interface CriteriaDropAreaProps {
     onDrop: (item: any) => void
@@ -67,44 +67,42 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
                 updateCriteriaByIndex(index, {});
             }
         } else if (formula && parents && typeof index === 'number') {
-            const parentFormula = getParentFormula();
+            const parentFormula = _.cloneDeep(getParentFormula());
             switch (operandLocation) {
                 case 'left':
                     if (!groupIndex || groupIndex.length == 0) {
-                        var test = createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], {});
-                        var test2 = _.assignIn({},
-                            parentFormula,
-                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], {}));
-                        addToQueryFormula(index, _.assignIn({},
+                        addToQueryFormula(index, mergeWithEmptyObj(
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], {})));
                     } else if (groupIndex?.length == 1) {
-                        addToQueryFormulaInGrouping(index, _.assignIn({},
+                        addToQueryFormulaInGrouping(index, mergeWithEmptyObj(
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], {})), groupIndex[0]);
                     } else if (groupIndex?.length == 2) {
-                        addToQueryFormulaInSubGrouping(index, _.assignIn({},
+                        addToQueryFormulaInSubGrouping(index, mergeWithEmptyObj(
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND], {})), groupIndex[0], groupIndex[1]);
                     }
                     break;
                 case 'right':
                     if (!groupIndex || groupIndex.length == 0) {
-                        addToQueryFormula(index, _.assignIn({},
+                        addToQueryFormula(index, mergeWithEmptyObj(
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND], {})));
                     } else if (groupIndex?.length == 1) {
-                        addToQueryFormulaInGrouping(index, _.assignIn({},
+                        addToQueryFormulaInGrouping(index, mergeWithEmptyObj(
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND], {})), groupIndex[0]);
                     } else if (groupIndex?.length == 2) {
-                        addToQueryFormulaInSubGrouping(index, _.assignIn({},
+                        addToQueryFormulaInSubGrouping(index, mergeWithEmptyObj(
                             parentFormula,
                             createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND], {})), groupIndex[0], groupIndex[1]);
                     }
                     break;
             }
         }
+
+        successToast("Criteria Deleted");
     }
 
     const opacity = isOver ? 0.7 : 1;
@@ -131,15 +129,15 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
         >
             <div ref={drop} className='text-[#001124] hover:text-[#006FEE]'>
                 {query && query.concept && (
-                    <div><FocusRender focus={query.concept.focus} /> [{query.concept.conceptName && (<>{query.concept.conceptName}</>)} {!query.concept.conceptName && <>Drag criteria here </>}] </div>
+                    <div><FocusRender focus={query.concept.focus} /> {query.concept.conceptName && (<>[{query.concept.conceptName}]</>)} {!query.concept.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>} </div>
                 )}
                 {formula && (
                     <>
                         {formula.leftOperand && operandLocation == 'left' && (
-                            <div><FocusRender focus={formula.leftOperand.focus} /> [{formula.leftOperand.conceptName} {!formula.leftOperand.conceptName && <>Drag criteria here </>}] </div>
+                            <div><FocusRender focus={formula.leftOperand.focus} /> {formula.leftOperand.conceptName && (<>[{formula.leftOperand.conceptName}]</>)} {!formula.leftOperand.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>} </div>
                         )}
                         {formula.rightOperand && operandLocation == 'right' && (
-                            <div><FocusRender focus={formula.rightOperand.focus} /> [{formula.rightOperand.conceptName} {!formula.rightOperand.conceptName && <>Drag criteria here </>}] </div>
+                            <div><FocusRender focus={formula.rightOperand.focus} /> {formula.rightOperand.conceptName && (<>[{formula.rightOperand.conceptName}]</>)} {!formula.rightOperand.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>} </div>
                         )}
                     </>
                 )}

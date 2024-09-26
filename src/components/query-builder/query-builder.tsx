@@ -7,6 +7,7 @@ import { JoinOperation, SavedQuery } from '@/api/adr';
 import { useGetQueryableData, useGetUnits, useListQueries, useSaveQuery, useUpdateQuery } from '@/hooks/hooks';
 import { QUERY_KEYS } from '@/hooks/query-keys';
 import { useQueryStore } from '@/lib/store';
+import { errorToast, successToast } from '@/lib/utils';
 import { Tab, Tabs } from '@nextui-org/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -15,8 +16,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { allExpanded, defaultStyles, JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from 'ui-library';
 import FocusDropdown from '../droppable/focus/focus-dropdown';
 import { FormulaDroppable } from '../droppable/formula-droppable';
@@ -64,20 +63,14 @@ export default function QueryBuilder() {
 
     saveQuery(newQuery, {
       onSuccess: (response) => {
-        toast.success("Query saved", {
-          position: 'top-right',
-          autoClose: 2000,
-        });
+        successToast("Query saved");
 
         updateQueryStore(response.data);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LIST_QUERIES });
         setIsLoading(false);
       },
       onError: (error) => {
-        toast.error(error?.message, {
-          position: 'top-right',
-          autoClose: 2000,
-        });
+        errorToast(error?.message);
         setIsLoading(false);
       }
     });
@@ -90,20 +83,14 @@ export default function QueryBuilder() {
 
     updateQuery(updatedQuery, {
       onSuccess: (response) => {
-        toast.success("Query saved", {
-          position: 'top-right',
-          autoClose: 2000,
-        });
+        successToast("Query saved");
 
         updateQueryStore(response.data);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LIST_QUERIES });
         setIsLoading(false);
       },
       onError: (error) => {
-        toast.error(error?.message, {
-          position: 'top-right',
-          autoClose: 2000,
-        });
+        errorToast(error?.message);
         setIsLoading(false);
       }
     });
@@ -188,13 +175,12 @@ export default function QueryBuilder() {
                     {query?.id &&
                       <Button className='m-2' endContent={<SaveIcon />} onClick={runUpdateQuery}>Update Query</Button>
                     }
-                    <Button className='m-2' endContent={<ArrowForwardIcon />} onPress={() => router.push('/results')} isDisabled={isDisabled()}>Continue</Button>
+                    <Button className='m-2' color='primary' endContent={<ArrowForwardIcon />} onPress={() => router.push('/results')} isDisabled={isDisabled()}>Run Query</Button>
                   </div>
                 </div>
               </div>
 
             </DndProvider>
-            <ToastContainer />
           </div>
         )
       }

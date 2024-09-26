@@ -2,20 +2,15 @@
 
 import React, { useState } from 'react';
 
-
-
 import { useRouter } from 'next/navigation';
-
-
 
 import { Link } from '@nextui-org/link';
 import { Card, CardBody, CardFooter, CardHeader, Image } from '@nextui-org/react';
-import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 
+import { useTranslations } from 'next-intl';
 import { Button, Input } from 'ui-library';
-import {useTranslations} from 'next-intl';
 
 
 export default function Login() {
@@ -148,7 +143,6 @@ export default function Login() {
           </CardFooter>
         </Card>
       </form>
-      <ToastContainer />
     </div>
   );
 }
