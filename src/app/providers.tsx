@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import '@/styles/globals.css';
+import 'ui-library/styles/globals.css'
 import { NextUIProvider } from '@nextui-org/system';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';

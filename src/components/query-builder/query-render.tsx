@@ -91,7 +91,7 @@ export default function QueryRender() {
         {query?.query?.queries && query?.query?.queries.length > 0 && (
             <div className='float-right'>
                 <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={clearAll}>Clear All</Button>
-                <Button className='m-1 bg-[#E6F1FE] text-[#006FEE]' onClick={updateNewQuery}>New Query Field</Button>
+                <Button className='ml-1 bg-[#E6F1FE] text-[#006FEE]' onClick={updateNewQuery}>New Query Field</Button>
             </div>
         )}
         </>

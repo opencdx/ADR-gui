@@ -51,7 +51,7 @@ export default function QueryLibrary() {
 
   return (
     <>
-      <h1>Query Library</h1>
+      <h1 className='font-medium'>Query Library</h1>
       {queryList?.map((query, index) => {
         return (
           <div className='mt-auto w-full justify-between flex' key={index}>
