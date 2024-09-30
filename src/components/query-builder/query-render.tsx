@@ -11,7 +11,7 @@ import { GroupBox } from './group-box';
 
 export default function QueryRender() {
 
-    const [newQueryField, setNewQueryField] = useState(true);
+    const [newQueryField, setNewQueryField] = useState(false);
 
     const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery, resetQueryStore, addGroupToQuery, addJoinOperationToQuery } = useQueryStore();
 
