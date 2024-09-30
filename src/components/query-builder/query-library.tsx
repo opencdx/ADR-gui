@@ -1,9 +1,9 @@
 import { useDeleteQuery, useListQueries } from '@/hooks/hooks';
-import { DeleteIcon, EditIcon } from '../icons';
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from 'ui-library';
 import { useQueryStore } from '@/lib/store';
+import { errorToast, successToast } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from 'ui-library';
+import { DeleteIcon, EditIcon } from '../icons';
 
 export default function QueryLibrary() {
 
@@ -28,10 +28,7 @@ export default function QueryLibrary() {
   const runDeleteQuery = async () => {
     deleteQuery(queryId!, {
       onSuccess: () => {
-        toast.success("Query " + queryName + " Successfully Deleted!", {
-          position: 'top-right',
-          autoClose: 2000,
-        });
+        successToast("Query " + queryName + " Successfully Deleted!")
 
         const updatedQueries = { ...queries };
         updatedQueries.data?.splice(updatedQueries.data?.map(function (query) { return query.id }).indexOf(queryId!), 1);
@@ -42,10 +39,7 @@ export default function QueryLibrary() {
         onClose();
       },
       onError: (error) => {
-        toast.error(error?.message, {
-          position: 'top-right',
-          autoClose: 2000,
-        });
+        errorToast(error?.message);
       }
     });
   };
@@ -57,7 +51,7 @@ export default function QueryLibrary() {
 
   return (
     <>
-      <h1>Query Library</h1>
+      <h1 className='font-medium'>Query Library</h1>
       {queryList?.map((query, index) => {
         return (
           <div className='mt-auto w-full justify-between flex' key={index}>

@@ -74,9 +74,9 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
                             groupIndex === group.length - 1 ? 'h-[50px] mb-12' :
                                 'h-[65px]'
-                            }`}></div>
+                            }`} />
 
-                        <div className="w-4 h-[2px] bg-blue-200 "></div>
+                        <div className="w-4 h-[2px] bg-blue-200 " />
                         <div className="w-full">
                             <QueryDropArea
                                 onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
@@ -91,8 +91,8 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                 )}
                 {item.joinOperation && (
                     <div className=" flex items-center">
-                        <div className='w-[2px] h-[60px] bg-blue-200'></div>
-                        <div className="w-4 h-[2px] bg-blue-200 "></div>
+                        <div className='w-[2px] h-[60px] bg-blue-200' />
+                        <div className="w-4 h-[2px] bg-blue-200 " />
                         <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={parentGroupIndex} depth={groupIndex} />
                     </div>
                 )}
@@ -102,9 +102,9 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
                             groupIndex === group.length - 1 ? 'h-[50px] mb-12' :
                                 'h-[65px]'
-                            }`}></div>
+                            }`} />
 
-                        <div className="w-4 h-[2px] bg-blue-200 "></div>
+                        <div className="w-4 h-[2px] bg-blue-200 " />
                         <div className="w-full">
                             <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
                                 formula={item.formula}

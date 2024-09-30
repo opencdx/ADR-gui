@@ -1,8 +1,6 @@
-import { useState, type CSSProperties, type FC } from 'react'
-import { useDrag } from 'react-dnd'
+import { useState, type CSSProperties } from 'react'
 
 import { useQueryStore } from "@/lib/store";
-import { DroppableTypes } from '../droppable-types';
 import { Button, Dropdown, DropdownItem, DropdownSection, DropdownTrigger } from 'ui-library';
 import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
 import { OperationQueryBox } from './operation-query-droppable';
@@ -24,18 +22,6 @@ export default function OperatorsDropdown() {
     const query = useQueryStore((state) => state.query);
     const [isHovered, setIsHovered] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [{ opacity }, drag] = useDrag(
-        () => ({
-            type: DroppableTypes.OPERATOR,
-            options: {
-                dropEffect: 'move',
-            },
-            collect: (monitor) => ({
-                opacity: monitor.isDragging() ? 0.2 : 1,
-            }),
-        }),
-        [],
-    )
 
     const handleOpenChange = (isOpen: boolean) => {
         setIsOpen(isOpen);

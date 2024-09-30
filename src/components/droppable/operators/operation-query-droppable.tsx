@@ -18,7 +18,7 @@ export const OperationQueryBox: FC<OperationQueryBoxProps> = ({ showCopyIcon, op
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: DroppableTypes.OPERATOR,
+      type: DroppableTypes.RELATIONAL_OPERATOR,
       item: { operation },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',

@@ -1,7 +1,6 @@
 import { useState, type CSSProperties, type FC } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { useQueryStore } from "@/lib/store";
 import { DroppableTypes } from './droppable-types';
 
 const hoverStyle: CSSProperties = {
