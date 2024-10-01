@@ -5,8 +5,7 @@ import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { useRouter } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 import { usePapaParse } from 'react-papaparse';
-import { Button, Divider } from 'ui-library';
-import { DownloadIcon, ReturnIcon } from '../icons';
+import { Button, Divider, DownloadIcon, ReturnIcon } from 'ui-library';
 
 export interface ResultsTableProps {
 

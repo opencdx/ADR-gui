@@ -3,8 +3,8 @@ import { DropTargetMonitor, useDrop } from 'react-dnd';
 
 import { Query } from "@/api/adr";
 import { useQueryStore } from "@/lib/store";
+import { DeleteIcon, DragIcon } from 'ui-library';
 import { DroppableTypes } from '../../droppable/droppable-types';
-import { DragIcon } from "../../icons";
 import { OperationRender } from "../../ui/operation-render";
 import type { DragItem } from '../interfaces';
 import { CriteriaDropArea } from "./criteria-drop-area";
@@ -143,7 +143,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                         style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
                 }
             </div>
-            <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
+            <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
         </div>
     )
 })
