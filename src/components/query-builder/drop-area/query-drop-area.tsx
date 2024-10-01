@@ -3,8 +3,8 @@ import { DropTargetMonitor, useDrop } from 'react-dnd';
 
 import { Query } from "@/api/adr";
 import { useQueryStore } from "@/lib/store";
+import { DeleteIcon, DragIcon } from 'ui-library';
 import { DroppableTypes } from '../../droppable/droppable-types';
-import { DeleteIcon, DragIcon } from "../../icons";
 import { OperationRender } from "../../ui/operation-render";
 import type { DragItem } from '../interfaces';
 import { CriteriaDropArea } from "./criteria-drop-area";

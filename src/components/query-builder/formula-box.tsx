@@ -3,8 +3,8 @@ import { FC, memo, RefObject, SetStateAction, useEffect, useMemo, useRef, useSta
 import { Formula, Query } from "@/api/adr";
 import { useQueryStore } from "@/lib/store";
 import { DropTargetMonitor, useDrop } from "react-dnd";
+import { DeleteIcon, DragIcon } from 'ui-library';
 import { DroppableTypes } from "../droppable/droppable-types";
-import { DeleteIcon, DragIcon } from "../icons";
 import { OperationRender } from "../ui/operation-render";
 import { FormulaRender } from "./formula-render";
 import type { DragItem } from './interfaces';
