@@ -1,11 +1,10 @@
 import { usePostQuery } from '@/hooks/hooks';
 import { useQueryStore } from '@/lib/store';
+import { errorToast, successToast } from '@/lib/utils';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { useRouter } from 'next/navigation';
 import { FC, useMemo, useState } from 'react';
 import { usePapaParse } from 'react-papaparse';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Button, Divider } from 'ui-library';
 import { DownloadIcon, ReturnIcon } from '../icons';
 
@@ -29,17 +28,11 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         if (query.query) {
             postQuery(query.query, {
                 onSuccess: () => {
-                    toast.success('Query ready for review!', {
-                        position: 'top-right',
-                        autoClose: 2000,
-                    });
+                    successToast('Query ready for review!');
                     setIsError(false);
                 },
                 onError: (error) => {
-                    toast.error(error?.message, {
-                        position: 'top-right',
-                        autoClose: 2000,
-                    });
+                    errorToast(error?.message);
                     setIsError(true);
                 }
             });
@@ -167,7 +160,6 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                         <Button color='primary' radius='md' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
 
                     </div>
-                    <ToastContainer />
 
                     <Divider className='my-4' />
                     <div className='w-full h-full  flex-grow'>

@@ -20,7 +20,7 @@ export interface QueryDropAreaProps {
 export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     onDrop, query, index, groupIndex, depth
 }) {
-    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping, addOperationDoubleToGroup, removeFromQueryGroup } = useQueryStore();
+    const { removeFromQuery, addOperationDoubleToQuery, addOperationStringToQuery, addFocusToQuery, addFocusToQueryGrouping, addGroupOperationDoubleToQuery, addFocusToQuerySubGrouping, addOperationDoubleToGroup, removeFromQueryGroup, updateCriteriaByIndex, updateCriteriaByGrouping, updateCriteriaBySubGrouping } = useQueryStore();
     const [operationValue, setOperationValue] = useState('');
     const [hovered, setHovered] = useState(false);
     const [operationValuewidth, setOperationValuewidth] = useState('3ch');
@@ -45,13 +45,23 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
         setOperationValue(event.target.value);
     };
 
-    const handleFocusDrop = (index: number, item: any, depth: number | undefined, groupIndex: number[] | undefined) => {
-        if (groupIndex?.length == 0 && typeof depth === 'number') {
-            addFocusToQueryGrouping(index, item.focus, depth);
-        } else if (groupIndex?.length === 1 && typeof depth === 'number') {
-            addFocusToQuerySubGrouping(index, item.focus, groupIndex[0], depth);
-        } else {
-            addFocusToQuery(index, item.focus);
+    const handleDrop = (index: number, item: any, depth: number | undefined, groupIndex: number[] | undefined) => {
+        if (item.focus) {
+            if (groupIndex?.length == 0 && typeof depth === 'number') {
+                addFocusToQueryGrouping(index, item.focus, depth);
+            } else if (groupIndex?.length === 1 && typeof depth === 'number') {
+                addFocusToQuerySubGrouping(index, item.focus, groupIndex[0], depth);
+            } else {
+                addFocusToQuery(index, item.focus);
+            }
+        } else if (item.criteria) {
+            if (groupIndex?.length == 0 && typeof depth === 'number') {
+                updateCriteriaByGrouping(index, depth, item.criteria);
+            } else if (groupIndex?.length === 1 && typeof depth === 'number') {
+                updateCriteriaBySubGrouping(index, groupIndex[0], depth, item.criteria);
+            } else {
+                updateCriteriaByIndex(index, item.criteria);
+            }
         }
     }
 
@@ -81,7 +91,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
-            accept: [DroppableTypes.OPERATOR],
+            accept: [DroppableTypes.ARITHMETIC_OPERATOR, DroppableTypes.RELATIONAL_OPERATOR],
             drop(_item: DragItem, monitor) {
                 onDrop(monitor.getItem());
                 return undefined;
@@ -109,15 +119,18 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     return (
         <div
             ref={drop}
-            className='flex rounded-md h-13 w-auto px-4 py-2 items-center justify-between mb-2'
+            className='flex rounded-md h-12 w-auto px-4 py-2 items-center justify-between mb-2'
             style={{ backgroundColor, color, opacity, border }}
             key={index}>
             <div className='my-auto flex'>
-                <div className='text-[#757575] m-auto'><DragIcon /></div>
+                <div className='text-[#757575] m-auto flex'><DragIcon /></div>
                 <p className='text-[#001124] flex items-center'>
                     <CriteriaDropArea
-                        onDrop={(item) => handleFocusDrop(index, item, depth, groupIndex)}
+                        onDrop={(item) => handleDrop(index, item, depth, groupIndex)}
                         query={query}
+                        index={index}
+                        depth={depth}
+                        groupIndex={groupIndex}
                     />&nbsp;
                     {query?.operation &&
                         <>
@@ -127,7 +140,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                 </p>
                 {query?.operation &&
                     <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave}></input>
+                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
                 }
             </div>
             <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>

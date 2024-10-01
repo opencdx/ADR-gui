@@ -18,7 +18,7 @@ export const OperationFormulaBox: FC<OperationFormulaBoxProps> = ({ showCopyIcon
   const [isHovered, setIsHovered] = useState(false);
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: DroppableTypes.OPERATOR,
+      type: DroppableTypes.ARITHMETIC_OPERATOR,
       item: { operation },
       options: {
         dropEffect: showCopyIcon ? 'copy' : 'move',

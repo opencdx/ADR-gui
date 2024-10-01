@@ -1,5 +1,4 @@
-import '@/styles/globals.css';
-import '@/styles/globalicons.css';
+import 'ui-library/styles/globals.css'
 
 import { Metadata, Viewport } from 'next';
 
@@ -13,6 +12,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: {
@@ -66,6 +67,7 @@ export default async function RootLayout({
                       </div>
                     </div>
                   </div>
+                  <ToastContainer />
                 </NextIntlClientProvider>
               </PrimeReactProvider>
             </Providers>
