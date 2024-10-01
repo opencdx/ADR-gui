@@ -56,7 +56,7 @@ export default function QueryLibrary() {
         return (
           <div className='mt-auto w-full justify-between flex' key={index}>
             <p className='max-w-xs p-3'>{query.name}</p>
-            <div className='my-auto'>
+            <div className='my-auto flex'>
               <div className='float-right'>
                 <Button endContent={<DeleteIcon />} isIconOnly className='text-blue-500 bg-transparen'
                   onClick={() => deleteWarning(query.id!, query.name!)} onPress={onOpen} />

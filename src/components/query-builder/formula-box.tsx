@@ -4,7 +4,7 @@ import { Formula, Query } from "@/api/adr";
 import { useQueryStore } from "@/lib/store";
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { DroppableTypes } from "../droppable/droppable-types";
-import { DragIcon } from "../icons";
+import { DeleteIcon, DragIcon } from "../icons";
 import { OperationRender } from "../ui/operation-render";
 import { FormulaRender } from "./formula-render";
 import type { DragItem } from './interfaces';
@@ -166,7 +166,7 @@ export const FormulaBox: FC<FormulaBoxProps> = memo(function QueryBox({
                     </>
                 }
             </div>
-            <div><span onClick={() => handleRemove(index)} className='material-symbols-outlined text-[#757575] cursor-pointer'>delete</span></div>
+            <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
         </div>
     )
 })
