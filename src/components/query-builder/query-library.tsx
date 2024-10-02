@@ -2,8 +2,7 @@ import { useDeleteQuery, useListQueries } from '@/hooks/hooks';
 import { useQueryStore } from '@/lib/store';
 import { errorToast, successToast } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from 'ui-library';
-import { DeleteIcon, EditIcon } from '../icons';
+import { Button, DeleteForeverIcon, EditIcon, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from 'ui-library';
 
 export default function QueryLibrary() {
 
@@ -58,7 +57,7 @@ export default function QueryLibrary() {
             <p className='max-w-xs p-3'>{query.name}</p>
             <div className='my-auto'>
               <div className='float-right'>
-                <Button endContent={<DeleteIcon />} isIconOnly className='text-blue-500 bg-transparen'
+                <Button endContent={<DeleteForeverIcon />} isIconOnly className='text-blue-500 bg-transparen'
                   onClick={() => deleteWarning(query.id!, query.name!)} onPress={onOpen} />
               </div>
               <div className='float-right'>

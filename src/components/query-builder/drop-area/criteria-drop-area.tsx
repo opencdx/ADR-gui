@@ -2,14 +2,13 @@ import { FC, memo } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 
 import { Formula, Query } from "@/api/adr";
-import { DeleteIcon } from "@/components/icons";
 import { FocusRender } from "@/components/ui/focus-render";
 import { useQueryStore } from "@/lib/store";
+import { createNestedObject, mergeWithEmptyObj, successToast } from "@/lib/utils";
 import _ from "lodash";
-import { Link, Tooltip } from "ui-library";
+import { DeleteIcon, Link, Tooltip } from 'ui-library';
 import { DroppableTypes } from '../../droppable/droppable-types';
 import { OperandTypes } from "../operand-types";
-import { createNestedObject, mergeWithEmptyObj, successToast } from "@/lib/utils";
 
 export interface CriteriaDropAreaProps {
     onDrop: (item: any) => void

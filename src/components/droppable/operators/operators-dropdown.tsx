@@ -1,13 +1,12 @@
-import { useState, type CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react';
 
-import { useQueryStore } from "@/lib/store";
-import { Button, Dropdown, DropdownItem, DropdownSection, DropdownTrigger } from 'ui-library';
-import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
-import { OperationQueryBox } from './operation-query-droppable';
-import { Operation as QueryOperation } from '@/api/adr/model/query';
 import { Operation as FormulaOperation } from '@/api/adr/model/formula';
-import { DownArrow, UpArrow } from '../../icons';
+import { Operation as QueryOperation } from '@/api/adr/model/query';
+import { useQueryStore } from "@/lib/store";
+import { Button, DownArrow, Dropdown, DropdownItem, DropdownSection, DropdownTrigger, UpArrow } from 'ui-library';
+import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
 import { OperationFormulaBox } from './operation-formula-droppable';
+import { OperationQueryBox } from './operation-query-droppable';
 
 const hoverStyle: CSSProperties = {
     border: '1px solid #006FEE',
