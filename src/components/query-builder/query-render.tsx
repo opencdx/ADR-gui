@@ -79,7 +79,7 @@ export default function QueryRender() {
                                 query={currentQuery}
                                 index={index}
                                 key={index}
-                                joinOperation={query?.query?.queries?.at(index - 1)?.joinOperation} />
+                                joinOperation={(index !== 0) ? query?.query?.queries?.at(index - 1)?.joinOperation : undefined} />
                         )}
                     </div>
                 })}
