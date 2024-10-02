@@ -119,7 +119,7 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     return (
         <div
             ref={drop}
-            className='flex rounded-md h-12 w-auto px-4 py-2 items-center justify-between mb-2'
+            className='flex rounded-md h-12 w-auto px-4 py-2 items-center justify-between'
             style={{ backgroundColor, color, opacity, border }}
             key={index}>
             <div className='my-auto flex'>

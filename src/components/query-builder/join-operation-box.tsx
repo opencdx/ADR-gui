@@ -24,7 +24,7 @@ export const JoinOperationBox: FC<JoinOperationBoxProps> = ({ joinOperation, ind
 
     return (
         <div>
-            <div className='flex rounded-md h-12 w-auto px-4 py-2 items-center justify-between border border-[#757575] mb-2 bg-white'>
+            <div className='flex rounded-md h-12 w-auto px-4 py-2 items-center justify-between border border-[#757575] bg-white'>
                 <div className='flex'><span className="material-symbols-outlined" style={{ color: "#757575" }}>drag_indicator</span><p style={{ color: "#001124" }}><JoinOperationRender joinOperation={joinOperation}/></p></div>
                 <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
             </div>
