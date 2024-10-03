@@ -1,5 +1,5 @@
 import { Query } from "@/api/adr";
-import { Operation } from '@/api/adr/model/query';
+import { JoinOperation, Operation } from '@/api/adr/model/query';
 import { useQueryStore } from '@/lib/store';
 import React, { FC, memo, useState } from 'react';
 import { useDrop } from 'react-dnd';
@@ -18,10 +18,11 @@ interface GroupBoxProps {
     index: number;
     groupIndex?: number[];
     depth?: number;
+    joinOperation?: JoinOperation;
 }
 
 export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
-    onDrop, group, parentGroupIndex, index, groupIndex, depth
+    onDrop, group, parentGroupIndex, index, groupIndex, depth, joinOperation
 }) {
 
     const [isExpanded, setIsExpanded] = useState(true);
@@ -67,58 +68,96 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
         }
     }
 
-    const renderQueryItem = (index: number, item: Query, groupIndex: number, parentGroupIndex: number[]) => {
+    const renderQueryItem = (index: number, item: Query, groupIndex: number, parentGroupIndex: number[], group: Array<Query>) => {
         return (
             <React.Fragment key={groupIndex}>
-                {item.concept && (
-                    <div className="flex items-center w-full ">
-                        <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
-                            groupIndex === group.length - 1 ? 'h-[50px] mb-12' :
-                                'h-[65px]'
-                            }`} />
+                {((item.concept && groupIndex === 0)
+                    || (item.concept && !group.at(groupIndex - 1)?.joinOperation)) && (
+                        <div className="flex items-center w-full ">
+                            <div className={`w-[2px] ${groupIndex === 0 ? 'h-[35px] mt-[33px]' :
+                                groupIndex === group.length - 1 ? 'h-[35px] mb-[32px] bg-blue-200' :
+                                    'h-[65px] bg-blue-200'
+                                } ${(groupIndex === 0 && group.length > 1) ? 'bg-blue-200' : ''}`} />
 
-                        <div className="w-4 h-[2px] bg-blue-200 " />
-                        <div className="w-full">
-                            <QueryDropArea
-                                onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
-                                query={item}
-                                index={index}
-                                key={index}
-                                depth={groupIndex}
-                                groupIndex={parentGroupIndex} />
+                            <div className="w-4 h-[2px] bg-blue-200 " />
+                            <div className="w-full">
+                                <QueryDropArea
+                                    onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
+                                    query={item}
+                                    index={index}
+                                    key={index}
+                                    depth={groupIndex}
+                                    groupIndex={parentGroupIndex} />
+                            </div>
                         </div>
-                    </div>
 
-                )}
-                {item.joinOperation && (
-                    <div className=" flex items-center">
-                        <div className='w-[2px] h-[60px] bg-blue-200' />
-                        <div className="w-4 h-[2px] bg-blue-200 " />
-                        <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={parentGroupIndex} depth={groupIndex} />
-                    </div>
-                )}
-                {item.formula && (
+                    )}
+                {item.joinOperation &&
+                    !(group.at(groupIndex + 1) && group.at(groupIndex + 1)?.group) && (
+                        <div className=" flex items-center">
+                            {!group.at(groupIndex + 2) &&
+                                <div className='w-[2px] h-[33px] mb-[31px] bg-blue-200' />
+                            }
+                            {group.at(groupIndex + 2) &&
+                                <div className='w-[2px] h-[65px] bg-blue-200' />
+                            }
+                            <div className="w-4 h-[2px] bg-blue-200 " />
+                            <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={parentGroupIndex} depth={groupIndex} />
+                            {group.at(groupIndex + 1) && group.at(groupIndex + 1)?.concept &&
+                                (
+                                    <div className="flex items-center w-full ">
+                                        <div className="w-4 h-[2px] bg-blue-200 " />
+                                        <div className="w-full">
+                                            <QueryDropArea
+                                                onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
+                                                query={group.at(groupIndex + 1)!}
+                                                index={index}
+                                                key={index}
+                                                depth={groupIndex + 1}
+                                                groupIndex={parentGroupIndex} />
+                                        </div>
+                                    </div>
 
-                    <div className="flex items-center w-full ">
-                        <div className={`w-[2px] bg-blue-200 ${groupIndex === 0 ? 'h-[50px] mt-12' :
-                            groupIndex === group.length - 1 ? 'h-[50px] mb-12' :
-                                'h-[65px]'
-                            }`} />
-
-                        <div className="w-4 h-[2px] bg-blue-200 " />
-                        <div className="w-full">
-                            <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
-                                formula={item.formula}
-                                query={item}
-                                index={index}
-                                parents={[OperandTypes.FORMULA]}
-                                key={index}
-                                groupIndex={[...parentGroupIndex, groupIndex]}
-                                depth={groupIndex} />
+                                )}
+                            {group.at(groupIndex + 1) && group.at(groupIndex + 1)?.formula && (
+                                <div className="flex items-center w-full ">
+                                    <div className="w-4 h-[2px] bg-blue-200 " />
+                                    <div className="w-full">
+                                        <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
+                                            formula={group.at(groupIndex + 1)?.formula!}
+                                            query={item}
+                                            index={index}
+                                            parents={[OperandTypes.FORMULA]}
+                                            key={index}
+                                            groupIndex={[...parentGroupIndex, groupIndex + 1]}
+                                            depth={groupIndex} />
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    </div>
+                    )}
+                {((item.formula && groupIndex === 0)
+                    || (item.formula && !group.at(groupIndex - 1)?.joinOperation)) && (
+                        <div className="flex items-center w-full ">
+                            <div className={`w-[2px] ${groupIndex === 0 ? 'h-[35px] mt-[33px]' :
+                                groupIndex === group.length - 1 ? 'h-[35px] mb-[32px] bg-blue-200' :
+                                    'h-[65px] bg-blue-200'
+                                } ${(groupIndex === 0 && group.length > 1) ? 'bg-blue-200' : ''}`} />
 
-                )}
+                            <div className="w-4 h-[2px] bg-blue-200 " />
+                            <div className="w-full">
+                                <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
+                                    formula={item.formula}
+                                    query={item}
+                                    index={index}
+                                    parents={[OperandTypes.FORMULA]}
+                                    key={index}
+                                    groupIndex={[...parentGroupIndex, groupIndex]}
+                                    depth={groupIndex} />
+                            </div>
+                        </div>
+
+                    )}
                 {item.group && (
                     <GroupBox
                         onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
@@ -129,6 +168,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         key={index}
                         groupIndex={[...parentGroupIndex, groupIndex]}
                         depth={groupIndex}
+                        joinOperation={group.at(groupIndex - 1)?.joinOperation}
                     />
                 )}
 
@@ -144,17 +184,24 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
     return (
         <div ref={drop}>
             <div className="accordion-container rounded-md border border-[#CCE3FD] mb-2 w-full">
-                <div className="accordion-header flex items-center  bg-[#CCE3FD]  p-2 rounded-t-md cursor-pointer justify-end" onClick={() => setIsExpanded(!isExpanded)}>
-                    <span
-                        className="material-symbols-outlined mr-2 text-blue-500 cursor-pointer"
-                    >
-                        {isExpanded ? 'expand_more' : 'chevron_right'}
-                    </span>
-                    <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
+                <div className="accordion-header flex items-center  bg-[#CCE3FD]  p-2 rounded-t-md cursor-pointer justify-between flex" onClick={() => setIsExpanded(!isExpanded)}>
+                    <div>
+                        {joinOperation && (
+                            <JoinOperationBox joinOperation={joinOperation} index={index - 1} key={index - 1} />
+                        )}
+                    </div>
+                    <div className='flex my-auto'>
+                        <span
+                            className="material-symbols-outlined mr-2 text-blue-500 cursor-pointer"
+                        >
+                            {isExpanded ? 'expand_more' : 'chevron_right'}
+                        </span>
+                        <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
+                    </div>
                 </div>
                 {isExpanded && (
                     <div className="accordion-content bg-[#F6FAFF] p-4 rounded-b-md border-t border-blue-200 w-full">
-                        {group.map((item, groupIndex) => renderQueryItem(index, item, groupIndex, parentGroupIndex))}
+                        {group.map((item, groupIndex) => renderQueryItem(index, item, groupIndex, parentGroupIndex, group))}
 
                         <div className='flex items-center'>
                             <div className='w-full'>
