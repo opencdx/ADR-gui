@@ -8,7 +8,9 @@
     "build": "ANALYZE=true && next build",
     "generate-api:adr": "openapi-generator-cli generate -i ./src/api/json/adr.json -g typescript-axios -o ./src/api/adr/ --skip-validate-spec --additional-properties=useSingleRequestParameter=true,withoutPrefixEnums=true,enumNameSuffix=,withSeparateModelsAndApi=true,apiPackage=server,modelPackage=model --openapi-normalizer REFACTOR_ALLOF_WITH_PROPERTIES_ONLY=true",
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
-    "cy": "cypress open",
+    "playwright": "npx playwright test",
+    "playwright:ui": "npx playwright test --ui",
+    "playwright:report": "npx playwright show-report",
     "rollup": "rollup -c"
   },
   "dependencies": {
@@ -60,6 +62,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "2.1.1",
     "cross-env": "^7.0.3",
+    "cypress-real-events": "^1.13.0",
+    "cypress-xpath": "^2.0.1",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
@@ -103,6 +107,7 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.4",
     "@openapitools/openapi-generator-cli": "^2.13.5",
+    "@playwright/test": "^1.47.2",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",

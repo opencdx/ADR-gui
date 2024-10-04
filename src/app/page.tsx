@@ -1,5 +1,6 @@
-import {redirect} from 'next/navigation';
-
+import QueryBuilder from '@/components/query-builder/query-builder';
 export default function IndexPage() {
-  redirect('/query-builder');
+  return (
+    <QueryBuilder />
+  );
 }

@@ -68,3 +68,7 @@ Thumbs.db
 /last_docker_compose_filename.txt
 /docker/generated-docker-compose.yaml
 /version.txt
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
