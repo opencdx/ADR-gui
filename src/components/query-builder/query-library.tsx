@@ -54,7 +54,7 @@ export default function QueryLibrary() {
       {queryList?.map((query, index) => {
         return (
           <div className='mt-auto w-full justify-between flex' key={index}>
-            <p className='max-w-xs p-3'>{query.name}</p>
+            <p className='max-w-56 p-3'>{query.name}</p>
             <div className='my-auto'>
               <div className='float-right'>
                 <Button endContent={<DeleteForeverIcon />} isIconOnly className='text-blue-500 bg-transparen'
@@ -71,14 +71,19 @@ export default function QueryLibrary() {
       },)
 
       }
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='rounded-none'
+      classNames={{
+        header: 'pt-10',
+        footer: 'pb-10',
+        closeButton: 'hidden'
+      }}>
         <ModalContent>
           <ModalHeader>Delete Query</ModalHeader>
-          <ModalBody><div>Delete <b>{queryName}</b>?</div> This action can not be undone.
+          <ModalBody><div className='gap-0'>Delete <b>{queryName}</b>?</div> This action can not be undone.
           </ModalBody>
           <ModalFooter>
-            <Button onPress={onClose} variant='bordered'>Cancel</Button>
-            <Button onClick={() => runDeleteQuery()} color='danger'>Delete</Button>
+            <Button onPress={onClose} color='primary' variant='bordered' className='w-40 h-12'>Cancel</Button>
+            <Button onClick={() => runDeleteQuery()} color='danger' className='w-40 h-12'>Delete</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

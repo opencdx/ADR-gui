@@ -42,7 +42,7 @@ export const AddQueryDropArea: FC<AddQueryDropAreaProps> = memo(function AddQuer
     return (
         <div
             ref={drop}
-            className='flex rounded-md h-12 w-auto px-4 py-2 items-center mb-2'
+            className='flex rounded-md h-12 w-auto px-4 py-2 items-center'
             style={{ backgroundColor, color, border, opacity }}
             role="AddQueryBox"
             data-cy="add-query-box"
