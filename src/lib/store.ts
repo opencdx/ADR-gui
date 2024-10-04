@@ -6,6 +6,8 @@ import { createWithEqualityFn as create } from 'zustand/traditional';
 interface QueryStore {
     query: SavedQuery;
     queryList: Array<SavedQuery>;
+    isReturn: boolean;
+    updateIsReturn: (isReturn: boolean) => void;
     updateQueryStore: (query: SavedQuery) => void;
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
     removeFromQuery: (index: number) => void;
@@ -70,6 +72,13 @@ export const useQueryStore = create<QueryStore>()(
     (set) => ({
         query: { query: { queries: [], unitOutput: UnitOutput.Imperial } },
         queryList: [],
+        isReturn: false,
+        updateIsReturn: (isReturn) =>
+            set(
+                produce((draft) => {
+                    draft.isReturn = isReturn;
+                })
+            ),
         updateQueryStore: (query) =>
             set(
                 produce((draft) => {
