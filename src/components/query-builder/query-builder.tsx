@@ -33,7 +33,7 @@ export default function QueryBuilder() {
   const { data: unitsOfMeasure } = useGetUnits();
   const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
-  const { query, updateQueryStore, updateQueryName } = useQueryStore();
+  const { query, updateQueryStore, updateQueryName, isReturn, updateIsReturn } = useQueryStore();
   const { data: queries } = useListQueries();
   const [searchTerm, setSearchTerm] = useState('');
   const [queryName, setQueryName] = useState('');
@@ -96,6 +96,10 @@ export default function QueryBuilder() {
   }
 
   useMemo(() => {
+    if (isReturn) {
+      successToast("Welcome back, start building a new query.");
+      updateIsReturn(false);
+    }
     if (query) {
       setQueryName(query.name!);
     }
