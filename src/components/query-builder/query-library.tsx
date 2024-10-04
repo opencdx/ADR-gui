@@ -27,7 +27,7 @@ export default function QueryLibrary() {
   const runDeleteQuery = async () => {
     deleteQuery(queryId!, {
       onSuccess: () => {
-        successToast("Query " + queryName + " Successfully Deleted!")
+        successToast("Query Successfully Deleted!")
 
         const updatedQueries = { ...queries };
         updatedQueries.data?.splice(updatedQueries.data?.map(function (query) { return query.id }).indexOf(queryId!), 1);
