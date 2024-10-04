@@ -102,7 +102,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                 <div className='w-[2px] h-[65px] bg-blue-200' />
                             }
                             <div className="w-4 h-[2px] bg-blue-200 " />
-                            <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={parentGroupIndex} depth={groupIndex} />
+                            <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={[...parentGroupIndex, groupIndex + 1]} depth={groupIndex} />
                             {group.at(groupIndex + 1) && group.at(groupIndex + 1)?.concept &&
                                 (
                                     <div className="flex items-center w-full ">
@@ -114,7 +114,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                                 index={index}
                                                 key={index}
                                                 depth={groupIndex + 1}
-                                                groupIndex={parentGroupIndex} />
+                                                groupIndex={[...parentGroupIndex, groupIndex + 1]} />
                                         </div>
                                     </div>
 
@@ -130,7 +130,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                             parents={[OperandTypes.FORMULA]}
                                             key={index}
                                             groupIndex={[...parentGroupIndex, groupIndex + 1]}
-                                            depth={groupIndex} />
+                                            depth={groupIndex + 1} />
                                     </div>
                                 </div>
                             )}

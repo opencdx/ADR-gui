@@ -177,11 +177,10 @@ export const useQueryStore = create<QueryStore>()(
         removeFromQueryGroup: (index, groupIndex, depth) =>
             set(
                 produce((draft) => {
-                    if (groupIndex && groupIndex.length === 0) {
+                    if (groupIndex && (groupIndex.length === 0 || groupIndex.length === 1)) {
                         draft.query.query.queries[index].group.splice(depth, 1);
                     } else {
                         draft.query.query.queries[index].group[groupIndex[0]].group.splice(depth, 1);
-
                     }
                 })
             ),
