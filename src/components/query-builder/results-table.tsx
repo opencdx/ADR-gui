@@ -21,7 +21,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
     const { readString } = usePapaParse();
 
     const { mutate: postQuery, data: queryResults } = usePostQuery();
-    const { query } = useQueryStore();
+    const { query, updateIsReturn } = useQueryStore();
 
     const fetchData = useMemo(() => {
         if (query.query) {
@@ -147,6 +147,11 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
         },
     });
 
+    const returnToBuilder = () => {
+        updateIsReturn(true);
+        router.push('/query-builder');
+    };
+
 
     return (
         <>
@@ -155,7 +160,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
                     <p className='text-xl'>{query.name} Results</p>
 
                     <div className='flex flex-row justify-start'>
-                        <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => router.push('/query-builder')}>Return to Query Builder</Button>
+                        <Button color='primary' variant='bordered' className='m-1' startContent={<ReturnIcon />} onPress={() => returnToBuilder()}>Return to Query Builder</Button>
                         <Button color='primary' radius='md' className='m-1' startContent={<DownloadIcon />} onPress={downloadCsv} isDisabled={isError}>Download CSV</Button>
 
                     </div>

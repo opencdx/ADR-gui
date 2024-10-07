@@ -121,7 +121,7 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
             isDisabled={(query && query.concept && !query.concept.conceptName) || (formula && formula.leftOperand && !formula.leftOperand.conceptName && operandLocation == 'left') || (formula && formula.rightOperand && !formula.rightOperand.conceptName && operandLocation == 'right')}
             content={
                 <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearCriteria(query, formula, index, depth, groupIndex, operandLocation, parents)}>
-                    <div className='text-[#006FEE] flex'><DeleteIcon /></div>
+                    <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
                     Delete Criteria
                 </Link>
             }
