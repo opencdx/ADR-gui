@@ -10,7 +10,7 @@
   <img alt="JWT" src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" />
   <img alt="Prettier" src="https://img.shields.io/badge/-Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=white" />
   <img alt="Nodejs" src="https://img.shields.io/badge/-Nodejs-43853d?style=flat-square&logo=Node.js&logoColor=white" />
-  <img alt="Cypress" src="https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white" />
+  <img alt="Playwright" src="https://img.shields.io/badge/Playwright-00B140?style=for-the-badge&logo=playwright&logoColor=white"/>
   <img alt="StoryBook" src="https://img.shields.io/badge/storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white"/>
   <img alt="TailwindCSS" src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white"/>
 </p>
@@ -93,12 +93,12 @@ Before cloning/forking this project, make sure you have the following tools inst
     npm run startDev
 
 
-## Cypress
+## Playwright
 
-1. Start the Cypress
+1. Start the Playwright
 
    ```bash
-    npm run cy
+    npx playwright test --project=chromium --headed
 
 2.  Open your web browser to access the application
 
