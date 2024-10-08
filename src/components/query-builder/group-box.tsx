@@ -3,7 +3,7 @@ import { JoinOperation, Operation } from '@/api/adr/model/query';
 import { useQueryStore } from '@/lib/store';
 import React, { FC, memo, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { DeleteIcon } from 'ui-library';
+import { DeleteIcon, ExpandIcon, RightChevronIcon } from 'ui-library';
 import { AddQueryDropArea } from './drop-area/add-query-drop-area';
 import { QueryDropArea } from './drop-area/query-drop-area';
 import { FormulaBox } from './formula-box';
@@ -191,11 +191,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                         )}
                     </div>
                     <div className='flex my-auto'>
-                        <span
-                            className="material-symbols-outlined mr-2 text-blue-500 cursor-pointer"
-                        >
-                            {isExpanded ? 'expand_more' : 'chevron_right'}
-                        </span>
+                            {isExpanded ? <ExpandIcon /> : <RightChevronIcon />}
                         <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
                     </div>
                 </div>
