@@ -190,9 +190,11 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                             <JoinOperationBox joinOperation={joinOperation} index={index - 1} key={index - 1} />
                         )}
                     </div>
-                    <div className='flex my-auto'>
-                            {isExpanded ? <ExpandIcon /> : <RightChevronIcon />}
-                        <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>
+                    <div className='flex my-auto text-[#66AAF9]'>
+                        <div className='flex cursor-pointer' onClick={() => handleRemove(index)}>
+                            <DeleteIcon />
+                        </div>
+                        {isExpanded ? <ExpandIcon /> : <RightChevronIcon />}
                     </div>
                 </div>
                 {isExpanded && (
