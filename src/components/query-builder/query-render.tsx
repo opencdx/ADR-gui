@@ -69,7 +69,8 @@ export default function QueryRender() {
                                     key={index}
                                     joinOperation={(index !== 0) ? query?.query?.queries?.at(index - 1)?.joinOperation : undefined} />
                             )}
-                            {!currentQuery.group && (
+                            {(!currentQuery.group &&
+                            !(currentQuery.joinOperation && query && query.query && query.query.queries && query.query.queries.at(index + 1) && query.query.queries.at(index + 1)?.group)) && (
                                 <div className="accordion-container rounded-md border border-[#CCE3FD] mb-2 w-full">
                                     <div className="accordion-header flex items-end  bg-[#F6FAFF]  p-2 rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(index)}>
                                         <div></div>
