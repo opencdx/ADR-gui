@@ -72,7 +72,7 @@ export default function QueryRender() {
                             {(!currentQuery.group &&
                             !(currentQuery.joinOperation && query && query.query && query.query.queries && query.query.queries.at(index + 1) && query.query.queries.at(index + 1)?.group)) && (
                                 <div className="accordion-container rounded-md border border-[#CCE3FD] mb-2 w-full">
-                                    <div className="accordion-header flex items-end  bg-[#F6FAFF]  p-2 rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(index)}>
+                                    <div className="accordion-header flex items-end  bg-[#F6FAFF]  rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(index)}>
                                         <div></div>
                                         <div className='flex my-auto text-[#66AAF9]'>
                                             {!isExpanded.get(index) ? <ExpandIcon /> : <RightChevronIcon />}
@@ -125,7 +125,7 @@ export default function QueryRender() {
             {
                 (newQueryField || query?.query?.queries?.length == 0) && (
                     <div className="accordion-container rounded-md border border-[#CCE3FD] mb-2 w-full">
-                        <div className="accordion-header flex items-end  bg-[#F6FAFF]  p-2 rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(-1)}>
+                        <div className="accordion-header flex items-end  bg-[#F6FAFF] rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(-1)}>
                             <div></div>
                             <div className='flex my-auto text-[#66AAF9]'>
                                 {!isExpanded.get(-1) ? <ExpandIcon /> : <RightChevronIcon />}
