@@ -87,7 +87,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                                     index={index}
                                     key={index}
                                     depth={groupIndex}
-                                    groupIndex={parentGroupIndex} />
+                                    groupIndex={[...parentGroupIndex, groupIndex]} />
                             </div>
                         </div>
 

@@ -58,9 +58,9 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
 
     const clearCriteria = (query: Query | undefined, formula: Formula | undefined, index: number | undefined, depth: number | undefined, groupIndex: number[] | undefined, operandLocation: string | undefined, parents: string[] | undefined) => {
         if (query) {
-            if (groupIndex && groupIndex[0] === 1 && typeof depth === 'number' && typeof index === 'number') {
+            if (groupIndex?.length === 1 && typeof depth === 'number' && typeof index === 'number') {
                 updateCriteriaByGrouping(index, depth, {});
-            } else if (groupIndex && groupIndex[0] === 2 && typeof depth === 'number' && typeof index === 'number') {
+            } else if (groupIndex?.length === 2 && typeof depth === 'number' && typeof index === 'number') {
                 updateCriteriaBySubGrouping(index, groupIndex[0], depth, {});
             } else if (typeof index === 'number') {
                 updateCriteriaByIndex(index, {});
