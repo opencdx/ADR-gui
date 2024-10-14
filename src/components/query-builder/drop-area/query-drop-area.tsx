@@ -55,9 +55,9 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                 addFocusToQuery(index, item.focus);
             }
         } else if (item.criteria) {
-            if (groupIndex && groupIndex[0] === 1 && typeof depth === 'number') {
+            if (groupIndex?.length === 1 && typeof depth === 'number') {
                 updateCriteriaByGrouping(index, depth, item.criteria);
-            } else if (groupIndex && groupIndex[0] === 2 && typeof depth === 'number') {
+            } else if (groupIndex?.length === 2 && typeof depth === 'number') {
                 updateCriteriaBySubGrouping(index, groupIndex[0], depth, item.criteria);
             } else {
                 updateCriteriaByIndex(index, item.criteria);
