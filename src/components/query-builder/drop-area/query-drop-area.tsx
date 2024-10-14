@@ -68,10 +68,9 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
     const valueUpdated = useMemo(() => {
         setOperationValuewidth((operationValue.length + 1) + 'ch');
         if (operationValue && !isNaN(Number(operationValue))) {
-            if (groupIndex?.length === 0 && typeof depth === 'number') {
-                addOperationDoubleToGroup(index, Number(operationValue), depth);
-            }
             if (groupIndex?.length === 1 && typeof depth === 'number') {
+                addOperationDoubleToGroup(index, Number(operationValue), depth);
+            } else if (groupIndex?.length === 2 && typeof depth === 'number') {
                 addGroupOperationDoubleToQuery(index, Number(operationValue), groupIndex[0], depth);
             } else {
                 addOperationDoubleToQuery(index, Number(operationValue));
