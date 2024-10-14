@@ -55,6 +55,16 @@ export default function QueryBuilder() {
     }
   }, [queries]);
 
+  const runQuery = async () => {
+    if (query?.id) {
+      runUpdateQuery();
+    } else {
+      runSaveQuery();
+    }
+
+    router.push('/results');
+  };
+
   const runSaveQuery = async () => {
     setIsLoading(true);
     const newQuery: SavedQuery = { ...query };
@@ -62,8 +72,6 @@ export default function QueryBuilder() {
 
     saveQuery(newQuery, {
       onSuccess: (response) => {
-        successToast("Query saved");
-
         updateQueryStore(response.data);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LIST_QUERIES });
         setIsLoading(false);
@@ -82,8 +90,6 @@ export default function QueryBuilder() {
 
     updateQuery(updatedQuery, {
       onSuccess: (response) => {
-        successToast("Query saved");
-
         updateQueryStore(response.data);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LIST_QUERIES });
         setIsLoading(false);
@@ -172,13 +178,7 @@ export default function QueryBuilder() {
                   <Input label='Add Query Name' value={query.name} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
                   <div className='flex my-auto'>
                     <Button className='m-2' color='primary' startContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
-                    {!query?.id &&
-                      <Button className='m-2' endContent={<SaveIcon />} onClick={runSaveQuery} isDisabled={isDisabled()}>Save Query</Button>
-                    }
-                    {query?.id &&
-                      <Button className='m-2' endContent={<SaveIcon />} onClick={runUpdateQuery}>Update Query</Button>
-                    }
-                    <Button className='m-2' color='primary' endContent={<ArrowForwardIcon />} onPress={() => router.push('/results')} isDisabled={isDisabled()}>Run Query</Button>
+                    <Button className='m-2' color='primary' endContent={<ArrowForwardIcon />} onPress={() => runQuery()} isDisabled={isDisabled()}>Run Query</Button>
                   </div>
                 </div>
               </div>

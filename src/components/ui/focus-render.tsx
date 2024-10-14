@@ -8,27 +8,27 @@ export interface FocusRenderProps {
 export const FocusRender: FC<FocusRenderProps> = ({ focus }) => {
     switch (focus) {
         case Focus.Ancestors:
-            return <>Ancestors</>;
+            return <>Ancestors&nbsp;</>;
         case Focus.AncestorsOrSelf:
-            return <>Ancestors or Self</>;
+            return <>Ancestors or Self&nbsp;</>;
         case Focus.Children:
-            return <>Child</>;
+            return <>Child&nbsp;</>;
         case Focus.ChildrenOrSelf:
-            return <>Child or Self</>;
+            return <>Child or Self&nbsp;</>;
         case Focus.Date:
-            return <>Date</>;
+            return <>Date&nbsp;</>;
         case Focus.Descendants:
-            return <>Descendants</>;
+            return <>Descendants&nbsp;</>;
         case Focus.DescendantsOrSelf:
-            return <>Descendants or Self</>;
+            return <>Descendants or Self&nbsp;</>;
         case Focus.Member:
-            return <>Member</>;
+            return <>Member&nbsp;</>;
         case Focus.Parent:
-            return <>Parent</>;
+            return <>Parent&nbsp;</>;
         case Focus.ParentOrSelf:
-            return <>Parent or Self</>;
+            return <>Parent or Self&nbsp;</>;
         case Focus.Self:
-            return <>Self</>;
+            return <></>;
     }
 
     return <></>;

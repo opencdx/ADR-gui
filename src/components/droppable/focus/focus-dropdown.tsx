@@ -43,7 +43,6 @@ export default function FocusDropdown() {
                 <DropdownMenu className='w-[250px] rounded-none p-0'>
                     <DropdownSection className='rounded-none'>
                         <DropdownItem isReadOnly className='p-0 rounded-none mt-2'>
-                            <FocusBox focus={Focus.Self} display='Self' />
                             <FocusBox focus={Focus.Descendants} display='Descendants' />
                             <FocusBox focus={Focus.DescendantsOrSelf} display='Descendants or Self' />
                             <FocusBox focus={Focus.ChildrenOrSelf} display='Child or Self' />
