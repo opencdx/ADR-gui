@@ -21,7 +21,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
     const { readString } = usePapaParse();
 
     const { mutate: postQuery, data: queryResults } = usePostQuery();
-    const { query, updateIsReturn } = useQueryStore();
+    const { query, updateIsReturn, clearQuery } = useQueryStore();
 
     const fetchData = useMemo(() => {
         if (query.query) {
@@ -149,6 +149,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({ }) => {
 
     const returnToBuilder = () => {
         updateIsReturn(true);
+        clearQuery();
         router.push('/query-builder');
     };
 

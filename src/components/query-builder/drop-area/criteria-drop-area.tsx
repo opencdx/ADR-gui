@@ -1,7 +1,7 @@
 import { FC, memo } from "react";
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 
-import { Formula, Query } from "@/api/adr";
+import { Focus, Formula, Query } from "@/api/adr";
 import { FocusRender } from "@/components/ui/focus-render";
 import { useQueryStore } from "@/lib/store";
 import { createNestedObject, mergeWithEmptyObj, successToast } from "@/lib/utils";
@@ -25,7 +25,7 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
     onDrop, query, formula, operandLocation, index, depth, groupIndex, parents
 }) {
 
-    const { query: queryStore, updateCriteriaByIndex, updateCriteriaByGrouping, updateCriteriaBySubGrouping, addToQueryFormula, addToQueryFormulaInGrouping, addToQueryFormulaInSubGrouping } = useQueryStore();
+    const { query: queryStore, updateCriteriaByIndex, updateCriteriaByGrouping, updateCriteriaBySubGrouping, addToQueryFormula, addToQueryFormulaInGrouping, addToQueryFormulaInSubGrouping, addFocusToQueryGrouping, addFocusToQuerySubGrouping, addFocusToQuery } = useQueryStore();
 
     const [{ isActive, isOver, canDrop, draggingColor }, drop] = useDrop(
         () => ({
@@ -104,6 +104,50 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
         successToast("Criteria Deleted");
     }
 
+    const clearFocus = (index: number | undefined, groupIndex: number[] | undefined, depth: number | undefined, formula: Formula | undefined, parents: string[] | undefined) => {
+        if (typeof index === 'number' && formula && parents) {
+            const parentFormula = getParentFormula();
+            switch (operandLocation) {
+                case 'left':
+                    if (!groupIndex || groupIndex.length == 0) {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, OperandTypes.FOCUS], Focus.Self)));
+                    } else if (groupIndex?.length == 1) {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, OperandTypes.FOCUS], Focus.Self)), groupIndex[0]);
+                    } else if (groupIndex?.length == 2) {
+                        addToQueryFormulaInSubGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.LEFT_OPERAND, OperandTypes.FOCUS], Focus.Self)), groupIndex[0], groupIndex[1]);
+                    }
+                    break;
+                case 'right':
+                    if (!groupIndex || groupIndex.length == 0) {
+                        addToQueryFormula(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, OperandTypes.FOCUS], Focus.Self)));
+                    } else if (groupIndex?.length == 1) {
+                        addToQueryFormulaInGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, OperandTypes.FOCUS], Focus.Self)), groupIndex[0]);
+                    } else if (groupIndex?.length == 2) {
+                        addToQueryFormulaInSubGrouping(index, _.merge({},
+                            parentFormula,
+                            createNestedObject([...parents.slice(1), OperandTypes.RIGHT_OPERAND, OperandTypes.FOCUS], Focus.Self)), groupIndex[0], groupIndex[1]);
+                    }
+                    break;
+            }
+        } else if (typeof index === 'number' && groupIndex?.length === 1 && typeof depth === 'number') {
+            addFocusToQueryGrouping(index, Focus.Self, depth);
+        } else if (typeof index === 'number' && groupIndex?.length === 2 && typeof depth === 'number') {
+            addFocusToQuerySubGrouping(index, Focus.Self, groupIndex[0], depth);
+        } else if (typeof index === 'number') {
+            addFocusToQuery(index, Focus.Self);
+        }
+    }
+
     const opacity = isOver ? 0.7 : 1;
     let backgroundColor = '#fff';
     let color = '#6E6E6E';
@@ -115,32 +159,106 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
     }
 
     return (
-        <Tooltip
-            placement='top-end'
-            radius='sm'
-            isDisabled={(query && query.concept && !query.concept.conceptName) || (formula && formula.leftOperand && !formula.leftOperand.conceptName && operandLocation == 'left') || (formula && formula.rightOperand && !formula.rightOperand.conceptName && operandLocation == 'right')}
-            content={
-                <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearCriteria(query, formula, index, depth, groupIndex, operandLocation, parents)}>
-                    <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
-                    Delete Criteria
-                </Link>
-            }
-        >
-            <div ref={drop} className='text-[#001124] hover:text-[#006FEE]'>
-                {query && query.concept && (
-                    <div><FocusRender focus={query.concept.focus} /> {query.concept.conceptName && (<>[{query.concept.conceptName}]</>)} {!query.concept.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>} </div>
-                )}
-                {formula && (
-                    <>
-                        {formula.leftOperand && operandLocation == 'left' && (
-                            <div><FocusRender focus={formula.leftOperand.focus} /> {formula.leftOperand.conceptName && (<>[{formula.leftOperand.conceptName}]</>)} {!formula.leftOperand.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>} </div>
-                        )}
-                        {formula.rightOperand && operandLocation == 'right' && (
-                            <div><FocusRender focus={formula.rightOperand.focus} /> {formula.rightOperand.conceptName && (<>[{formula.rightOperand.conceptName}]</>)} {!formula.rightOperand.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>} </div>
-                        )}
-                    </>
-                )}
-            </div>
-        </Tooltip>
+        <div ref={drop} className='text-[#001124]'>
+            {query && query.concept && (
+                <div className='flex'>
+                    <Tooltip
+                        placement='top-end'
+                        radius='sm'
+                        content={
+                            <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearFocus(index, groupIndex, depth, formula, parents)}>
+                                <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
+                                Delete Focus
+                            </Link>
+                        }>
+                        <p className='hover:text-[#006FEE]'><FocusRender focus={query.concept.focus} /></p>
+                    </Tooltip>
+                    {query.concept.conceptName && (
+                        <Tooltip
+                            placement='top-end'
+                            radius='sm'
+                            isDisabled={(query && query.concept && !query.concept.conceptName)}
+                            content={
+                                <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearCriteria(query, formula, index, depth, groupIndex, operandLocation, parents)}>
+                                    <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
+                                    Delete Criteria
+                                </Link>
+                            }
+                        >
+                            <p className='hover:text-[#006FEE]'>[{query.concept.conceptName}]</p>
+                        </Tooltip>
+                    )}
+                    {!query.concept.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>}
+                </div>
+            )}
+            {formula && (
+                <>
+                    {formula.leftOperand && operandLocation == 'left' && (
+                        <div className='flex'>
+                            <Tooltip
+                                placement='top-end'
+                                radius='sm'
+                                content={
+                                    <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearFocus(index, groupIndex, depth, formula, parents)}>
+                                        <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
+                                        Delete Focus
+                                    </Link>
+                                }
+                            >
+                                <p className='hover:text-[#006FEE]'><FocusRender focus={formula.leftOperand.focus} /></p>
+                            </Tooltip>
+                            {formula.leftOperand.conceptName && (
+                                <Tooltip
+                                    placement='top-end'
+                                    radius='sm'
+                                    isDisabled={(formula && formula.leftOperand && !formula.leftOperand.conceptName && operandLocation == 'left')}
+                                    content={
+                                        <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearCriteria(query, formula, index, depth, groupIndex, operandLocation, parents)}>
+                                            <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
+                                            Delete Criteria
+                                        </Link>
+                                    }
+                                >
+                                    <p className='hover:text-[#006FEE]'>[{formula.leftOperand.conceptName}]</p>
+                                </Tooltip>
+                            )}
+                            {!formula.leftOperand.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>}
+                        </div>
+                    )}
+                    {formula.rightOperand && operandLocation == 'right' && (
+                        <div className='flex'>
+                            <Tooltip
+                                placement='top-end'
+                                radius='sm'
+                                content={
+                                    <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearFocus(index, groupIndex, depth, formula, parents)}>
+                                        <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
+                                        Delete Focus
+                                    </Link>
+                                }
+                            >
+                                <p className='hover:text-[#006FEE]'><FocusRender focus={formula.rightOperand.focus} /></p>
+                            </Tooltip>
+                            {formula.rightOperand.conceptName && (
+                                <Tooltip
+                                    placement='top-end'
+                                    radius='sm'
+                                    isDisabled={(formula && formula.rightOperand && !formula.rightOperand.conceptName && operandLocation == 'right')}
+                                    content={
+                                        <Link color='foreground' className='p-2 cursor-pointer' onPress={() => clearCriteria(query, formula, index, depth, groupIndex, operandLocation, parents)}>
+                                            <div className='text-[#006FEE] flex'><DeleteIcon />&nbsp;</div>
+                                            Delete Criteria
+                                        </Link>
+                                    }
+                                >
+                                    <p className='hover:text-[#006FEE]'>[{formula.rightOperand.conceptName}]</p>
+                                </Tooltip>
+                            )}
+                            {!formula.rightOperand.conceptName && <div className='text-[#A1A1AA]'>[ Drag criteria here ]</div>}
+                        </div>
+                    )}
+                </>
+            )}
+        </div>
     )
 })

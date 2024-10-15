@@ -7,6 +7,7 @@ interface QueryStore {
     query: SavedQuery;
     queryList: Array<SavedQuery>;
     isReturn: boolean;
+    clearQuery: () => void;
     updateIsReturn: (isReturn: boolean) => void;
     updateQueryStore: (query: SavedQuery) => void;
     updateQueryListStore: (queryList: Array<SavedQuery>) => void;
@@ -73,6 +74,12 @@ export const useQueryStore = create<QueryStore>()(
         query: { query: { queries: [], unitOutput: UnitOutput.Imperial } },
         queryList: [],
         isReturn: false,
+        clearQuery: () =>
+            set(
+                produce((draft) => {
+                    draft.query = { query: { queries: [], unitOutput: UnitOutput.Imperial } }
+                })
+            ),
         updateIsReturn: (isReturn) =>
             set(
                 produce((draft) => {
