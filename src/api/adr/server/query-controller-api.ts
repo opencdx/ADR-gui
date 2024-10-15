@@ -260,6 +260,42 @@ export const QueryControllerApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @param {string} search 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        search: async (search: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'search' is not null or undefined
+            assertParamExists('search', 'search', search)
+            const localVarPath = `/query/search`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {SavedQuery} savedQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -386,6 +422,18 @@ export const QueryControllerApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} search 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async search(search: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TinkarConceptModel>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.search(search, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['QueryControllerApi.search']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {SavedQuery} savedQuery 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -468,6 +516,15 @@ export const QueryControllerApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {QueryControllerApiSearchRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        search(requestParameters: QueryControllerApiSearchRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<TinkarConceptModel>> {
+            return localVarFp.search(requestParameters.search, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {QueryControllerApiUpdateQueryRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -532,6 +589,20 @@ export interface QueryControllerApiSaveQueryRequest {
      * @memberof QueryControllerApiSaveQuery
      */
     readonly savedQuery: SavedQuery
+}
+
+/**
+ * Request parameters for search operation in QueryControllerApi.
+ * @export
+ * @interface QueryControllerApiSearchRequest
+ */
+export interface QueryControllerApiSearchRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof QueryControllerApiSearch
+     */
+    readonly search: string
 }
 
 /**
@@ -627,6 +698,17 @@ export class QueryControllerApi extends BaseAPI {
      */
     public saveQuery(requestParameters: QueryControllerApiSaveQueryRequest, options?: RawAxiosRequestConfig) {
         return QueryControllerApiFp(this.configuration).saveQuery(requestParameters.savedQuery, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {QueryControllerApiSearchRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof QueryControllerApi
+     */
+    public search(requestParameters: QueryControllerApiSearchRequest, options?: RawAxiosRequestConfig) {
+        return QueryControllerApiFp(this.configuration).search(requestParameters.search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

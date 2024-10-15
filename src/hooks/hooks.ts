@@ -49,3 +49,10 @@ export const useDeleteQuery = () => {
         onError: (error) => { },
     });
 }
+
+export const useSearchData = (search: string) => {
+    return useQuery({
+        queryKey: QUERY_KEYS.SEARCH_QUERY,
+        queryFn: async () => adrApi.search({search: search}),
+    });
+};
