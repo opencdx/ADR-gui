@@ -33,6 +33,12 @@ export interface TinkarConceptModel {
      */
     'conceptId'?: string;
     /**
+     * Boolean indicating if the concept has been synchronized with IKM
+     * @type {boolean}
+     * @memberof TinkarConceptModel
+     */
+    'sync'?: boolean;
+    /**
      * The name of the concept
      * @type {string}
      * @memberof TinkarConceptModel

@@ -1,8 +1,10 @@
-import { useMemo, type FC } from 'react'
-import { CriteriaDroppable } from '../droppable/criteria-droppable'
 import { TinkarConceptModel } from '@/api/adr';
+import { useSearchData } from '@/hooks/hooks';
+import { QUERY_KEYS } from '@/hooks/query-keys';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useMemo, useState, type FC } from 'react';
+import { CriteriaDroppable } from '../droppable/criteria-droppable';
 import { UnitsDroppable } from '../droppable/units-droppable';
-
 
 export interface CriteriaListProps {
     criteriaList: TinkarConceptModel[] | undefined,
@@ -12,12 +14,35 @@ export interface CriteriaListProps {
 
 export const CriteriaList: FC<CriteriaListProps> = ({ criteriaList, unitsList, filter }) => {
 
+    const [combinedCriteriaList, setCombinedCriteriaList] = useState<TinkarConceptModel[]>([]);
+    const queryClient = useQueryClient();
+    const { data: searchResults, refetch } = useSearchData(filter);
+
+    useEffect(() => {
+        if (filter) {
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SEARCH_QUERY });
+            refetch();
+        } else {
+            setCombinedCriteriaList(criteriaList || []);
+        }
+    }, [filter, queryClient, refetch, criteriaList]);
+
+    useEffect(() => {
+        if (searchResults?.data) {
+            setCombinedCriteriaList([...(criteriaList || []), ...searchResults.data].sort((a, b) => 
+                (a.conceptName?.toLowerCase() ?? '').localeCompare(b.conceptName?.toLowerCase() ?? '')
+            ));
+        }
+    }, [searchResults, criteriaList]);
+
     const filteredCriteria = useMemo(() => {
         if (filter) {
-            return criteriaList?.filter(item => item.conceptName?.toLowerCase().includes(filter.toLowerCase()));
+            return combinedCriteriaList.filter(item => 
+                item.conceptName?.toLowerCase().includes(filter.toLowerCase())
+            );
         }
-        return criteriaList; // Return the original list if no filter
-    }, [criteriaList, filter]);
+        return criteriaList || []; // Return the original list if no filter
+    }, [combinedCriteriaList, filter, criteriaList]);
 
     const filteredUnits = useMemo(() => {
         if (filter) {
