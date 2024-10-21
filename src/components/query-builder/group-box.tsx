@@ -73,14 +73,14 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
             <React.Fragment key={groupIndex}>
                 {((item.concept && groupIndex === 0)
                     || (item.concept && !group.at(groupIndex - 1)?.joinOperation)) && (
-                        <div className="flex items-center w-full ">
+                        <div className="flex items-center w-full">
                             <div className={`w-[2px] ${groupIndex === 0 ? 'h-[35px] mt-[33px]' :
                                 groupIndex === group.length - 1 ? 'h-[35px] mb-[32px] bg-blue-200' :
                                     'h-[65px] bg-blue-200'
                                 } ${(groupIndex === 0 && group.length > 1) ? 'bg-blue-200' : ''}`} />
 
-                            <div className="w-4 h-[2px] bg-blue-200 " />
-                            <div className="w-full">
+                            <div className="w-3 h-[2px] bg-blue-200 " />
+                            <div className="w-full mr-3">
                                 <QueryDropArea
                                     onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
                                     query={item}
@@ -101,13 +101,13 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                             {group.at(groupIndex + 2) &&
                                 <div className='w-[2px] h-[65px] bg-blue-200' />
                             }
-                            <div className="w-4 h-[2px] bg-blue-200 " />
+                            <div className="w-3 h-[2px] bg-blue-200 " />
                             <JoinOperationBox joinOperation={item.joinOperation} index={index} key={index} groupIndex={[...parentGroupIndex, groupIndex + 1]} depth={groupIndex} />
                             {group.at(groupIndex + 1) && group.at(groupIndex + 1)?.concept &&
                                 (
-                                    <div className="flex items-center w-full ">
-                                        <div className="w-4 h-[2px] bg-blue-200 " />
-                                        <div className="w-full">
+                                    <div className="flex items-center w-full">
+                                        <div className="w-3 h-[2px] bg-blue-200 " />
+                                        <div className="w-full mr-3">
                                             <QueryDropArea
                                                 onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
                                                 query={group.at(groupIndex + 1)!}
@@ -120,9 +120,9 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
 
                                 )}
                             {group.at(groupIndex + 1) && group.at(groupIndex + 1)?.formula && (
-                                <div className="flex items-center w-full ">
-                                    <div className="w-4 h-[2px] bg-blue-200 " />
-                                    <div className="w-full">
+                                <div className="flex items-center w-full">
+                                    <div className="w-3 h-[2px] bg-blue-200 " />
+                                    <div className="w-full mr-3">
                                         <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
                                             formula={group.at(groupIndex + 1)?.formula!}
                                             query={item}
@@ -138,14 +138,14 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                     )}
                 {((item.formula && groupIndex === 0)
                     || (item.formula && !group.at(groupIndex - 1)?.joinOperation)) && (
-                        <div className="flex items-center w-full ">
+                        <div className="flex items-center w-full">
                             <div className={`w-[2px] ${groupIndex === 0 ? 'h-[35px] mt-[33px]' :
                                 groupIndex === group.length - 1 ? 'h-[35px] mb-[32px] bg-blue-200' :
                                     'h-[65px] bg-blue-200'
                                 } ${(groupIndex === 0 && group.length > 1) ? 'bg-blue-200' : ''}`} />
 
-                            <div className="w-4 h-[2px] bg-blue-200 " />
-                            <div className="w-full">
+                            <div className="w-3 h-[2px] bg-blue-200 " />
+                            <div className="w-full mr-3">
                                 <FormulaBox onDrop={(item) => handleDrop(index, item, groupIndex, parentGroupIndex)}
                                     formula={item.formula}
                                     query={item}
@@ -184,25 +184,27 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
     return (
         <div ref={drop}>
             <div className="accordion-container rounded-md border border-[#CCE3FD] mb-2 w-full">
-                <div className="accordion-header flex items-center  bg-[#CCE3FD]  p-2 rounded-t-md cursor-pointer justify-between flex" onClick={() => setIsExpanded(!isExpanded)}>
-                    <div>
-                        {joinOperation && (
-                            <JoinOperationBox joinOperation={joinOperation} index={index - 1} key={index - 1} />
-                        )}
-                    </div>
-                    <div className='flex my-auto text-[#66AAF9]'>
-                        <div className='flex cursor-pointer' onClick={() => handleRemove(index)}>
+                <div className="accordion-header bg-[#E6F1FE] pl-2 py-2 rounded-t-md cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+                    <div className='flex justify-end text-[#66AAF9]'>
+                        <div className='flex cursor-pointer mr-5' onClick={() => handleRemove(index)}>
                             <DeleteIcon />
                         </div>
-                        {isExpanded ? <ExpandIcon /> : <RightChevronIcon />}
+                        <div>
+                            {isExpanded ? <ExpandIcon /> : <RightChevronIcon />}
+                        </div>
                     </div>
+                    {joinOperation && (
+                        <div className="ml-5 mt-[-15px] w-[120px]">
+                            <JoinOperationBox joinOperation={joinOperation} index={index - 1} key={index - 1} />
+                        </div>
+                    )}
                 </div>
                 {isExpanded && (
                     <div className="accordion-content bg-[#F6FAFF] p-4 rounded-b-md border-t border-blue-200 w-full">
                         {group.map((item, groupIndex) => renderQueryItem(index, item, groupIndex, parentGroupIndex, group))}
 
                         <div className='flex items-center'>
-                            <div className='w-full'>
+                            <div className='w-full mt-2 mx-3'>
                                 <AddQueryDropArea onDrop={(item) => handleDrop(index, item, group.length, parentGroupIndex)} />
                             </div>
                         </div>

@@ -71,15 +71,15 @@ export default function QueryRender() {
                             )}
                             {(!currentQuery.group &&
                             !(currentQuery.joinOperation && query && query.query && query.query.queries && query.query.queries.at(index + 1) && query.query.queries.at(index + 1)?.group)) && (
-                                <div className="accordion-container rounded-md border border-[#CCE3FD] mb-2 w-full">
-                                    <div className="accordion-header flex items-end  bg-[#F6FAFF]  rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(index)}>
+                                <div className="accordion-container rounded-md border border-[#CCE3FD] bg-[#F6FAFF] mb-2 w-full mt-2">
+                                    <div className="accordion-header flex items-end  bg-[#F6FAFF]  rounded-t-md cursor-pointer justify-between flex py-2" onClick={() => toggleIsExpanded(index)}>
                                         <div></div>
                                         <div className='flex my-auto text-[#66AAF9]'>
                                             {!isExpanded.get(index) ? <ExpandIcon /> : <RightChevronIcon />}
                                         </div>
                                     </div>
                                     {!isExpanded.get(index) && (
-                                        <div key={index} className='mb-4 mx-4'>
+                                        <div key={index} className='mb-4 mx-7 mt-[-12px]'>
                                             {currentQuery.concept && (
                                                 <QueryDropArea
                                                     onDrop={(item) => handleDrop(index, item)}
@@ -132,7 +132,7 @@ export default function QueryRender() {
                             </div>
                         </div>
                         {!isExpanded.get(-1) && (
-                            <div className='mb-4 mx-4'>
+                            <div className='mb-4 mx-7'>
                                 <AddQueryDropArea
                                     onDrop={(item) => handleDrop(-1, item)} />
                             </div>
