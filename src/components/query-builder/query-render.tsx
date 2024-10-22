@@ -5,7 +5,7 @@ import { JoinOperationBox } from './join-operation-box';
 import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';
-import { Button, ExpandIcon, RightChevronIcon } from 'ui-library';
+import { Button, ExpandIcon, CollapseIcon } from 'ui-library';
 import { useState } from 'react';
 import { GroupBox } from './group-box';
 
@@ -75,7 +75,7 @@ export default function QueryRender() {
                                     <div className="accordion-header flex items-end  bg-[#F6FAFF]  rounded-t-md cursor-pointer justify-between flex py-2" onClick={() => toggleIsExpanded(index)}>
                                         <div></div>
                                         <div className='flex my-auto text-[#66AAF9]'>
-                                            {!isExpanded.get(index) ? <ExpandIcon /> : <RightChevronIcon />}
+                                            {!isExpanded.get(index) ? <ExpandIcon /> : <CollapseIcon />}
                                         </div>
                                     </div>
                                     {!isExpanded.get(index) && (
@@ -128,7 +128,7 @@ export default function QueryRender() {
                         <div className="accordion-header flex items-end  bg-[#F6FAFF] rounded-t-md cursor-pointer justify-between flex" onClick={() => toggleIsExpanded(-1)}>
                             <div></div>
                             <div className='flex my-auto text-[#66AAF9]'>
-                                {!isExpanded.get(-1) ? <ExpandIcon /> : <RightChevronIcon />}
+                                {!isExpanded.get(-1) ? <ExpandIcon /> : <CollapseIcon />}
                             </div>
                         </div>
                         {!isExpanded.get(-1) && (

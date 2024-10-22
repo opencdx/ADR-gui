@@ -3,7 +3,7 @@ import { JoinOperation, Operation } from '@/api/adr/model/query';
 import { useQueryStore } from '@/lib/store';
 import React, { FC, memo, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import { DeleteIcon, ExpandIcon, RightChevronIcon } from 'ui-library';
+import { DeleteIcon, ExpandIcon, CollapseIcon } from 'ui-library';
 import { AddQueryDropArea } from './drop-area/add-query-drop-area';
 import { QueryDropArea } from './drop-area/query-drop-area';
 import { FormulaBox } from './formula-box';
@@ -190,7 +190,7 @@ export const GroupBox: FC<GroupBoxProps> = memo(function GroupBox({
                             <DeleteIcon />
                         </div>
                         <div>
-                            {isExpanded ? <ExpandIcon /> : <RightChevronIcon />}
+                            {isExpanded ? <ExpandIcon /> : <CollapseIcon />}
                         </div>
                     </div>
                     {joinOperation && (
