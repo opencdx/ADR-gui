@@ -146,6 +146,8 @@ export const CriteriaDropArea: FC<CriteriaDropAreaProps> = memo(function QueryBo
         } else if (typeof index === 'number') {
             addFocusToQuery(index, Focus.Self);
         }
+
+        successToast("Focus Deleted");
     }
 
     const opacity = isOver ? 0.7 : 1;
