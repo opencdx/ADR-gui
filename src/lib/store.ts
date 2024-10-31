@@ -7,6 +7,7 @@ interface QueryStore {
     query: SavedQuery;
     queryList: Array<SavedQuery>;
     isReturn: boolean;
+    queryText: string;
     clearQuery: () => void;
     updateIsReturn: (isReturn: boolean) => void;
     updateQueryStore: (query: SavedQuery) => void;
@@ -15,6 +16,7 @@ interface QueryStore {
     removeFromQueryGroup: (index: number, groupIndex: number[], depth: number) => void;
     removeFromQueryGroupSection: (index: number, groupIndex: number[]) => void;
     resetQueryStore: () => void;
+    setQueryText: (queryText: string) => void;
 
     addCriteriaToQuery: (criteria: TinkarConceptModel) => void;
     addJoinOperationToQuery: (operation: JoinOperation) => void;
@@ -74,6 +76,7 @@ export const useQueryStore = create<QueryStore>()(
         query: { query: { queries: [], unitOutput: UnitOutput.Imperial } },
         queryList: [],
         isReturn: false,
+        queryText: '',
         clearQuery: () =>
             set(
                 produce((draft) => {
@@ -302,6 +305,12 @@ export const useQueryStore = create<QueryStore>()(
             set(
                 produce((draft) => {
                     draft.query = { query: { queries: [], unitOutput: UnitOutput.Imperial }, name: '' };
+                })
+            ),
+        setQueryText: (queryText) =>
+            set(
+                produce((draft) => {
+                    draft.queryText = queryText;
                 })
             ),
         addNameToFormula: (index, name) =>

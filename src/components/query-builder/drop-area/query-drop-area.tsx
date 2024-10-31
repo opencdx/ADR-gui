@@ -138,8 +138,11 @@ export const QueryDropArea: FC<QueryDropAreaProps> = memo(function QueryBox({
                     }
                 </p>
                 {query?.operation &&
-                    <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
-                        style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
+                    <>
+                        <input value={operationValue} onChange={handleChange} className='h-[30px] border-none text-[#001124] text-center p-px'
+                            style={{ width: operationValuewidth, border: hovered ? '1px solid #006FEE' : 'none' }} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} />
+                        <p className='hidden'>{operationValue} </p>
+                    </>
                 }
             </div>
             <div className='flex cursor-pointer text-[#757575]' onClick={() => handleRemove(index)}><DeleteIcon /></div>

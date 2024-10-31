@@ -33,7 +33,7 @@ export default function QueryBuilder() {
   const { data: unitsOfMeasure } = useGetUnits();
   const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
-  const { query, updateQueryStore, updateQueryName, isReturn, updateIsReturn } = useQueryStore();
+  const { query, updateQueryStore, updateQueryName, isReturn, updateIsReturn, queryText } = useQueryStore();
   const { data: queries } = useListQueries();
   const [searchTerm, setSearchTerm] = useState('');
   const [queryName, setQueryName] = useState('');
@@ -159,16 +159,24 @@ export default function QueryBuilder() {
                     <FocusDropdown />
                   </div>
                   <QueryRender />
-                  <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' scrollBehavior='inside'>
+                  <Modal isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    placement='bottom'
+                    backdrop='transparent'
+                    scrollBehavior='inside'
+                    classNames={{
+                      base: 'bg-[#001731] w-full max-w-max min-w-full fixed bottom-[-64px] left-[-24px] rounded-b-none',
+                      closeButton: 'text-white hover:bg-white/50',
+                    }}>
                     <ModalContent>
                       <ModalHeader>
                         {queryPreview &&
-                          <>Query Preview</>
+                          <div className='text-white'>Preview Sample Query</div>
                         }
                       </ModalHeader>
                       <ModalBody>
                         {queryPreview &&
-                          <JsonView data={queryPreview} shouldExpandNode={allExpanded} style={defaultStyles} />
+                          <div className='text-white' dangerouslySetInnerHTML={{ __html: queryText.replace(/(And|Or)/g, '<strong>$1</strong>') }} />
                         }
                       </ModalBody>
                     </ModalContent>
