@@ -152,7 +152,7 @@ export const FormulaRender: FC<FormulaRenderProps> = memo(function QueryBox({
                 operandLocation='right'
                 parents={parents}
                 groupIndex={groupIndex} />
-            &#41;
+            &#41;&nbsp;
         </>
     )
 })

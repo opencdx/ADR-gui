@@ -16,7 +16,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { allExpanded, defaultStyles, JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
-import { ArrowForwardIcon, Button, Input, Modal, ModalBody, ModalContent, ModalHeader, PreviewIcon, SaveIcon, useDisclosure } from 'ui-library';
+import { ArrowForwardIcon, Button, CloseIcon, Input, Modal, ModalBody, ModalContent, ModalHeader, PreviewIcon, SaveIcon, useDisclosure } from 'ui-library';
 import FocusDropdown from '../droppable/focus/focus-dropdown';
 import { FormulaDroppable } from '../droppable/formula-droppable';
 import { GroupDroppable } from '../droppable/group-droppable';
@@ -33,21 +33,17 @@ export default function QueryBuilder() {
   const { data: unitsOfMeasure } = useGetUnits();
   const { mutateAsync: saveQuery, data: savedQueryResult } = useSaveQuery();
   const { mutate: updateQuery, data: savedUpdateQueryResult, error: updateError } = useUpdateQuery();
-  const { query, updateQueryStore, updateQueryName, isReturn, updateIsReturn } = useQueryStore();
+  const { query, updateQueryStore, updateQueryName, isReturn, updateIsReturn, queryText } = useQueryStore();
   const { data: queries } = useListQueries();
   const [searchTerm, setSearchTerm] = useState('');
   const [queryName, setQueryName] = useState('');
-  const { isOpen, onOpen, onOpenChange } = useDisclosure({ defaultOpen: false });
+  const [showPreview, setShowPreview] = useState(false);
   const [queryPreview, setQueryPreview] = useState('');
   const [isLoading, setIsLoading] = useState(true); // State for loading indicator
 
   const queryClient = useQueryClient();
 
   const t = useTranslations('common');
-
-  const getPreview = () => {
-    setQueryPreview(JSON.stringify(query.query, null, 2))
-  };
 
   useEffect(() => {
     if (queries?.data) {
@@ -123,68 +119,68 @@ export default function QueryBuilder() {
     <Suspense fallback={<Loading />}>
       {
         isLoading ? <Loading /> : (
-          <div className='flex py-4 bg-blue-100 p-4 flex-row w-full h-screen overflow-hidden'>
-            <DndProvider backend={HTML5Backend}>
-              <div className='float-left w-[420px] flex-col flex h-full'>
+          <>
+            <div className='flex py-4 bg-blue-100 p-4 flex-row w-full h-screen overflow-hidden'>
+              <DndProvider backend={HTML5Backend}>
+                <div className='float-left w-[420px] flex-col flex h-full'>
 
-                <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden grow mb-4 h-2/3'>
-                  <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
-                  <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
-                  <Tabs aria-label='Available Criteria' className='mt-4 flex-grow overflow-hidden h-[80px]' fullWidth>
-                    <Tab key='criteria' title='Available Criteria' className='h-full overflow-auto'>
-                      <CriteriaList criteriaList={criteriaList?.data} unitsList={undefined} filter={searchTerm} />
-                    </Tab>
-                    <Tab key='units' title='Units of Measure' className='h-full overflow-auto'>
-                      <CriteriaList unitsList={unitsOfMeasure?.data} criteriaList={undefined} filter={searchTerm} />
-                    </Tab>
-                  </Tabs>
-                </div>
-                <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-[250px]'>
-
-                  {queries?.data &&
-                    <QueryLibrary />
-                  }
-                </div>
-              </div>
-              <div className='rounded-md bg-white clear-both flex flex-col  w-full ml-5'>
-                <div className='p-3'>
-                  <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
-                  <div className='pb-3 flex items-center'>
-
-                    <GroupDroppable showCopyIcon={true} group={[]} />
-                    <JoinOperationDroppable joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
-                    <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
-                    <FormulaDroppable showCopyIcon={true} />
-                    <OperatorsDropdown />
-                    <FocusDropdown />
+                  <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-hidden grow mb-4 h-2/3'>
+                    <h1 className='text-2xl font-medium mb-6'>Available Criteria</h1>
+                    <Input variant='bordered' id='search' label='Search' onValueChange={setSearchTerm} />
+                    <Tabs aria-label='Available Criteria' className='mt-4 flex-grow overflow-hidden h-[80px]' fullWidth>
+                      <Tab key='criteria' title='Available Criteria' className='h-full overflow-auto'>
+                        <CriteriaList criteriaList={criteriaList?.data} unitsList={undefined} filter={searchTerm} />
+                      </Tab>
+                      <Tab key='units' title='Units of Measure' className='h-full overflow-auto'>
+                        <CriteriaList unitsList={unitsOfMeasure?.data} criteriaList={undefined} filter={searchTerm} />
+                      </Tab>
+                    </Tabs>
                   </div>
-                  <QueryRender />
-                  <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' scrollBehavior='inside'>
-                    <ModalContent>
-                      <ModalHeader>
-                        {queryPreview &&
-                          <>Query Preview</>
-                        }
-                      </ModalHeader>
-                      <ModalBody>
-                        {queryPreview &&
-                          <JsonView data={queryPreview} shouldExpandNode={allExpanded} style={defaultStyles} />
-                        }
-                      </ModalBody>
-                    </ModalContent>
-                  </Modal>
-                </div>
-                <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
-                  <Input label='Add Query Name' value={query.name} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
-                  <div className='flex my-auto'>
-                    <Button className='m-2' color='primary' startContent={<PreviewIcon />} onClick={getPreview} onPress={onOpen}>Preview Sample Query</Button>
-                    <Button className='m-2' color='primary' endContent={<ArrowForwardIcon />} onPress={() => runQuery()} isDisabled={isDisabled()}>Run Query</Button>
+                  <div className='rounded-md bg-white clear-both p-3 flex flex-col overflow-scroll h-[250px]'>
+
+                    {queries?.data &&
+                      <QueryLibrary />
+                    }
                   </div>
                 </div>
-              </div>
+                <div className='rounded-md bg-white clear-both flex flex-col  w-full ml-5 overflow-scroll'>
+                  <div className='p-3'>
+                    <h1 className='text-2xl font-medium mb-6'>Query Builder</h1>
+                    <div className='pb-3 flex items-center'>
 
-            </DndProvider>
-          </div>
+                      <GroupDroppable showCopyIcon={true} group={[]} />
+                      <JoinOperationDroppable joinOperation={JoinOperation.And} display='And' showCopyIcon={true} />
+                      <JoinOperationDroppable joinOperation={JoinOperation.Or} display='Or' showCopyIcon={true} />
+                      <FormulaDroppable showCopyIcon={true} />
+                      <OperatorsDropdown />
+                      <FocusDropdown />
+                    </div>
+                    <QueryRender />
+                  </div>
+                  <div className="mt-auto w-full border-t border-gray-300 justify-between flex">
+                    <Input label='Add Query Name' value={query.name} onValueChange={setQueryName} variant="bordered" className='max-w-xs p-3' isRequired />
+                    <div className='flex my-auto'>
+                      <Button className='m-2' color='primary' startContent={<PreviewIcon />} onPress={() => setShowPreview(true)}>Preview Sample Query</Button>
+                      <Button className='m-2' color='primary' endContent={<ArrowForwardIcon />} onPress={() => runQuery()} isDisabled={isDisabled()}>Run Query</Button>
+                    </div>
+                  </div>
+                </div>
+
+              </DndProvider>
+            </div>
+            {showPreview &&
+              <div className='bg-[#001731] w-full max-w-max min-w-full rounded-t-2xl p-7 relative'>
+                <button 
+                  className='absolute top-4 right-4 text-white' 
+                  onClick={() => setShowPreview(false)}
+                >
+                  <CloseIcon/>
+                </button>
+                <div className='text-white mb-1'>Preview Sample Query:</div>
+                <div className='text-white' dangerouslySetInnerHTML={{ __html: queryText.replace(/(And|Or)/g, '<strong>$1</strong>') }} />
+              </div>
+            }
+          </>
         )
       }
 

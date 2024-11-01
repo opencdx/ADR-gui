@@ -6,15 +6,16 @@ import { Operation } from '@/api/adr/model/query';
 import { FormulaBox } from './formula-box';
 import { OperandTypes } from './operand-types';
 import { Button, ExpandIcon, CollapseIcon } from 'ui-library';
-import { useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { GroupBox } from './group-box';
 
 export default function QueryRender() {
 
     const [newQueryField, setNewQueryField] = useState(false);
     const [isExpanded, setIsExpanded] = useState<Map<number, boolean>>(new Map());
+    const queryRef = useRef<HTMLDivElement>(null);
 
-    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery, resetQueryStore, addGroupToQuery, addJoinOperationToQuery } = useQueryStore();
+    const { query, addCriteriaToQuery, addOperationToQuery, addFormulaToQuery, resetQueryStore, addGroupToQuery, addJoinOperationToQuery, setQueryText } = useQueryStore();
 
     const handleDrop = (index: number, item: any) => {
         if (item.criteria) {
@@ -36,6 +37,31 @@ export default function QueryRender() {
         return Object.values(Operation).includes(value as Operation);
     }
 
+    const useMutationObserver = (
+        ref: RefObject<HTMLDivElement>,
+        callback: MutationCallback,
+        options = {
+            characterData: true,
+            childList: true,
+            subtree: true,
+            attributes: true,
+        }
+    ) => {
+        useEffect(() => {
+            if (ref.current) {
+                const observer = new MutationObserver(callback);
+                observer.observe(ref.current, options);
+                return () => observer.disconnect();
+            }
+        }, [ref])
+    };
+    const updateQueryText = () => {
+        if (queryRef.current?.textContent) {
+            setQueryText(queryRef.current?.textContent?.replace(/Drag criteria and or operators here in the Query Field and begin defining/g, ""));
+        }
+    };
+    useMutationObserver(queryRef, updateQueryText);
+
     const updateNewQuery = () => {
         setNewQueryField(true);
     }
@@ -55,7 +81,7 @@ export default function QueryRender() {
 
     return (
         <>
-            <div className='max-h-[calc(100vh-400px)] overflow-y-auto'>
+            <div ref={queryRef} className='max-h-[calc(100vh-400px)] overflow-y-auto'>
                 {query?.query?.queries?.map((currentQuery, index) => {
                     return (
                         <>

@@ -8,8 +8,8 @@ export interface JoinOperationRenderProps {
 export const JoinOperationRender: FC<JoinOperationRenderProps> = ({ joinOperation }) => {
     switch (joinOperation) {
         case JoinOperation.And:
-            return <>And</>;
+            return <>And </>;
         case JoinOperation.Or:
-            return <>Or</>;
+            return <>Or </>;
     }
 };
