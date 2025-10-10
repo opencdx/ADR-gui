@@ -3,8 +3,7 @@ import { useState, type CSSProperties } from 'react';
 import { Operation as FormulaOperation } from '@/api/adr/model/formula';
 import { Operation as QueryOperation } from '@/api/adr/model/query';
 import { useQueryStore } from "@/lib/store";
-import { Button, DownArrow, Dropdown, DropdownItem, DropdownSection, DropdownTrigger, UpArrow } from 'ui-library';
-import DropdownMenu from 'ui-library/dropdown/dropdown-menu';
+import { Button, DownArrow, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, UpArrow } from 'ui-library';
 import { OperationFormulaBox } from './operation-formula-droppable';
 import { OperationQueryBox } from './operation-query-droppable';
 
