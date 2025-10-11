@@ -68,22 +68,47 @@ Before cloning/forking this project, make sure you have the following tools inst
 - [NodeJS](https://nodejs.org/en/download/)
 
 ## Installation
-1. Clone this repository and the ui library to your local machine:
 
-   ```bash
-   git clone https://github.com/opencdx/ADR-gui.git
-   git clone https://github.com/opencdx/ui-library.git
+### 1. Clone repositories
 
-2. Install the project dependencies using npm in both ui-library and ADR-gui:
-   
-   ```bash
-   npm install
+Clone both ADR-gui and ui-library as sibling directories:
 
+```bash
+git clone https://github.com/opencdx/ADR-gui.git
+git clone https://github.com/opencdx/ui-library.git
+```
 
-3. Start the app
+### 2. Build ui-library
 
-   ```bash
-    npm start
+The ui-library must be built before installing ADR-gui dependencies:
+
+```bash
+cd ui-library
+npm ci
+npm run build
+npm run build:types
+```
+
+**Important**: ADR-gui uses `"ui-library": "file:../ui-library"` which requires the built package. After ui-library changes, rebuild it:
+
+```bash
+cd ui-library
+npm run build && npm run build:types
+cd ../ADR-gui
+npm install  # Re-link updated build
+```
+
+### 3. Install ADR-gui dependencies
+
+```bash
+cd ADR-gui
+npm install
+```
+
+### 4. Start the app
+
+```bash
+npm start
 
 4.  Open your web browser and visit http://localhost:3000 (or the URL in the cosole) to access the application
 
