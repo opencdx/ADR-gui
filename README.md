@@ -65,7 +65,9 @@ To get started, follow these steps:
 Before cloning/forking this project, make sure you have the following tools installed:
 
 - [Git](https://git-scm.com/downloads)
-- [NodeJS](https://nodejs.org/en/download/)
+- [NodeJS](https://nodejs.org/en/download/) (v20 or higher)
+
+**Version Requirements**: See [VERSION_COMPATIBILITY.md](../.github/node/VERSION_COMPATIBILITY.md) for package version requirements.
 
 ## Installation
 
